@@ -103,7 +103,7 @@ public:
 
           void setAugmentationSize(bool);
 
-
+          EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 
 protected:
 
@@ -350,6 +350,9 @@ protected:
 
       struct Optimization
       {
+        EIGEN_MAKE_ALIGNED_OPERATOR_NEW
+
+
         Vector3 positionFlex;
         Vector3 velocityFlex;
         Vector3 accelerationFlex;
@@ -464,7 +467,7 @@ protected:
         Matrix3 curRotation3;
         Vector3 orientationVector3;
 
-        EIGEN_MAKE_ALIGNED_OPERATOR_NEW
+
 
         Optimization()
           :

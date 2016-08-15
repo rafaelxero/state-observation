@@ -103,6 +103,8 @@ namespace stateObservation
         /// Reset the extended kalman filter (call also the reset function of the dynamics functor)
         virtual void reset();
 
+        EIGEN_MAKE_ALIGNED_OPERATOR_NEW
+
     protected:
         /// simulate the dynamics of the state using the functor
         virtual StateVector prediction_(unsigned k);
@@ -131,6 +133,8 @@ namespace stateObservation
         //optimization
         struct Optimization
         {
+          EIGEN_MAKE_ALIGNED_OPERATOR_NEW
+
           ObserverBase::InputVector u_;
           KalmanFilterBase::Amatrix a_;
           KalmanFilterBase::Cmatrix c_;
