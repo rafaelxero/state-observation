@@ -22,20 +22,29 @@ namespace stateObservation
 
     }
 
-    void Logger::save()
+    void Logger::save(bool clear, bool append)
     {
       for (std::map<const void *, log_s >::iterator i=logs_.begin();i!=logs_.end();++i)
       {
         if (i->second.filename!=std::string(""))
         {
-          i->second.array.writeInFile((path_+std::string("/")+i->second.filename).c_str());
+          i->second.array.writeInFile((path_+std::string("/")+i->second.filename).c_str(),
+                                      clear,append);
         }
       }
     }
 
-    void Logger::clear()
+    void Logger::clearTracking()
     {
       logs_.clear();
+    }
+
+    void Logger::clearLogs()
+    {
+      for (std::map<const void *, log_s >::iterator i=logs_.begin();i!=logs_.end();++i)
+      {
+        i->second.array.clear();
+      }
     }
 
     const IndexedMatrixArray & Logger::getRecord(const void* address) const

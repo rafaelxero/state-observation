@@ -48,9 +48,13 @@ namespace stateObservation
 
       IndexedMatrixArray & getRecord(const void *address);
 
-      void save();
+      void save(bool clear = false, bool append = false);
 
-      void clear();
+      ///clears all the tracking lists and delete all the logs
+      void clearTracking();
+
+      ///clears the logs but keeps the tracking including time indexation
+      void clearLogs();
 
     protected:
       struct log_s
