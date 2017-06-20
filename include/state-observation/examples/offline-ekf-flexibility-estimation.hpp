@@ -15,7 +15,6 @@
 #define FLEXIBILITYESTIMATION_OFFLINEEKFFLEXIBILITYESTIMATION_H
 
 #include <state-observation/flexibility-estimation/fixed-contact-ekf-flex-estimator-imu.hpp>
-#include <state-observation/flexibility-estimation/model-base-ekf-flex-estimator-imu.hpp>
 #include <vector>
 
 namespace stateObservation
