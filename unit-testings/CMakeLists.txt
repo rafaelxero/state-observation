@@ -18,6 +18,9 @@ ADD_EXECUTABLE(test_model-base-ekf-flex-estimator-imu test_model-base-ekf-flex-e
 ADD_EXECUTABLE(test_model-base-ekf-flex-estimator-imu_withComBias_withForcesSensors test_model-base-ekf-flex-estimator-imu_withComBias_withForcesSensors.cpp ${${PROJECT_NAME}_ABSOLUTE_HEADERS})
 ADD_EXECUTABLE(zmpEstimation zmpEstimation.cpp ${${PROJECT_NAME}_ABSOLUTE_HEADERS})
 
+#NOT A TEST
+ADD_EXECUTABLE(flexEstimatorTester model-base-flex-estimator-file-tester.cpp ${${PROJECT_NAME}_ABSOLUTE_HEADERS})
+
 
 TARGET_LINK_LIBRARIES(test-kalman-filter ${Boost_LIBRARIES} ${PROJECT_NAME})
 TARGET_LINK_LIBRARIES(test-kalman-filter-template ${Boost_LIBRARIES} ${PROJECT_NAME})
@@ -33,6 +36,7 @@ TARGET_LINK_LIBRARIES(test_imu-elastic-local-frame-dynamical-system ${Boost_LIBR
 TARGET_LINK_LIBRARIES(test_model-base-ekf-flex-estimator-imu ${Boost_LIBRARIES} ${PROJECT_NAME})
 TARGET_LINK_LIBRARIES(test_model-base-ekf-flex-estimator-imu_withComBias_withForcesSensors ${Boost_LIBRARIES} ${PROJECT_NAME})
 TARGET_LINK_LIBRARIES(zmpEstimation ${Boost_LIBRARIES} ${PROJECT_NAME})
+TARGET_LINK_LIBRARIES(flexEstimatorTester ${Boost_LIBRARIES} ${PROJECT_NAME})
 
 ADD_TEST(test-kalman-filter test-kalman-filter)
 ADD_TEST(test-kalman-filter-template test-kalman-filter-template)
