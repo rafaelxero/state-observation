@@ -64,9 +64,6 @@ void IndexedMatrixArray::setValue(const Matrix& v,unsigned k)
 
 void IndexedMatrixArray::pushBack(const Matrix& v)
 {
-    if (v_.size()==0)
-        k_=0;
-
     v_.push_back(v);
 }
 
@@ -119,19 +116,23 @@ Matrix & IndexedMatrixArray::back()
 ///Get the time index
 unsigned IndexedMatrixArray::getLastIndex()const
 {
-    if (v_.size()>0)
-      return k_+v_.size()-1;
-    else
-      return 0;
+  return k_+v_.size()-1;
 }
 
 ///Get the time index
 unsigned IndexedMatrixArray::getFirstIndex()const
 {
-    if (v_.size()>0)
-      return k_;
-    else
-      return 0;
+  return k_;
+}
+
+unsigned IndexedMatrixArray::setLastIndex(int index)
+{
+  k_=index-(v_.size()+1);
+}
+
+unsigned IndexedMatrixArray::setFirstIndex(int index)
+{
+  k_=index;
 }
 
 unsigned IndexedMatrixArray::size() const
@@ -139,7 +140,7 @@ unsigned IndexedMatrixArray::size() const
     return v_.size();
 }
 
-///Switch off the initalization flag, the value is no longer accessible
+///Switch off the initialization flag, the value is no longer accessible
 void IndexedMatrixArray::reset()
 {
     k_=0;
@@ -152,7 +153,6 @@ bool IndexedMatrixArray::checkIndex(unsigned time) const
     return (v_.size()>0 && k_<=time && k_+v_.size() > time);
 }
 
-
 ///Checks whether the matrix is set or not (assert)
 ///does nothing in release mode
 void IndexedMatrixArray::check_(unsigned time)const
@@ -160,7 +160,6 @@ void IndexedMatrixArray::check_(unsigned time)const
     (void)time;//avoid warning
     BOOST_ASSERT(checkIndex(time) && "Error: Time out of range");
 }
-
 
 ///Checks whether the matrix is set or not (assert)
 ///does nothing in release mode
@@ -179,11 +178,6 @@ void IndexedMatrixArray::checkNext_(unsigned time)const
 ///resizes the array
 void IndexedMatrixArray::resize(unsigned i, const Matrix & m )
 {
-    if (v_.size()==0)
-    {
-        k_=0;
-    }
-
     v_.resize(i,m);
 }
 

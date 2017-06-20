@@ -146,7 +146,6 @@ namespace stateObservation
         inline void setValue(const Matrix& v,unsigned k);
 
         ///Pushes back the matrix to the array, the new value will take the next time
-        ///index. If the array is empty, the time index will be set to 0
         inline void pushBack(const Matrix& v);
 
         ///removes the first (oldest) element of the array
