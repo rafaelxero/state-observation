@@ -101,6 +101,9 @@ namespace stateObservation
         ///Set the value of the matrix and the time sample
         inline void set(const Matrix& v,unsigned k);
 
+        ///set the index of the matrix
+        inline void setIndex(int index);
+
         ///Get the matrix value
         inline Matrix operator()() const;
 

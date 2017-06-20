@@ -5,6 +5,12 @@ inline void IndexedMatrix::set(const Matrix& v,unsigned k)
     v_=v;
 }
 
+void IndexedMatrix::setIndex(int k)
+{
+  check_();
+  k_=k;
+}
+
 ///Get the matrix value
 Matrix IndexedMatrix::operator()()const
 {
@@ -28,8 +34,8 @@ bool IndexedMatrix::isSet()const
 ///Switch off the initalization flag, the value is no longer accessible
 void IndexedMatrix::reset()
 {
-    k_=0;
-    v_.resize(0,0);
+  k_=0;
+  v_.resize(0,0);
 }
 
 ///Checks whether the matrix is set or not (assert)
