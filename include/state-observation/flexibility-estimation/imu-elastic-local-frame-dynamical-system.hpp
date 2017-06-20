@@ -70,6 +70,8 @@ namespace stateObservation
         static const unsigned unmodeledForces = 24;
         static const unsigned comBias = 30;
         static const unsigned drift = 32;
+
+        static const unsigned size =35;
       };
 
 
@@ -378,7 +380,7 @@ public:
 
       Matrix3& computeRotation_(const Vector3 & x, int i);
 
-      static const unsigned stateSize_=35;
+      static const unsigned stateSize_=state::size;
       static const unsigned inputSizeBase_=42;
       unsigned inputSize_;
       static const unsigned measurementSizeBase_=6;
