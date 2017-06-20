@@ -93,17 +93,25 @@ namespace stateObservation
     }
 
 
-    void IndexedMatrixArray::writeInFile(const char * filename)
+    void IndexedMatrixArray::writeInFile(const char * filename, bool clearLog, bool append)
     {
     	std::ofstream f;
-
-      f.open(filename);
-
-      if (size()>0)
+    	if (!append)
       {
+        f.open(filename);
+      }
+      else
+      {
+        f.open(filename,std::ofstream::app);
+      }
 
-        for (size_t k=getFirstIndex();k<=getLastIndex();++k)
+      if (f.is_open())
+      {
+        if (size()>0)
         {
+
+          for (size_t k=getFirstIndex();k<=getLastIndex();++k)
+          {
 
             f << k;
 
@@ -116,10 +124,23 @@ namespace stateObservation
             		f << " "<< m(i,j);
               }
             }
-
             f << std::endl;
+          }
+        }
+
+        if (clearLog)
+        {
+          clear();
         }
       }
+      else
+      {
+        std::stringstream ss;
+        ss<< "Logger: File " <<filename<<" could not be created/opened.";
+        std::runtime_error e(ss.str().c_str());
+        throw e;
+      }
+
     }
 
 }

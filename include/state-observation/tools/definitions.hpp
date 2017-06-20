@@ -202,7 +202,9 @@ namespace stateObservation
         ///write the array in a a file
         ///the line starts with the time index and then the matrix is described
         ///row by row
-        void writeInFile(const char * filename);
+        /// When clear is set, the array is cleared but the time index is conserved
+        /// When append is set to true, the output is appended to file
+        void writeInFile(const char * filename, bool clear=false, bool append =false);
 
     protected:
         ///Asserts that the index is present in the array
