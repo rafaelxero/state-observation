@@ -134,29 +134,29 @@ int test()
      // Measurement
      IndexedMatrixArray y;
      std::cout << "Loading measurements file" << std::endl;
-     y.getFromFile("source_measurement.dat",1,30);
+     y.readFromFile("source_measurement.dat",1,30);
 
      // Input
      IndexedMatrixArray u;
      std::cout << "Loading input file" << std::endl;
-     u.getFromFile("source_input.dat",1,66);
+     u.readFromFile("source_input.dat",1,66);
 
      // Number of support contacts
      IndexedMatrixArray nbSupport;
      std::cout << "Loading the number of supports file" << std::endl;
-     nbSupport.getFromFile("source_nbSupport.dat",1,1);
+     nbSupport.readFromFile("source_nbSupport.dat",1,1);
 
      // CoM bias
      IndexedMatrixArray bias;
      std::cout << "Loading comBias file" << std::endl;
-     bias.getFromFile("source_comBias.dat",1,35);
+     bias.readFromFile("source_comBias.dat",1,35);
 
      // Zmp ref
      IndexedMatrixArray zmpRef;
      std::cout << "Loading zmpRef file" << std::endl;
-     zmpRef.getFromFile("source_zmpRef.dat",1,3);
+     zmpRef.readFromFile("source_zmpRef.dat",1,3);
 
-    /// Definition of ouptut vectors 
+    /// Definition of ouptut vectors
      // State: what we want
      IndexedMatrixArray x_output;
      // State: what we want
@@ -227,7 +227,7 @@ int test()
 
     for (unsigned k=kinit;k<kmax;++k)
     {
-        std::cout << "\n" << k << std::endl;   
+        std::cout << "\n" << k << std::endl;
 
         if(nbSupport[k](0)!=est.getContactsNumber())
         {

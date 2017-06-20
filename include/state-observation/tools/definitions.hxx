@@ -147,6 +147,11 @@ void IndexedMatrixArray::reset()
     v_.clear();
 }
 
+void IndexedMatrixArray::clear()
+{
+  k_=k_+v_.size();
+  v_.clear();
+}
 
 bool IndexedMatrixArray::checkIndex(unsigned time) const
 {

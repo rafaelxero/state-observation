@@ -120,15 +120,15 @@ int test()
      // Measurement
     IndexedMatrixArray y;
     std::cout << "Loading measurements file" << std::endl;
-    y.getFromFile("source_measurement.dat",1,measurementSize);
+    y.readFromFile("source_measurement.dat",1,measurementSize);
      // Input
     IndexedMatrixArray u;
      std::cout << "Loading input file" << std::endl;
-    u.getFromFile("source_input.dat",1,inputSize);
+    u.readFromFile("source_input.dat",1,inputSize);
       //state
     IndexedMatrixArray xRef;
       std::cout << "Loading reference state file" << std::endl;
-    xRef.getFromFile("source_state.dat",stateSize,1);
+    xRef.readFromFile("source_state.dat",stateSize,1);
 
    /// Definition of ouptut vectors
      // State: what we want

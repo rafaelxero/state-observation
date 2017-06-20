@@ -176,45 +176,45 @@ int test()
      // Measurement
      IndexedMatrixArray y;
      std::cout << "Loading measurements file" << std::endl;
-     y.getFromFile("data/source_measurement.dat",1,measurementSize);
+     y.readFromFile("data/source_measurement.dat",1,measurementSize);
      // Input
      IndexedMatrixArray u;
      std::cout << "Loading input file" << std::endl;
-     u.getFromFile("data/source_input.dat",1,inputSize);
+     u.readFromFile("data/source_input.dat",1,inputSize);
      //state
      IndexedMatrixArray xRef;
      std::cout << "Loading reference state file" << std::endl;
-     xRef.getFromFile("data/source_state.dat",stateSize,1);
+     xRef.readFromFile("data/source_state.dat",stateSize,1);
 
 
      //zmp estimated ref
      IndexedMatrixArray zmpEstimatedRef;
      std::cout << "Loading reference zmpEstimated file" << std::endl;
-     zmpEstimatedRef.getFromFile("data/source_zmpestimated.dat",3,1);
+     zmpEstimatedRef.readFromFile("data/source_zmpestimated.dat",3,1);
      //zmp
      IndexedMatrixArray zmpRef;
      std::cout << "Loading reference zmp file" << std::endl;
-     zmpRef.getFromFile("data/source_zmp.dat",3,1);
+     zmpRef.readFromFile("data/source_zmp.dat",3,1);
      //forcesAndMoments
      IndexedMatrixArray forcesAndMomentsRef;
      std::cout << "Loading reference forcesAndMoments file" << std::endl;
-     forcesAndMomentsRef.getFromFile("data/source_forcesAndMoments.dat",12,1);
+     forcesAndMomentsRef.readFromFile("data/source_forcesAndMoments.dat",12,1);
      //forceLLEG
      IndexedMatrixArray forceLLEGRef;
      std::cout << "Loading reference forceLLEG file" << std::endl;
-     forceLLEGRef.getFromFile("data/source_forceLLEG.dat",6,1);
+     forceLLEGRef.readFromFile("data/source_forceLLEG.dat",6,1);
      //forceRLEG
      IndexedMatrixArray forceRLEGRef;
      std::cout << "Loading reference forceRLEG file" << std::endl;
-     forceRLEGRef.getFromFile("data/source_forceRLEG.dat",6,1);
+     forceRLEGRef.readFromFile("data/source_forceRLEG.dat",6,1);
      //forceLLEG estimated
      IndexedMatrixArray forceLLEGEst;
      std::cout << "Loading estimated forceLLEG file" << std::endl;
-     forceLLEGEst.getFromFile("data/source_forcesSupport1.dat",6,1);
+     forceLLEGEst.readFromFile("data/source_forcesSupport1.dat",6,1);
      //forceRLEG estimated
      IndexedMatrixArray forceRLEGEst;
      std::cout << "Loading estimated forceRLEG file" << std::endl;
-     forceRLEGEst.getFromFile("data/source_forcesSupport2.dat",6,1);
+     forceRLEGEst.readFromFile("data/source_forcesSupport2.dat",6,1);
 
    /// Definition of ouptut vectors
      // State: what we want

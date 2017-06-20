@@ -11,9 +11,9 @@ const double dt = 5e-3;
 int homoMatrixDerivationTestFromFile(char * homo, char * vel, const std::string & prefix)
 {
     IndexedMatrixArray velocities;
-    velocities.getFromFile(vel,6);
+    velocities.readFromFile(vel,6);
     IndexedMatrixArray homoMatrices;
-    homoMatrices.getFromFile(homo,4,4);
+    homoMatrices.readFromFile(homo,4,4);
 
     IndexedMatrixArray computedVelocities;
 

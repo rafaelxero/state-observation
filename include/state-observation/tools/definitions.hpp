@@ -178,13 +178,23 @@ namespace stateObservation
         ///Get the time index
         inline unsigned getLastIndex() const;
 
+        ///Set the time index of the last element
+        inline unsigned setLastIndex(int index);
+
         ///Get the time index
         inline unsigned getFirstIndex() const;
 
+        ///set the time index of the first element
+        inline unsigned setFirstIndex(int index);
+
         inline unsigned size() const;
 
-        ///Resets the array the value is no longer accessible
+        ///Resets the array to initial state
+        ///the value is no longer accessible
         inline void reset();
+
+        ///Clears the vector but keeps the last index
+        inline void clear();
 
         ///converts the array into a standard vector
         std::vector<Matrix> getArray() const;
@@ -193,10 +203,16 @@ namespace stateObservation
         inline bool checkIndex(unsigned k) const;
 
         ///gets the array from a file
-        ///the line starts with the time index and then the matrix is described
+        ///the line starts with the time index and then the matrix is read
         ///row by row
-        ///Warning : this resets the array
-        void getFromFile(const char * filename, size_t rows, size_t cols=1);
+        ///WARNING: this resets the array
+        void readFromFile(const char * filename, size_t rows, size_t cols=1);
+
+        ///gets the array from a file
+        ///the line starts with the time index and then every line of the file
+        /// is converted into a vector
+        ///WARNING: this resets the array
+        void readVectorsFromFile(const char * filename);
 
         ///write the array in a a file
         ///the line starts with the time index and then the matrix is described
