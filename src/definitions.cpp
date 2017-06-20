@@ -74,7 +74,7 @@ namespace stateObservation
           int k;
           f >> k;
 
-          if (f.eof())
+          if (f.fail())
             continuation=false;
           else
           {
