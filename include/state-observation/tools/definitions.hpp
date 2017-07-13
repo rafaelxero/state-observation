@@ -206,13 +206,13 @@ namespace stateObservation
         ///the line starts with the time index and then the matrix is read
         ///row by row
         ///WARNING: this resets the array
-        void readFromFile(const char * filename, size_t rows, size_t cols=1);
+        void readFromFile(const char * filename, size_t rows, size_t cols=1, bool withTimeStamp = true);
 
         ///gets the array from a file
         ///the line starts with the time index and then every line of the file
         /// is converted into a vector
         ///WARNING: this resets the array
-        void readVectorsFromFile(const char * filename);
+        void readVectorsFromFile(const char * filename, bool withTimeStamp = true );
 
         ///write the array in a a file
         ///the line starts with the time index and then the matrix is described
@@ -220,6 +220,13 @@ namespace stateObservation
         /// When clear is set, the array is cleared but the time index is conserved
         /// When append is set to true, the output is appended to file
         void writeInFile(const char * filename, bool clear=false, bool append =false);
+
+        ///write the array in a a file
+        ///the line starts with the time index and then the matrix is described
+        ///row by row
+        /// When clear is set, the array is cleared but the time index is conserved
+        /// When append is set to true, the output is appended to file
+        void writeInFile(const std::string & filename, bool clear=false, bool append =false);
 
     protected:
         ///Asserts that the index is present in the array

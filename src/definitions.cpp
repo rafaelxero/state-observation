@@ -55,7 +55,7 @@ namespace stateObservation
         }
     }
 
-    void IndexedMatrixArray::readFromFile(const char * filename , size_t rows, size_t cols)
+    void IndexedMatrixArray::readFromFile(const char * filename , size_t rows, size_t cols, bool withTimeStamp)
     {
       reset();
 
@@ -72,8 +72,16 @@ namespace stateObservation
 
         while (continuation)
         {
-          int k;
-          f >> k;
+          int k=0;
+
+          if (withTimeStamp)
+          {
+            f >> k;
+          }
+          else
+          {
+            ++k;
+          }
 
           if (f.fail())
             continuation=false;
@@ -93,7 +101,7 @@ namespace stateObservation
       }
     }
 
-    void IndexedMatrixArray::readVectorsFromFile(const char * filename )
+    void IndexedMatrixArray::readVectorsFromFile(const char * filename , bool withTimeStamp )
     {
       reset();
 
@@ -105,7 +113,7 @@ namespace stateObservation
       {
         std::string s;
         Vector v;
-        int k;
+        int k=0;
 
         bool continuation=true;
 
@@ -115,7 +123,15 @@ namespace stateObservation
 
           std::stringstream ss(s);
 
-          ss >> k;
+          if (withTimeStamp)
+          {
+            ss >> k;
+          }
+          else
+          {
+            ++k;
+          }
+
 
           if (f.fail())
             continuation=false;
@@ -148,6 +164,11 @@ namespace stateObservation
           }
         }
       }
+    }
+
+    void IndexedMatrixArray::writeInFile(const std::string & filename,  bool clearLog, bool append)
+    {
+      writeInFile(filename.c_str(),  clearLog, append);
     }
 
 
