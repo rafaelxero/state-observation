@@ -100,7 +100,7 @@ namespace stateObservation
         BOOST_ASSERT(checkPmatrix(pr_) && "ERROR: The Matrix P is not initialized");
 
         //prediction
-        updatePredictedMeasurement();// runs also updatePrediction_();
+        updateStateAndMeasurementPrediction();// runs also updatePrediction_();
         oc_.pbar=q_;
         oc_.pbar.noalias()  += a_*(pr_*a_.transpose());
 
@@ -133,6 +133,7 @@ namespace stateObservation
         std::cout <<"oc_.pbar" <<std::endl<< (oc_.pbar).format(CleanFmt)<<std::endl;
         std::cout <<"c_ * (oc_.pbar * c_.transpose())" <<std::endl<< ( c_ * (oc_.pbar * c_.transpose())).format(CleanFmt)<<std::endl;
         std::cout <<"inoMeasCovInverse" <<std::endl<< oc_.inoMeasCovInverse.format(CleanFmt)<<std::endl;
+        std::cout <<"predictedMeasurement " <<std::endl<< predictedMeasurement_.transpose().format(CleanFmt)<<std::endl;
         std::cout <<"inoMeas" <<std::endl<< oc_.inoMeas.transpose().format(CleanFmt)<<std::endl;
         std::cout <<"inovation_" <<std::endl<< inovation_.transpose().format(CleanFmt)<<std::endl;
         std::cout <<"Xhat" <<std::endl<< oc_.xhat.transpose().format(CleanFmt)<<std::endl;
@@ -322,18 +323,6 @@ namespace stateObservation
         return inovation_;
     }
 
-    Vector KalmanFilterBase::getPrediction()
-    {
-        updatePrediction();
-        return oc_.xbar;
-    }
-
-    Vector KalmanFilterBase::getPredictedMeasurement()
-    {
-        updatePredictedMeasurement();
-        return predictedMeasurement_;
-    }
-
     Vector KalmanFilterBase::getLastPrediction() const
     {
         return oc_.xbar;
@@ -347,5 +336,11 @@ namespace stateObservation
     Matrix KalmanFilterBase::getLastGain() const
     {
         return oc_.kGain;
+    }
+
+    Vector KalmanFilterBase::predictSensor_(unsigned k)
+    {
+        oc_.xbar = prediction_(this->x_.getTime()+1);
+        return predictedMeasurement_=simulateSensor_(oc_.xbar,this->x_.getTime()+1);
     }
 }

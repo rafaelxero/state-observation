@@ -9,6 +9,8 @@
 #include <state-observation/tools/miscellaneous-algorithms.hpp>
 #include <stdexcept>
 
+#include <iostream>
+
 namespace stateObservation
 {
 namespace flexibilityEstimation
@@ -44,7 +46,7 @@ namespace flexibilityEstimation
       contactModel_=contactModel::none;
 
       nbContacts_=0;
-      inputSize_=input::inputSizeBase;
+      inputSize_=input::sizeBase;
 
       kcurrent_=-1;
 
@@ -254,8 +256,16 @@ namespace flexibilityEstimation
         op_.globalContactPos.noalias() += op_.RciContactPos ;
 
         op_.forcei.noalias() = - Kfe_*op_.Rcit*op_.Rt*(op_.globalContactPos-op_.contactPos);
+
         op_.forcei.noalias() += - Kfv_*op_.Rcit*op_.Rt*(kine::skewSymmetric(angVel)*op_.RciContactPos
                                   +linVelocity + orientation*op_.contactVel);
+
+        //std::cout << "RciContactPos " << op_.RciContactPos.transpose() <<std::endl;
+        //std::cout << "linVelocity " << linVelocity.transpose() <<std::endl;
+        //std::cout << "kine::skewSymmetric(angVel)*op_.RciContactPos +linVelocity + orientation*op_.contactVel " << (kine::skewSymmetric(angVel)*op_.RciContactPos
+        //                          +linVelocity + orientation*op_.contactVel).transpose() <<std::endl;
+
+        //std::cout << "forcei " << op_.forcei.transpose() <<std::endl;
 
         fc.segment<3>(3*i)= op_.forcei;
 
@@ -828,8 +838,9 @@ namespace flexibilityEstimation
     }
 
     Vector IMUElasticLocalFrameDynamicalSystem::stateDynamics
-            (const Vector& x, const Vector& u, unsigned )
+            (const Vector& x, const Vector& u, unsigned k)
     {
+
         assertStateVector_(x);
         assertInputVector_(u);
 
@@ -898,6 +909,9 @@ namespace flexibilityEstimation
 
         for (int i=0; i<hrp2::contact::nbModeledMax; ++i)
         {
+            //std::cout << "Contact " << i << std::endl
+            //          << fc_.segment<3>(3*i).transpose() << std::endl
+            //          << tc_.segment<3>(3*i).transpose()<< std::endl;
             op_.efforts[i].block<3,1>(0,0) = fc_.segment<3>(3*i);
             op_.efforts[i].block<3,1>(3,0) = tc_.segment<3>(3*i);
         }
@@ -1072,6 +1086,7 @@ namespace flexibilityEstimation
 
         //measurements
         yk_=sensor_.getMeasurements();
+
         return yk_;
     }
 
@@ -1320,7 +1335,7 @@ namespace flexibilityEstimation
     void IMUElasticLocalFrameDynamicalSystem::setContactsNumber(unsigned i)
     {
         nbContacts_=i;
-        inputSize_ =input::inputSizeBase +12*i;
+        inputSize_ =input::sizeBase +12*i;
 
         updateMeasurementSize_();
 

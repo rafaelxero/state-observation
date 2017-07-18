@@ -63,7 +63,7 @@ stateObservation::IndexedMatrixArray offlineEKFFlexibilityEstimation(
 
         if (premea != 0)
         {
-            premea->setValue(estimator.getPredictedMeasurement(),i);
+            premea->setValue(estimator.getLastPredictedMeasurement(),i);
         }
 
     }

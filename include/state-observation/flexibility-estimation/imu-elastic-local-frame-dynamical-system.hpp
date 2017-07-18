@@ -57,7 +57,7 @@ namespace stateObservation
         static const unsigned additionalForces = 42;
         static const unsigned contacts = 48;
 
-        static const unsigned inputSizeBase = 48;
+        static const unsigned sizeBase = 48;
       };
 
       struct state
@@ -381,7 +381,6 @@ public:
       Matrix3& computeRotation_(const Vector3 & x, int i);
 
       static const unsigned stateSize_=state::size;
-      static const unsigned inputSizeBase_=42;
       unsigned inputSize_;
       static const unsigned measurementSizeBase_=6;
       unsigned nbContacts_;
@@ -477,7 +476,6 @@ public:
         Vector3 imuAcc;
         Vector3 imuOmega;
         Vector sensorState;
-
 
         Vector3 positionCom;
         Vector3 velocityCom;

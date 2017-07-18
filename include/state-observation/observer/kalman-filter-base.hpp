@@ -223,28 +223,22 @@ namespace stateObservation
         virtual void setMeasureSize(unsigned m);
 
         /// Get simulation of the measurement y_k using the state estimation
-        virtual Vector getSimulatedMeasurement(unsigned k);
+        virtual MeasureVector getSimulatedMeasurement(unsigned k);
 
         ///Get the last vector of inovation of the Kalman filter
-        virtual Vector getInovation();
+        virtual StateVector getInovation();
 
         /// A function that gives the prediction (this is NOT the estimation of the state),
         /// for the estimation call getEstimateState method
         /// it is only an execution of the state synamics with the current state
         /// estimation and the current input value
-        virtual Vector getPrediction();
-
-        ///Get the simulated measurement of the predicted state
-        virtual Vector getPredictedMeasurement();
-
-        ///update the prediction, enables to precompute the predicted state
-        ///definition in the bottom of this file
-        inline void updatePrediction();
+        inline StateVector updateStatePrediction();
 
         ///update the predicted state, enables to precompute the predicted measurementŔ
-        ///triggers also void updatePrediction()
+        ///triggers also Vector updateStatePrediction()
+        ///returns the measurement prediction
         ///definition in the bottom of this file
-        inline void updatePredictedMeasurement();
+        inline MeasureVector updateStateAndMeasurementPrediction();
 
         ///get the last predicted state
         Vector getLastPrediction() const;
@@ -268,6 +262,10 @@ namespace stateObservation
 
         /// The abstract method to overload to implement h(x,u)
         virtual MeasureVector simulateSensor_(const StateVector& x, unsigned k)=0;
+
+        /// Predicts the sensor measurement,
+        /// by default simulates the sensor on the predicted state
+        virtual MeasureVector predictSensor_(unsigned k);
 
         /// Containers for the jacobian matrix of the process
         Matrix a_;
@@ -307,15 +305,15 @@ namespace stateObservation
 
     };
 
-    /*inline*/ void KalmanFilterBase::updatePrediction()
+    /*inline*/ Vector KalmanFilterBase::updateStatePrediction()
     {
-        oc_.xbar = prediction_(this->x_.getTime()+1);
+        return oc_.xbar = prediction_(this->x_.getTime()+1);
     }
 
-    /*inline*/ void KalmanFilterBase::updatePredictedMeasurement()
+    /*inline*/ Vector KalmanFilterBase::updateStateAndMeasurementPrediction()
     {
-        updatePrediction();
-        predictedMeasurement_=simulateSensor_(oc_.xbar,this->x_.getTime()+1);
+        updateStatePrediction();
+        return predictedMeasurement_=predictSensor_(this->x_.getTime());
     }
 
 

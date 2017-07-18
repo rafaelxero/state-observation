@@ -1,7 +1,5 @@
 #include <state-observation/observer/extended-kalman-filter.hpp>
 
-#include <iostream>
-
 namespace stateObservation
 {
     void ExtendedKalmanFilter::setFunctor(DynamicalSystemFunctorBase* f)
@@ -65,12 +63,12 @@ namespace stateObservation
         return xbar_();
     }
 
-    ObserverBase::MeasureVector ExtendedKalmanFilter::predictSensor_(const ObserverBase::StateVector& x, unsigned k)
+    ObserverBase::MeasureVector ExtendedKalmanFilter::predictSensor_(unsigned k)
     {
 
         if (!this->ybar_.isSet() || this->ybar_.getTime()!=k)
         {
-            ybar_.set(simulateSensor_(x,k),k);
+            ybar_.set(simulateSensor_(xbar_(),k),k);
         }
 
         return ybar_();
@@ -147,7 +145,7 @@ must set directInputOutputFeedthrough to 'false' in the constructor");
         opt.xbar_=prediction_(k+1);
         opt.xp_ = opt.xbar_;
 
-        opt.y_=predictSensor_( opt.xbar_, k+1);
+        opt.y_=predictSensor_(k+1);
 
         for (unsigned i=0;i<n_;++i)
         {
