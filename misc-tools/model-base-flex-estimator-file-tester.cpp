@@ -50,7 +50,8 @@ main (int argc, char *argv[])
 
     std::cout << "Rebuiding state" << std::endl;
     IndexedMatrixArray xhat=
-      examples::offlineModelBaseFlexEstimation( y, u, xh0, numberOfContacts, dt, mass,0x0,0x0,1);
+      examples::offlineModelBaseFlexEstimation( y, u, xh0, numberOfContacts, dt, mass, Matrix3::Zero(),
+                                               Matrix3::Zero(), Matrix3::Zero(), Matrix3::Zero(), 0x0,0x0,0x0,1);
     std::cout << "State rebuilt" << std::endl;
 
     xhat.writeInFile("xhat");
