@@ -87,7 +87,7 @@ main (int argc, char *argv[])
       reconsVeli = reconsVel [i];
 
       errorPosi = reconsPosi-absPosi-bias;
-      errorVelocityi = reconsVeli-absVeli;
+      errorVelocityi = (reconsVeli-absVeli).head<3>();
 
       errorPos.pushBack(errorPosi);
       errorVelocity.pushBack(errorVelocityi);

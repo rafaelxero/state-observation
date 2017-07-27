@@ -165,7 +165,8 @@ namespace flexibilityEstimation
         virtual void setUnmodeledForceVariance(double d);
         virtual void setUnmodeledForceProcessVariance(double d);
 
-        virtual void setForceVariance(double d);
+        virtual void setForceVarianceConstant(double d);
+        virtual void setForceVariance(Matrix C);
         virtual void setAbsolutePosVariance(double d);
 
         /// sets the sampling period

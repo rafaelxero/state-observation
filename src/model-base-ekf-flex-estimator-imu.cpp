@@ -17,7 +17,7 @@ namespace stateObservation
       functor_(dt),
       stateSize_(stateSize),
       unmodeledForceVariance_(1e-6),
-      forceVariance_(1e-4),
+      forceVariance_(Matrix::Identity(6,6)*1e-4),
       absPosVariance_(1e-4),
       useFTSensors_(false),
       withAbsolutePos_(false),
@@ -274,10 +274,11 @@ namespace stateObservation
       {
         R_.block(currIndex,0,functor_.getContactsNumber()*6,currIndex).setZero();
         R_.block(0,currIndex,currIndex,functor_.getContactsNumber()*6).setZero();
-        R_.block(currIndex,currIndex,functor_.getContactsNumber()*6,functor_.getContactsNumber()*6) =
-          Matrix::Identity(functor_.getContactsNumber()*6,functor_.getContactsNumber()*6)*forceVariance_;
-
-        currIndex += functor_.getContactsNumber()*6;
+        for (int i=0;i<functor_.getContactsNumber();++i)
+        {
+          R_.block(currIndex,currIndex,6,6) = forceVariance_;
+          currIndex +=6;
+        }
       }
 
       if(withAbsolutePos_)

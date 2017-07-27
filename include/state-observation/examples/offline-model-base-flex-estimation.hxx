@@ -1,7 +1,8 @@
-const double acc_cov_const=5e-8;
-const double gyr_cov_const=1e-14;
-const double force_sensor_const=1e-9;
-const double state_fc_const=5e-10;
+const double acc_cov_const=5e-3;
+const double gyr_cov_const=5e-6;
+const double force_sensor_const=1e-10;
+const double torque_sensor_const=1e-30;
+const double state_fc_const=5e-4;
 const double pos_state_cov_const=0;
 const double vel_state_cov_const=1e-10;
 const double ori_state_cov_const=0;
@@ -58,7 +59,13 @@ stateObservation::IndexedMatrixArray offlineModelBaseFlexEstimation(
 
   estimator.setProcessNoiseCovariance(Q);
   estimator.setMeasurementNoiseCovariance(R);
-  estimator.setForceVariance(force_sensor_const);
+  Matrix forcevariance= Matrix::Identity(6,6)*force_sensor_const;
+  forcevariance.block(3,3,3,3)=Matrix::Identity(3,3)*torque_sensor_const;
+  /// consider the vertical torque as reliable as a force
+  forcevariance(2,2)=torque_sensor_const;
+  /// consider the vertical force as reliable as torque
+  forcevariance(6,6)=force_sensor_const;
+  estimator.setForceVariance(forcevariance);
 
   ///initialize flexibility
   estimator.setFlexibilityCovariance(Q);
