@@ -43,14 +43,16 @@ namespace stateObservation
             }
 
             ///integrates the position/orientation and their time derivatives, given the
-            ///accelerations, and initial velocities and positions.
+            ///accelerations, and initial velocities and positions. The rotations are
+            ///expressed by rotation matrix
             void integrateKinematics
             (Vector3 & position, Vector3 & velocity, const Vector3 & acceleration,
              Matrix3 & orientation, Vector3 & rotationVelocity,
              const Vector3 & rotationAcceleration, double dt);
 
             ///integrates the position/orientation and their time derivatives, given the
-            ///accelerations, and initial velocities and positions.
+            ///accelerations, and initial velocities and positions. The orientations are
+            ///expressed by quaternions
             void integrateKinematics
             (Vector3 & position, Vector3 & velocity, const Vector3 & acceleration,
              Quaternion & orientation, Vector3 & rotationVelocity,
