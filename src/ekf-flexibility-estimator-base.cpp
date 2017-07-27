@@ -166,12 +166,12 @@ namespace flexibilityEstimation
 
     Vector EKFFlexibilityEstimatorBase::getPredictedMeasurement()
     {
-        return ekf_.getPredictedMeasurement();
+        return ekf_.updateStateAndMeasurementPrediction();
     }
 
     Vector EKFFlexibilityEstimatorBase::getPrediction()
     {
-        return ekf_.getPrediction();
+        return ekf_.updateStatePrediction();
     }
 
 
