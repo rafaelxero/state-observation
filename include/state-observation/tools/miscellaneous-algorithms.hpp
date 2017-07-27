@@ -97,6 +97,23 @@ namespace stateObservation
             return v;
         }
 
+        /// Tranbsform a quaternion into rotation vector
+        inline Vector3 quaternionToRotaionVector(const Quaternion &q)
+        {
+          AngleAxis aa(q);
+
+          return aa.angle()*aa.axis();
+        }
+
+        /// Tranbsform a quaternion into rotation vector
+        inline Vector3 quaternionToRotaionVector(const Vector4 &v)
+        {
+          Quaternion q(v);
+          AngleAxis aa(q);
+
+          return aa.angle()*aa.axis();
+        }
+
         /// Transform the rotation matrix into roll pitch yaw
         ///(decompose R into Ry*Rp*Rr)
         inline Vector3 rotationMatrixToRollPitchYaw(const Matrix3 & R, Vector3 & v )
