@@ -69,19 +69,17 @@ namespace stateObservation
         Matrix m(Matrix::Zero(rows,cols));
 
         bool continuation=true;
+        int k=0;
 
         while (continuation)
         {
-          int k=0;
+
 
           if (withTimeStamp)
           {
             f >> k;
           }
-          else
-          {
-            ++k;
-          }
+
 
           if (f.fail())
             continuation=false;
@@ -96,6 +94,7 @@ namespace stateObservation
             }
 
             setValue(m,k);
+            ++k;
           }
         }
       }
@@ -127,10 +126,7 @@ namespace stateObservation
           {
             ss >> k;
           }
-          else
-          {
-            ++k;
-          }
+
 
 
           if (f.fail())
@@ -160,6 +156,7 @@ namespace stateObservation
               v(i)=doublecontainer[i];
             }
             setValue(v,k);
+            ++k;
 
           }
         }
