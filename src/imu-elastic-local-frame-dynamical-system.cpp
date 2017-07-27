@@ -44,7 +44,7 @@ namespace flexibilityEstimation
       contactModel_=contactModel::none;
 
       nbContacts_=0;
-      inputSize_=input::inputSizeBase;
+      inputSize_=input::sizeBase;
 
       kcurrent_=-1;
 
@@ -669,9 +669,42 @@ namespace flexibilityEstimation
                        oriVector, op_.rFlex, angularVel, op_.angularAcceleration,
                        fc, tc, fm,tm, addiForces, addiMoments);
 
-        //integrate kinematics with the last acceleration
+        ///integrate kinematics with the last acceleration
         integrateKinematics(position, linVelocity, op_.linearAcceleration,
             op_.rFlex,angularVel, op_.angularAcceleration, dt);
+
+
+        ///Adding a kinematic coupling to improve estimation of the velocities
+//        Vector3 constrainedLinVel;
+//        constrainedLinVel.setZero();
+//
+//        for(int i=0; i<getContactsNumber();++i)
+//        {
+//          constrainedLinVel += Vector3(op_.rFlex*contactPos[i]).cross(angularVel);
+//        }
+//        constrainedLinVel=constrainedLinVel/getContactsNumber();
+//
+//        double alphaLin=0.1; ///kinematic coupling weight
+//        linVelocity=alphaLin*linVelocity + (1-alphaLin) * constrainedLinVel;
+//        ///
+//
+//        Vector3 constrainedAngVel=angularVel;
+//        if (getContactsNumber()==2)
+//        {
+//
+//            Vector3 interlegAxis = contactPos[1]-contactPos[0];
+//            constrainedAngVel -= (angularVel.dot(interlegAxis) * interlegAxis)/interlegAxis.squaredNorm();
+//        }
+//        else if (getContactsNumber()>2)
+//        {
+//            constrainedAngVel.setZero();
+//        }
+//        double alphaAng = 0.1;
+//        angularVel = alphaAng*angularVel + (1-alphaAng)*constrainedAngVel;
+
+
+
+
 
         op_.orientationAA=op_.rFlex;
         oriVector.noalias()=op_.orientationAA.angle()*op_.orientationAA.axis();
@@ -828,8 +861,9 @@ namespace flexibilityEstimation
     }
 
     Vector IMUElasticLocalFrameDynamicalSystem::stateDynamics
-            (const Vector& x, const Vector& u, unsigned )
+            (const Vector& x, const Vector& u, unsigned k)
     {
+
         assertStateVector_(x);
         assertInputVector_(u);
 
@@ -1320,7 +1354,7 @@ namespace flexibilityEstimation
     void IMUElasticLocalFrameDynamicalSystem::setContactsNumber(unsigned i)
     {
         nbContacts_=i;
-        inputSize_ =input::inputSizeBase +12*i;
+        inputSize_ =input::sizeBase +12*i;
 
         updateMeasurementSize_();
 
