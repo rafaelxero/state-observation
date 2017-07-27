@@ -52,8 +52,13 @@ namespace stateObservation
             const stateObservation::IndexedMatrixArray numberOfContacts,
             double dt,
             double mass,
-            IndexedMatrixArray * ino=0x0,
-            IndexedMatrixArray * premea = 0x0,
+            const Matrix3 & kfe = Matrix3::Zero(),
+            const Matrix3 & kfv = Matrix3::Zero(),
+            const Matrix3 & kte = Matrix3::Zero(),
+            const Matrix3 & ktv = Matrix3::Zero(),
+            IndexedMatrixArray * inovation=0x0,
+            IndexedMatrixArray * predictedMeasurements = 0x0,
+            IndexedMatrixArray * simulatedMeasurements = 0x0,
             int verbose=0x0);
 
 
