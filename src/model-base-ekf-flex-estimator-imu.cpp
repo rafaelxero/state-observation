@@ -607,7 +607,13 @@ namespace stateObservation
 
     void ModelBaseEKFFlexEstimatorIMU::setForceVariance(double d)
     {
-      forceVariance_ = d;
+      forceVariance_ = Matrix::Identity(6,6)*d;
+      updateMeasurementCovarianceMatrix_();
+    }
+
+    void ModelBaseEKFFlexEstimatorIMU::setForceVariance(const Matrix3 &v)
+    {
+      forceVariance_ = v;
       updateMeasurementCovarianceMatrix_();
     }
 

@@ -165,8 +165,11 @@ namespace flexibilityEstimation
         virtual void setUnmodeledForceVariance(double d);
         virtual void setUnmodeledForceProcessVariance(double d);
 
-        virtual void setForceVarianceConstant(double d);
-        virtual void setForceVariance(Matrix C);
+        ///sets the force sensor variance, either with a diagonal matrix with
+        /// constant diagonal, or using a 3x3 matrix
+        virtual void setForceVariance(double d);
+        virtual void setForceVariance(const Matrix3 & C);
+
         virtual void setAbsolutePosVariance(double d);
 
         /// sets the sampling period
@@ -261,7 +264,7 @@ namespace flexibilityEstimation
         double computeFlexibilityTime_;
 
         double unmodeledForceVariance_;
-        double forceVariance_;//force sensor variance
+        Matrix forceVariance_;//force sensor variance
         double absPosVariance_;
 
         bool useFTSensors_;

@@ -57,6 +57,14 @@ main (int argc, char *argv[])
       ut.tail(ui.size()-input::additionalForces) = ui.tail(ui.size()-input::additionalForces);
 
       u[i]=ut;
+
+      Vector3 gyroBias;
+      gyroBias << -0.04,-0.045,-0.064;
+
+      Vector yi=y[i];
+      yi.segment<3>(3)-=gyroBias;
+
+      y[i]=yi;
     }
 
     std::cout << "Read contact number, filename: "<<argv[3]<< std::endl;
@@ -88,8 +96,8 @@ main (int argc, char *argv[])
 
     //kfe=40000*Matrix3::Identity();
     //kte=600*Matrix3::Identity();
-    kfv=600*Matrix3::Identity();
-    ktv=60*Matrix3::Identity();
+    //kfv=600*Matrix3::Identity();
+    //ktv=60*Matrix3::Identity();
 
     IndexedMatrixArray xhat=
       examples::offlineModelBaseFlexEstimation( y, u, xh0, numberOfContacts, dt, mass,
