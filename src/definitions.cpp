@@ -186,7 +186,7 @@ namespace stateObservation
         if (size()>0)
         {
 
-          for (size_t k=getFirstIndex();k<=getLastIndex();++k)
+          for (size_t k=getFirstIndex();k<getNextIndex();++k)
           {
 
             f << k;

@@ -67,7 +67,7 @@ int testConstant()
     f.open("trajectory.dat");
 
     ///the reconstruction of the state
-    for (unsigned i=xh.getFirstIndex();i<=xh.getLastIndex();++i)
+    for (unsigned i=xh.getFirstIndex();i<xh.getNextIndex();++i)
     {
        f << i<<" "<< xh[i].transpose()
           << std::endl;
@@ -261,7 +261,7 @@ int test()
     double error=0;
 
     ///the reconstruction of the state
-    for (unsigned i=y.getFirstIndex();i<=y.getLastIndex();++i)
+    for (unsigned i=y.getFirstIndex();i<y.getNextIndex();++i)
     {
         ///display part, useless
         Vector3 g;

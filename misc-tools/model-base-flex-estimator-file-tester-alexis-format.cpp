@@ -43,7 +43,7 @@ main (int argc, char *argv[])
 
 
     //conversion from Alexis to my format
-    for (int i=u.getFirstIndex(); i< u.getLastIndex(); ++i)
+    for (int i=u.getFirstIndex(); i< u.getNextIndex(); ++i)
     {
       Vector ui, ut;
 
@@ -127,7 +127,7 @@ main (int argc, char *argv[])
 
     Vector6 vel;
 
-    for (int i = u.getFirstIndex(); i<u.getLastIndex(); ++i)
+    for (int i = u.getFirstIndex(); i<u.getNextIndex(); ++i)
     {
       Vector ui, xhati;
 

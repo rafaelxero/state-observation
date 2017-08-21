@@ -120,6 +120,13 @@ unsigned IndexedMatrixArray::getLastIndex()const
 }
 
 ///Get the time index
+unsigned IndexedMatrixArray::getNextIndex()const
+{
+  return k_+v_.size();
+}
+
+
+///Get the time index
 unsigned IndexedMatrixArray::getFirstIndex()const
 {
   return k_;

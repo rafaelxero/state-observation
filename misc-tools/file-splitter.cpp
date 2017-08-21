@@ -67,7 +67,7 @@ main (int argc, char *argv[])
         additionalForces,
         contact1,
         contact2 ;
-        for (int i=u.getFirstIndex(); i<u.getLastIndex(); ++i)
+        for (int i=u.getFirstIndex(); i<u.getNextIndex(); ++i)
         {
           ui=u[i];
           posCom.setValue(ui.segment<3>(input::posCom),i);
@@ -157,7 +157,7 @@ main (int argc, char *argv[])
 
         std::cout << "Splitting" << std::endl;
 
-        for (int i=y.getFirstIndex(); i<y.getLastIndex(); ++i)
+        for (int i=y.getFirstIndex(); i<y.getNextIndex(); ++i)
         {
           yi=y[i];
 
@@ -234,7 +234,7 @@ main (int argc, char *argv[])
         comBias,
         drift          ;
 
-        for (int i=x.getFirstIndex(); i<x.getLastIndex(); ++i)
+        for (int i=x.getFirstIndex(); i<x.getNextIndex(); ++i)
         {
           xi=x[i];
           pos             .setValue(xi.segment<3>(state::pos),i);

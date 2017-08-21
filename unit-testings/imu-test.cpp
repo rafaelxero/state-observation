@@ -121,7 +121,7 @@ int test()
     double dx;
 
     ///the reconstruction of the state
-    for (unsigned i=y.getFirstIndex();i<=y.getLastIndex();++i)
+    for (unsigned i=y.getFirstIndex();i<y.getNextIndex();++i)
     {
         ///display part, useless
         Vector3 g;

@@ -20,7 +20,7 @@ namespace stateObservation
 
     void DynamicalSystemSimulator::setState( const Vector & x, unsigned k)
     {
-        BOOST_ASSERT((x_.size()==0 || (x_.getFirstIndex()<=k && x_.getLastIndex()+1>=k)) &&
+        BOOST_ASSERT((x_.size()==0 || (x_.getFirstIndex()<=k && x_.getNextIndex()>=k)) &&
             "ERROR: Only consecutive states can be set. If you want to restart a new dynamics please call resetDynamics before");
         x_.truncate(k);
         x_.setValue(x,k);
@@ -35,7 +35,7 @@ namespace stateObservation
     {
         BOOST_ASSERT((y_.size()==0 || y_.getFirstIndex()<k) &&
             "ERROR: Only future measurements can be obtained");
-        if (y_.getLastIndex()<=k)
+        if (y_.getNextIndex()<k)
             simulateDynamicsTo(k);
 
         return y_[k];

@@ -176,7 +176,11 @@ namespace stateObservation
         inline void resize(unsigned i, const Matrix & m= Matrix::Zero(0,0));
 
         ///Get the time index
-        inline unsigned getLastIndex() const;
+        inline int getLastIndex() const;
+
+        ///Get the time index of the next value that will be pushed back
+        /// Can be used in for loops
+        inline unsigned getNextIndex() const;
 
         ///Set the time index of the last element
         inline unsigned setLastIndex(int index);

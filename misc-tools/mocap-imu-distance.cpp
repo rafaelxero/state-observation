@@ -62,9 +62,9 @@ main (int argc, char *argv[])
 
     int firstIndex =abs.getFirstIndex();
 
-    int lastIndex = std::min(abs.getLastIndex(),
-                             std::min(recons.getLastIndex(),
-                                      std::min(recons.getLastIndex(),reconsVel.getLastIndex())));
+    int lastIndex = std::min(abs.getNextIndex(),
+                             std::min(recons.getNextIndex(),
+                                      std::min(recons.getNextIndex(),reconsVel.getNextIndex())));
     int numberOfsamples = lastIndex-firstIndex;
 
     for (int i=abs.getFirstIndex(); i< lastIndex; ++i)

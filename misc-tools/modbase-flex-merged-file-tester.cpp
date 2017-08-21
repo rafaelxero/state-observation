@@ -166,7 +166,7 @@ void loadInputsAndMeasurements(const IndexedMatrixArray array,
 
 
 
-  for (int k=array.getFirstIndex(); k<array.getLastIndex(); ++k)
+  for (int k=array.getFirstIndex(); k<array.getNextIndex(); ++k)
   {
     ark=array[k];
 
