@@ -101,6 +101,7 @@ main (int argc, char *argv[])
 
     IndexedMatrixArray xhat=
       examples::offlineModelBaseFlexEstimation( y, u, xh0, numberOfContacts, dt, mass,
+                                              IndexedMatrixArray(), IndexedMatrixArray(),
           kfe, kfv, kte, ktv,
           &innovation, &predictedMea, &simumea, 1);
     std::cout << "State rebuilt, size " << xhat.size()  <<std::endl;

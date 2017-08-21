@@ -357,7 +357,8 @@ int main (int argc, char *argv[])
 
   IndexedMatrixArray xhat=
   examples::offlineModelBaseFlexEstimation( y, u, xh0, numberOfContacts,
-                                            dt, mass, Matrix3::Zero(),Matrix3::Zero(),
+                                            dt, mass, IndexedMatrixArray(), IndexedMatrixArray(),
+                                            Matrix3::Zero(),Matrix3::Zero(),
                                            Matrix3::Zero(),Matrix3::Zero(),
                                              &innovation, &predictedMea,
                                             &simumea, 1);
