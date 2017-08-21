@@ -313,7 +313,7 @@ namespace stateObservation
     /*inline*/ Vector KalmanFilterBase::updateStateAndMeasurementPrediction()
     {
         updateStatePrediction();
-        return predictedMeasurement_=predictSensor_(this->x_.getTime());
+        return predictedMeasurement_=predictSensor_(this->x_.getTime()+1);
     }
 
 
