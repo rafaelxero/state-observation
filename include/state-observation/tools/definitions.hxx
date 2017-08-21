@@ -114,7 +114,7 @@ Matrix & IndexedMatrixArray::back()
 }
 
 ///Get the time index
-unsigned IndexedMatrixArray::getLastIndex()const
+int IndexedMatrixArray::getLastIndex()const
 {
   return k_+v_.size()-1;
 }
