@@ -1,12 +1,12 @@
-const double acc_cov_const=5e-3;
-const double gyr_cov_const=5e-6;
-const double force_sensor_const=1e-10;
-const double torque_sensor_const=1e-30;
-const double state_fc_const=5e-4;
-const double pos_state_cov_const=0;
-const double vel_state_cov_const=1e-10;
-const double ori_state_cov_const=0;
-const double angv_state_cov_const=1e-8;
+//const double acc_cov_const=5e-3;
+//const double gyr_cov_const=5e-6;
+//const double force_sensor_const=1e-10;
+//const double torque_sensor_const=1e-30;
+//const double state_fc_const=5e-4;
+//const double pos_state_cov_const=0;
+//const double vel_state_cov_const=1e-10;
+//const double ori_state_cov_const=0;
+//const double angv_state_cov_const=1e-8;
 
 typedef flexibilityEstimation::IMUElasticLocalFrameDynamicalSystem::state state;
 
@@ -17,6 +17,8 @@ stateObservation::IndexedMatrixArray offlineModelBaseFlexEstimation(
   const stateObservation::IndexedMatrixArray numberOfContacts,
   double dt,
   double mass,
+  const stateObservation::IndexedMatrixArray & Q,
+  const stateObservation::IndexedMatrixArray & R,
   const Matrix3 & kfe,
   const Matrix3 & kfv,
   const Matrix3 & kte,
@@ -34,41 +36,57 @@ stateObservation::IndexedMatrixArray offlineModelBaseFlexEstimation(
   estimator.setSamplingPeriod(dt);
   estimator.setRobotMass(mass);
 
-  Matrix R,Q,P;
+  bool customQ = true,
+       customR = true;
 
-  int measurementSize=6;
-  int stateSize=flexibilityEstimation::IMUElasticLocalFrameDynamicalSystem::state::size;
+  if (Q.size()!=0)
+  {
+    customQ=true;
+  }
+  if (R.size()!=0)
+  {
+    customR=true;
+  }
 
-  double acceleroCovariance=acc_cov_const;
-  double gyroCovariance=gyr_cov_const;
-  double posStateCov=pos_state_cov_const;
-  double oristateCov=ori_state_cov_const;
-  double velStateCov=vel_state_cov_const;
-  double angvStateCov=angv_state_cov_const;
-  double stateForceCov=state_fc_const;
 
-  R.noalias()=Matrix::Identity(measurementSize,measurementSize)*acceleroCovariance;
-  R(3,3)=R(4,4)=R(5,5)=gyroCovariance;
-  Q.noalias()=Matrix::Identity(stateSize,stateSize)*posStateCov;
 
-  Q.diagonal().segment<3>(state::ori).setConstant(oristateCov);
+//  Matrix Ri,Qi,P;
+//
+//  int measurementSize=6;
+//  int stateSize=flexibilityEstimation::IMUElasticLocalFrameDynamicalSystem::state::size;
+//
+//  double acceleroCovariance=acc_cov_const;
+//  double gyroCovariance=gyr_cov_const;
+//  double posStateCov=pos_state_cov_const;
+//  double oristateCov=ori_state_cov_const;
+//  double velStateCov=vel_state_cov_const;
+//  double angvStateCov=angv_state_cov_const;
+//  double stateForceCov=state_fc_const;
 
-  Q.diagonal().segment<3>(state::linVel).setConstant(velStateCov);
-  Q.diagonal().segment<3>(state::angVel).setConstant(angvStateCov);
-  Q.diagonal().segment<12>(state::fc).setConstant(stateForceCov);
 
-  estimator.setProcessNoiseCovariance(Q);
-  estimator.setMeasurementNoiseCovariance(R);
-  Matrix forcevariance= Matrix::Identity(6,6)*force_sensor_const;
-  forcevariance.block(3,3,3,3)=Matrix::Identity(3,3)*torque_sensor_const;
-  /// consider the vertical torque as reliable as a force
-  forcevariance(2,2)=torque_sensor_const;
-  /// consider the vertical force as reliable as torque
-  forcevariance(6,6)=force_sensor_const;
-  estimator.setForceVariance(forcevariance);
 
-  ///initialize flexibility
-  estimator.setFlexibilityCovariance(Q);
+//  Ri.noalias()=Matrix::Identity(measurementSize,measurementSize)*acceleroCovariance;
+//  Ri(3,3)=R(4,4)=R(5,5)=gyroCovariance;
+//  Qi.noalias()=Matrix::Identity(stateSize,stateSize)*posStateCov;
+//
+//  Qi.diagonal().segment<3>(state::ori).setConstant(oristateCov);
+//
+//  Qi.diagonal().segment<3>(state::linVel).setConstant(velStateCov);
+//  Qi.diagonal().segment<3>(state::angVel).setConstant(angvStateCov);
+//  Qi.diagonal().segment<12>(state::fc).setConstant(stateForceCov);
+//
+//  estimator.setProcessNoiseCovariance(Qi);
+//  estimator.setMeasurementNoiseCovariance(Ri);
+//  Matrix forcevariance= Matrix::Identity(6,6)*force_sensor_const;
+//  forcevariance.block(3,3,3,3)=Matrix::Identity(3,3)*torque_sensor_const;
+//  /// consider the vertical torque as reliable as a force
+//  forcevariance(2,2)=torque_sensor_const;
+//  /// consider the vertical force as reliable as torque
+//  forcevariance(6,6)=force_sensor_const;
+//  estimator.setForceVariance(forcevariance);
+
+
+
   estimator.setFlexibilityGuess(xh0);
 
   estimator.setWithUnmodeledForces(true);
@@ -92,7 +110,7 @@ stateObservation::IndexedMatrixArray offlineModelBaseFlexEstimation(
     xh.setValue(xh0,y.getFirstIndex()-1);
 
   ///the reconstruction of the state
-  for (unsigned i=y.getFirstIndex(); i<=y.getLastIndex(); ++i)
+  for (unsigned i=y.getFirstIndex(); i<y.getNextIndex(); ++i)
   {
 
     estimator.setContactsNumber(numberOfContacts[i](0));
@@ -130,8 +148,23 @@ stateObservation::IndexedMatrixArray offlineModelBaseFlexEstimation(
 
     estimator.setMeasurementInput(u[i]);
 
+
+    ///initialize flexibility
+    if (customQ)
+    {
+      estimator.setProcessNoiseCovariance(Q[i]);
+    }
+
+    if (customR)
+    {
+      estimator.setMeasurementNoiseCovariance(R[i]);
+    }
+
+
     ///get the estimation and give it to the array
     Vector xhk=estimator.getFlexibilityVector();
+
+
 
     xh.pushBack(xhk);
 
