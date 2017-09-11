@@ -135,7 +135,7 @@ struct indexes
 
 using namespace stateObservation;
 
-void loadInputsAndMeasurements(const IndexedMatrixArray array,
+void loadInputsAndMeasurements(const IndexedMatrixArray & array,
                                IndexedMatrixArray & u, IndexedMatrixArray & y,
                                IndexedMatrixArray & nbrOfContacts,
                                double & mass, double & dt, bool simu,
