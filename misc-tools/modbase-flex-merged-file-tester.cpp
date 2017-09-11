@@ -138,7 +138,8 @@ using namespace stateObservation;
 void loadInputsAndMeasurements(const IndexedMatrixArray array,
                                IndexedMatrixArray & u, IndexedMatrixArray & y,
                                IndexedMatrixArray & nbrOfContacts,
-                               double & mass, double & dt)
+                               double & mass, double & dt, bool simu,
+                               bool useHandSensor)
 {
 
   Vector uk, yk, nbrCont;
@@ -189,11 +190,22 @@ void loadInputsAndMeasurements(const IndexedMatrixArray array,
 
     if (withForce)
     {
+
+      Vector3 footweight;
+      if (simu)
+        footweight=stateObservation::cst::gravity*1.325;//simulation
+      else
+        //footweight=-stateObservation::cst::gravity*1.057253969892212764e+00;//real robot
+        footweight<<-5.5,0,-stateObservation::cst::gravityConstant*1.55;//real robot
       cnbr=0;
       if (ark(indexes::rightFootForce+2)>mass*9.8*0.01)
       {
         ++cnbr;
-        yk.segment<6>(measurementIndex) << ark.segment<3>(indexes::rightFootForce),
+
+        q = Quaternion(ark(indexes::rightFootOri),ark(indexes::rightFootOri+1),ark(indexes::rightFootOri+2),ark(indexes::rightFootOri+3));
+        Rr = q.toRotationMatrix().transpose();
+
+        yk.segment<6>(measurementIndex) << ark.segment<3>(indexes::rightFootForce)+Rr.transpose()*footweight,
                    ark.segment<3>(indexes::rightFootMoment);
         rightFootIn=true;
         measurementIndex+=6;
@@ -204,7 +216,11 @@ void loadInputsAndMeasurements(const IndexedMatrixArray array,
       if (ark(indexes::leftFootForce+2)>mass*9.8*0.01)
       {
         ++cnbr;
-        yk.segment<6>(measurementIndex) << ark.segment<3>(indexes::leftFootForce),
+
+        q = Quaternion(ark(indexes::leftFootOri),ark(indexes::leftFootOri+1),ark(indexes::leftFootOri+2),ark(indexes::leftFootOri+3));
+        Rl = q.toRotationMatrix().transpose();
+
+        yk.segment<6>(measurementIndex) << ark.segment<3>(indexes::leftFootForce)+Rl.transpose()*footweight,
                    ark.segment<3>(indexes::leftFootMoment);
         measurementIndex+=6;
       }
@@ -218,13 +234,13 @@ void loadInputsAndMeasurements(const IndexedMatrixArray array,
 /// -------------COM---------------------///
     uk.segment<3> (Input::posCom)= ark.segment<3>(indexes::posCom) + virtualCoMBias ;
     uk.segment<3> (Input::velCom)= ark.segment<3>(indexes::velCom) ;
-    uk.segment<3> (Input::accCom)= ark.segment<3>(indexes::velCom) ;
+    uk.segment<3> (Input::accCom)= ark.segment<3>(indexes::accCom) ;
 
 /// -------------Inertia Matrix---------------------///
     Matrix3 inrtMtrxInOrign;
     inrtMtrxInOrign<<ark.segment<3>(indexes::inertia),
-                     ark.segment<3>(indexes::inertia+3),
-                     ark.segment<3>(indexes::inertia+6);
+                    ark.segment<3>(indexes::inertia+3),
+                    ark.segment<3>(indexes::inertia+6);
     //std::cout <<"inrtMtrxInRoot" <<std::endl << inrtMtrxInOrign << std::endl;
     inrtMtrxInOrign +=mass * kine::skewSymmetric2(ark.segment<3>(indexes::posCom)-ark.segment<3>(indexes::rootPos));
     //std::cout <<"inrtMtrxInCoM" <<std::endl << inrtMtrxInOrign << std::endl;
@@ -255,7 +271,7 @@ void loadInputsAndMeasurements(const IndexedMatrixArray array,
 
 
 
-    uk.segment<3> (Input::oriIMU) = kine::quaternionToRotaionVector(q);
+    uk.segment<3> (Input::oriIMU) = -kine::quaternionToRotationVector(q);
     uk.segment<3> (Input::linVelIMU)= ark.segment<3>(indexes::linVelIMU);
     uk.segment<3> (Input::angVelIMU)= ark.segment<3>(indexes::angVelIMU);
 
@@ -266,47 +282,112 @@ void loadInputsAndMeasurements(const IndexedMatrixArray array,
 
 
 /// -------------Additional Forces-------------------///
-    q = Quaternion(ark(indexes::rightHandOri),ark(indexes::rightHandOri+1),ark(indexes::rightHandOri+2),ark(indexes::rightHandOri+3));
-    Rr = q.toRotationMatrix();
-    q = Quaternion(ark(indexes::leftHandOri),ark(indexes::leftHandOri+1),ark(indexes::leftHandOri+2),ark(indexes::leftHandOri+3));
-    Rl = q.toRotationMatrix();
+    if (useHandSensor)
+    {
+      q = Quaternion(ark(indexes::rightHandOri),ark(indexes::rightHandOri+1),ark(indexes::rightHandOri+2),ark(indexes::rightHandOri+3));
+      Rr = q.toRotationMatrix().transpose();
+      q = Quaternion(ark(indexes::leftHandOri),ark(indexes::leftHandOri+1),ark(indexes::leftHandOri+2),ark(indexes::leftHandOri+3));
+      Rl = q.toRotationMatrix().transpose();
 
-    additionalForces.head<3>() =
-      Rr*ark.segment<3>(indexes::rightHandForce)
-     +Rl*ark.segment<3>(indexes::leftHandForce);
-    additionalForces.tail<3>() =
-      Rr* ark.segment<3>(indexes::rightHandMoment)
-     +Rl* ark.segment<3>(indexes::leftHandMoment)
-     +ark.segment<3>(indexes::rightHandPos).cross
-      (Rr* ark.segment<3>(indexes::rightHandForce))
-      + ark.segment<3>(indexes::leftHandPos).cross
-      (Rl* ark.segment<3>(indexes::leftHandForce));
+      Vector3 handWeight;
 
-    uk.segment<6> (Input::additionalForces)<<additionalForces;
+      if (simu)
+        handWeight=stateObservation::cst::gravity *
+                   1.09413163; ///Simulation
+      else
+        handWeight=stateObservation::cst::gravity *
+                   1.274430130714297782e+00; //real robot
+
+
+      Vector3 initialHandForceOffset;
+      if (simu)
+      {
+        initialHandForceOffset.setZero();
+      }
+      else
+      {
+        initialHandForceOffset<<-6.554883830982205506e-01,
+                               -3.661343805957282260e+00,
+                               1.197941548311729321e+01;///in the case of the real robot
+      }
+
+
+      Matrix3 initialRotOffset(Matrix3::Identity());
+      if (simu)
+      {
+        initialRotOffset <<
+                         0,  -1,  0,
+                         1, 0,  0,
+                         0,  0,  1;
+      }
+
+
+      Vector3 rightHandF= Rr*(initialRotOffset*(ark.segment<3>(indexes::rightHandForce)-initialHandForceOffset));
+      Vector3 leftHandF = Rl*(initialRotOffset*(ark.segment<3>(indexes::leftHandForce) -initialHandForceOffset));
+
+      // std::cout << k << " raw R " << ark.segment<3>(indexes::rightHandForce).transpose() << std::endl;
+      // std::cout << k << " raw L " << ark.segment<3>(indexes::leftHandForce).transpose() << std::endl;
+
+      // std::cout << k << " rot raw R " << (Rr*initialRotOffset*ark.segment<3>(indexes::rightHandForce)).transpose() << std::endl;
+      // std::cout << k << " rot raw L " << (Rl*initialRotOffset*ark.segment<3>(indexes::leftHandForce)).transpose() << std::endl;
+
+      // std::cout << k << " unbiased R " << rightHandF.transpose() << std::endl;
+      // std::cout << k << " unbiased L " << leftHandF.transpose() << std::endl;
+
+      Vector3 rightHandM= Rr*(initialRotOffset*(ark.segment<3>(indexes::rightHandMoment)));
+      Vector3 leftHandM = Rl*(initialRotOffset*(ark.segment<3>(indexes::leftHandMoment )));
+
+      // std::cout << k << " Rr " << std::endl <<Rr << std::endl ;
+      // std::cout << k << " Rl" << std::endl <<Rl << std::endl ;
+
+      rightHandF+=handWeight;
+      leftHandF +=handWeight;
+
+      // std::cout << k << " treated right  " << rightHandF.transpose() << std::endl;
+      // std::cout << k << " treated left "   << leftHandF.transpose() << std::endl;
+
+      leftHandF.setZero();///useless in this experiment
+      leftHandM.setZero();///useless in this experiment
+
+      additionalForces.head<3>() =rightHandF+leftHandF;
+      additionalForces.tail<3>() =rightHandM
+                                  +leftHandM
+                                  +ark.segment<3>(indexes::rightHandPos).cross
+                                  (rightHandF)
+                                  +ark.segment<3>(indexes::leftHandPos).cross
+                                  (leftHandF);
+
+
+
+      uk.segment<6> (Input::additionalForces)<<additionalForces;
+    }
 
 /// --------- Modeled Contact Positions -------------///
     int remainCont = cnbr;
+    int contactIndex =0;
     if (rightFootIn)
     {
       q = Quaternion(ark(indexes::rightFootOri),ark(indexes::rightFootOri+1),ark(indexes::rightFootOri+2),ark(indexes::rightFootOri+3));
-      Rr = q.toRotationMatrix();
+      Rr = q.toRotationMatrix().transpose();
       uk.segment<12>(Input::contacts)<<
-        ark.segment<3>(indexes::rightFootPos),
-        kine::rotationMatrixToRotationVector(Rr),
-        Vector3::Zero(),
-        Vector3::Zero();
-        remainCont --;
+                                     ark.segment<3>(indexes::rightFootPos),
+                                                 kine::rotationMatrixToRotationVector(Rr),
+                                                 Vector3::Zero(),
+                                                 Vector3::Zero();
+      remainCont --;
+      contactIndex+=12;
     }
     if (remainCont>0)
     {
       q = Quaternion(ark(indexes::leftFootOri),ark(indexes::leftFootOri+1),ark(indexes::leftFootOri+2),ark(indexes::leftFootOri+3));
-      Rl = q.toRotationMatrix();
-      uk.segment<12>(Input::contacts+12)<<
-      ark.segment<3>(indexes::leftFootPos),
-      kine::rotationMatrixToRotationVector(Rl),
-      Vector3::Zero(),
-      Vector3::Zero();
-
+      Rl = q.toRotationMatrix().transpose();
+      uk.segment<12>(Input::contacts+contactIndex)<<
+          ark.segment<3>(indexes::leftFootPos),
+                      kine::rotationMatrixToRotationVector(Rl),
+                      Vector3::Zero(),
+                      Vector3::Zero();
+      remainCont --;
+      contactIndex+=12;
     }
     u.setValue(uk,k);
     y.setValue(yk,k);
@@ -320,48 +401,120 @@ void loadInputsAndMeasurements(const IndexedMatrixArray array,
 int main (int argc, char *argv[])
 {
 
-  char * filename;
+  std::string filename;
+  bool simulation=false;
+  bool useHandSensor=true;
 
-  if (argc!=2)
+  if (argc<2 || argc>4)
   {
     std::cout << "Parameters : filename"<<std::endl;
     std::cout << "Leaving"<<std::endl;
 
-    filename="/home/benallegue/devel/logs/2017/humanoids/sample/StateEstimatorTest.log";
-    //return 1;
+    std::exit(1);
 
+  }
+
+  filename=argv[1];
+
+  std::cout << "Use of hand force sensor: ";
+
+  if (std::string(argv[2])=="-u")
+  {
+    useHandSensor = true;
+    std::cout << "True "<< std::endl;
   }
   else
   {
-    filename=argv[1];
+    useHandSensor= false;
+    std::cout << "False "<< std::endl;
   }
+
+
+
+  std::cout << "Simulation: ";
+
+  if (argc>3)
+    if (std::string(argv[3])=="-s")
+      simulation = true;
+    else
+      simulation = false;
+
+  if (simulation)
+    std::cout << "true"<<std::endl;
+  else
+    std::cout << "false"<<std::endl;
 
   IndexedMatrixArray initialFile;
   IndexedMatrixArray y,u,numberOfContacts;
 
   std::cout << "Readind initial file "<<filename<< std::endl;
-  initialFile.readVectorsFromFile(filename,false);
+  initialFile.readVectorsFromFile(filename.c_str(),false);
   std::cout << "File loaded, size:"<< initialFile.size() << std::endl;
 
   double dt;
   double mass;
 
-  loadInputsAndMeasurements(initialFile,u,y,numberOfContacts,mass,dt);
 
-  Matrix xh0 = Vector::Zero(flexibilityEstimation::IMUElasticLocalFrameDynamicalSystem::state::size,1);
+
+  loadInputsAndMeasurements(initialFile,u,y,numberOfContacts,mass,dt,simulation,useHandSensor);
+
+  Matrix xh0 = Vector::Zero(state::size,1);
 
   std::cout << "Rebuiding state" << std::endl;
 
 
-  IndexedMatrixArray predictedMea, innovation, simumea;
+  IndexedMatrixArray prediction, predictedMea, innovation, simumea;
+
+  IndexedMatrixArray Q, R;
+
+  Matrix Qi = Matrix::Zero(state::size, state::size);
+
+  Vector Qidiag(state::size);
+  Qidiag.setZero();
+
+  Qidiag.segment<12>(state::pos).setConstant(0); /// kinematics
+  Qidiag.segment<12>(state::fc).setConstant(1e-5); /// contact forces model
+  Qidiag.segment<2>(state::fc)=Qidiag.segment<2>(state::fc+6).setConstant(1e-1) ;///tangential forces model
+  Qidiag(state::fc+5)=Qidiag(state::fc+11) = 1e-1; ///yaw moment model
+  Qidiag.segment<6> (state::unmodeledForces).setConstant(1e-5); /// unmodeled forces and torques
+  //Qidiag.segment<3> (state::unmodeledForces).setConstant(0); /// unmodeled forces
+
+
+  Qi.diagonal()<<Qidiag;
+  Q.pushBack(Qi);
+
+
+  Matrix Ri = Matrix::Zero(18,18);
+  Ri.diagonal().segment<3>(0).setConstant(1e-4); //accelerometer
+  Ri.diagonal().segment<3>(3).setConstant(1e-8); //gyrometer
+  Ri.diagonal().segment<12>(6).setConstant(1e-15); //force sensor
+
+
+  R.pushBack(Ri);
+
+  //setting stiffness
+  Matrix3 kfe= Matrix3::Zero();
+  Matrix3 kfv = Matrix3::Zero();
+  Matrix3 kte = Matrix3::Zero();
+  Matrix3 ktv = Matrix3::Zero();
+
+  kfe.diagonal()<<40000,
+                        40000,
+                              400000;
+  kte.diagonal()<<600,
+                      600,
+                          6000;
+  kfv=600*Matrix3::Identity();
+  ktv=60*Matrix3::Identity();
+
 
   IndexedMatrixArray xhat=
-  examples::offlineModelBaseFlexEstimation( y, u, xh0, numberOfContacts,
-                                            dt, mass, IndexedMatrixArray(), IndexedMatrixArray(),
-                                            Matrix3::Zero(),Matrix3::Zero(),
-                                           Matrix3::Zero(),Matrix3::Zero(),
-                                             &innovation, &predictedMea,
-                                            &simumea, 1);
+    examples::offlineModelBaseFlexEstimation( y, u, xh0, numberOfContacts,
+        dt, mass, Q, R,
+        kfe,kfv,
+        kte,ktv,
+        &prediction, &innovation, &predictedMea,
+        &simumea, 1);
   std::cout << "State rebuilt" << std::endl;
 
   std::cout << "Last value" << std::endl << xhat[xhat.getLastIndex()].transpose() <<std::endl;
@@ -372,6 +525,7 @@ int main (int argc, char *argv[])
   u.writeInFile("u.log");
   xhat.writeInFile("xhat.log");
 
+  prediction.writeInFile("prediction.log");
   innovation.writeInFile("innovation.log");
   predictedMea.writeInFile("predictedMeasurement.log");
   simumea.writeInFile("simulatedMeasurement.log");
