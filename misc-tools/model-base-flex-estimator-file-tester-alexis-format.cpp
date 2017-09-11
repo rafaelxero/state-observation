@@ -76,7 +76,7 @@ main (int argc, char *argv[])
     double dt=atof(argv[4]);
     double mass=atof(argv[5]);
 
-    IndexedMatrixArray predictedMea, innovation, simumea;
+    IndexedMatrixArray prediction, predictedMea, innovation, simumea;
 
     std::cout << "Rebuiding state" << std::endl;
 
@@ -103,7 +103,7 @@ main (int argc, char *argv[])
       examples::offlineModelBaseFlexEstimation( y, u, xh0, numberOfContacts, dt, mass,
                                               IndexedMatrixArray(), IndexedMatrixArray(),
           kfe, kfv, kte, ktv,
-          &innovation, &predictedMea, &simumea, 1);
+          &prediction, &innovation, &predictedMea, &simumea, 1);
     std::cout << "State rebuilt, size " << xhat.size()  <<std::endl;
 
     std::cout << "Writting Files" << std::endl;
@@ -112,6 +112,7 @@ main (int argc, char *argv[])
     y.writeInFile("y.log");
     u.writeInFile("u.log");
     xhat.writeInFile("xhat.log");
+    prediction.writeInFile("prediction.log");
     innovation.writeInFile("innovation.log");
     predictedMea.writeInFile("predictedMeasurement.log");
     simumea.writeInFile("simulatedMeasurement.log");
