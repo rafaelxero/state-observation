@@ -122,21 +122,21 @@ main (int argc, char *argv[])
 
         std::cout << "Writing files" << std::endl;
 
-        posCom          .writeInFile(filename+"-01-posCom");
-        velCom          .writeInFile(filename+"-02-velCom");
-        accCom          .writeInFile(filename+"-03-accCom");
-        inertia         .writeInFile(filename+"-04-inertia");
-        angMoment       .writeInFile(filename+"-05-angMoment");
-        dotInertia      .writeInFile(filename+"-06-dotInertia");
-        dotAngMoment    .writeInFile(filename+"-07-dotAngMoment");
-        posIMU          .writeInFile(filename+"-08-posIMU");
-        oriIMU          .writeInFile(filename+"-09-oriIMU");
-        linVelIMU       .writeInFile(filename+"-10-linVelIMU");
-        angVelIMU       .writeInFile(filename+"-11-angVelIMU");
-        linAccIMU       .writeInFile(filename+"-12-linAccIMU");
-        additionalForces.writeInFile(filename+"-13-additionalForces");
-        contact1        .writeInFile(filename+"-14-contact1");
-        contact2        .writeInFile(filename+"-15-contact2");
+        posCom          .writeInFile(filename+"-00-posCom");
+        velCom          .writeInFile(filename+"-01-velCom");
+        accCom          .writeInFile(filename+"-02-accCom");
+        inertia         .writeInFile(filename+"-03-inertia");
+        angMoment       .writeInFile(filename+"-04-angMoment");
+        dotInertia      .writeInFile(filename+"-05-dotInertia");
+        dotAngMoment    .writeInFile(filename+"-06-dotAngMoment");
+        posIMU          .writeInFile(filename+"-07-posIMU");
+        oriIMU          .writeInFile(filename+"-08-oriIMU");
+        linVelIMU       .writeInFile(filename+"-09-linVelIMU");
+        angVelIMU       .writeInFile(filename+"-10-angVelIMU");
+        linAccIMU       .writeInFile(filename+"-11-linAccIMU");
+        additionalForces.writeInFile(filename+"-12-additionalForces");
+        contact1        .writeInFile(filename+"-13-contact1");
+        contact2        .writeInFile(filename+"-14-contact2");
 
         std::cout << "Done " << std::endl;
 
@@ -256,15 +256,15 @@ main (int argc, char *argv[])
         std::cout << "Writing files" << std::endl;
 
 
-        pos             .writeInFile(filename+"-01-pos");
-        ori             .writeInFile(filename+"-02-ori");
-        linVel          .writeInFile(filename+"-03-linVel");
-        angVel          .writeInFile(filename+"-04-angVel");
-        fc1             .writeInFile(filename+"-05-fc1");
-        fc2             .writeInFile(filename+"-06-fc2");
-        unmodeledForces .writeInFile(filename+"-07-unmodeledForces");
-        comBias         .writeInFile(filename+"-08-comBias");
-        drift           .writeInFile(filename+"-09-drift");
+        pos             .writeInFile(filename+"-00-pos");
+        ori             .writeInFile(filename+"-01-ori");
+        linVel          .writeInFile(filename+"-02-linVel");
+        angVel          .writeInFile(filename+"-03-angVel");
+        fc1             .writeInFile(filename+"-04-fc1");
+        fc2             .writeInFile(filename+"-05-fc2");
+        unmodeledForces .writeInFile(filename+"-06-unmodeledForces");
+        comBias         .writeInFile(filename+"-07-comBias");
+        drift           .writeInFile(filename+"-08-drift");
 
         std::cout << "Done " << std::endl;
 
