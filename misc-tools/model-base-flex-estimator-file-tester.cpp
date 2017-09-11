@@ -53,7 +53,7 @@ main (int argc, char *argv[])
       examples::offlineModelBaseFlexEstimation( y, u, xh0, numberOfContacts, dt, mass,
                                                IndexedMatrixArray(), IndexedMatrixArray(),
                                                 Matrix3::Zero(), Matrix3::Zero(), Matrix3::Zero(), Matrix3::Zero(),
-                                               0x0,0x0,0x0,1);
+                                               0x0,0x0,0x0,0x0,1);
     std::cout << "State rebuilt" << std::endl;
 
     xhat.writeInFile("xhat");
