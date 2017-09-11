@@ -23,6 +23,7 @@ stateObservation::IndexedMatrixArray offlineModelBaseFlexEstimation(
   const Matrix3 & kfv,
   const Matrix3 & kte,
   const Matrix3 & ktv,
+  IndexedMatrixArray * prediction,
   IndexedMatrixArray * ino,
   IndexedMatrixArray * premea,
   IndexedMatrixArray * simumea,
@@ -168,18 +169,22 @@ stateObservation::IndexedMatrixArray offlineModelBaseFlexEstimation(
 
     xh.pushBack(xhk);
 
-    if (ino != 0)
+    if (prediction != 0x0)
     {
+      prediction->setValue(estimator.getLastPrediction(),i);
+    }
 
+    if (ino != 0x0)
+    {
       ino->setValue(estimator.getInovation(),i);
     }
 
-    if (premea != 0)
+    if (premea != 0x0)
     {
       premea->setValue(estimator.getLastPredictedMeasurement(),i);
     }
 
-    if (simumea != 0)
+    if (simumea != 0x0)
     {
       simumea->setValue(estimator.getSimulatedMeasurement(),i);
     }

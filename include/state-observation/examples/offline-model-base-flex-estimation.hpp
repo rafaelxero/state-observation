@@ -66,6 +66,7 @@ namespace stateObservation
             const Matrix3 & kfv = Matrix3::Zero(),
             const Matrix3 & kte = Matrix3::Zero(),
             const Matrix3 & ktv = Matrix3::Zero(),
+            IndexedMatrixArray * prediction=0x0,
             IndexedMatrixArray * inovation=0x0,
             IndexedMatrixArray * predictedMeasurements = 0x0,
             IndexedMatrixArray * simulatedMeasurements = 0x0,
