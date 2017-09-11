@@ -243,7 +243,7 @@ main (int argc, char *argv[])
           angVel          .setValue(xi.segment<3>(state::angVel),i);
           fc1             .setValue(xi.segment<6>(state::fc),i);
           fc2             .setValue(xi.segment<6>(state::fc+6),i);
-          unmodeledForces .setValue(xi.segment<3>(state::unmodeledForces),i);
+          unmodeledForces .setValue(xi.segment<6>(state::unmodeledForces),i);
           comBias         .setValue(xi.segment<3>(state::comBias),i);
           drift           .setValue(xi.segment<3>(state::drift),i);
 
