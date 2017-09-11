@@ -44,6 +44,14 @@ namespace stateObservation
          *  \param numberOfContacts the number of contacts
          *  \param contactsPositions a vector of positions of the vector
          *  \param dt the time discretization period
+         *  \param mass the mass of the robot
+         *  \param Q process noise covariance matrix
+         *          It is an indexed Matrix array, when its size is zero it is ignored
+         *          when its size is 1 the matrix is set to constant
+         *          when its size is bigger than it is the value of the covariance matrix
+         *          for every time sample.
+         *  \param R measurement noise covariance matrix. Size interpretation is the same
+         *         as for Q.
          */
         stateObservation::IndexedMatrixArray offlineModelBaseFlexEstimation(
             const stateObservation::IndexedMatrixArray & y,
