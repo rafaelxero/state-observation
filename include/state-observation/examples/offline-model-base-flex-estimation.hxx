@@ -37,14 +37,23 @@ stateObservation::IndexedMatrixArray offlineModelBaseFlexEstimation(
   estimator.setSamplingPeriod(dt);
   estimator.setRobotMass(mass);
 
-  bool customQ = true,
-       customR = true;
+  bool customQ = false,
+       customR = false;
 
-  if (Q.size()!=0)
+  if (Q.size()==1)
+  {
+    estimator.setProcessNoiseCovariance(Q[Q.getFirstIndex()]);
+  }
+  if (R.size()==1)
+  {
+    estimator.setMeasurementNoiseCovariance(R[R.getFirstIndex()]);
+  }
+
+  if (Q.size()>1)
   {
     customQ=true;
   }
-  if (R.size()!=0)
+  if (R.size()>1)
   {
     customR=true;
   }
