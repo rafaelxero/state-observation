@@ -395,6 +395,46 @@ void loadInputsAndMeasurements(const IndexedMatrixArray & array,
   }
 }
 
+void kanekoExtForceEstMethod(const IndexedMatrixArray & xhat,
+                               const IndexedMatrixArray & y,
+                               const IndexedMatrixArray & u,
+                               double mass,
+                               IndexedMatrixArray & estForce)
+{
+  for (int k=xhat.getFirstIndex(); k<xhat.getNextIndex(); ++k)
+  {
+    Vector3 acc,force1,force2;
+
+    Vector xhatk=xhat[k];
+    Vector yk=y[k];
+    Vector uk=u[k];
+
+    acc=kine::rotationVectorToRotationMatrix(xhatk.segment<3>(state::ori))*
+        kine::rotationVectorToRotationMatrix(uk.segment<3>(Input::oriIMU))*
+        yk.head<3>();
+
+    std::cout <<k<<" "<< acc.transpose()<<std::endl;
+
+    force1=kine::rotationVectorToRotationMatrix(xhatk.segment<3>(state::ori))*
+        kine::rotationVectorToRotationMatrix(uk.segment<3>(Input::contacts+3))*
+        yk.segment<3>(6);
+
+    std::cout <<k<<" "<< force1.transpose()<<std::endl;
+
+    force2=kine::rotationVectorToRotationMatrix(xhatk.segment<3>(state::ori))*
+        kine::rotationVectorToRotationMatrix(uk.segment<3>(Input::contacts+12))*
+        yk.segment<3>(12);
+
+    std::cout <<k<<" "<< force2.transpose()<<std::endl;
+
+
+    estForce.pushBack(mass*acc -force1 -force2);
+
+
+  }
+}
+
+
 
 /// ///////////////////////////////////////////////////////////////
 
@@ -519,6 +559,13 @@ int main (int argc, char *argv[])
 
   std::cout << "Last value" << std::endl << xhat[xhat.getLastIndex()].transpose() <<std::endl;
 
+  std::cout << "Kaneko Estimation start" <<std::endl;
+  IndexedMatrixArray kanekoEstimation;
+
+  kanekoExtForceEstMethod(xhat,y,u,mass,kanekoEstimation);
+  std::cout << "Done" << std::endl;
+
+
 
   numberOfContacts.writeInFile("contNum.log");
   y.writeInFile("y.log");
@@ -529,6 +576,8 @@ int main (int argc, char *argv[])
   innovation.writeInFile("innovation.log");
   predictedMea.writeInFile("predictedMeasurement.log");
   simumea.writeInFile("simulatedMeasurement.log");
+
+  kanekoEstimation.writeInFile("kanekoEstimation");
 
   std::cout << "mass " << mass<<std::endl;
   std::cout << "dt " << dt<<std::endl;
