@@ -60,6 +60,7 @@ namespace stateObservation
             const stateObservation::IndexedMatrixArray numberOfContacts,
             double dt,
             double mass,
+            bool withForce,
             const stateObservation::IndexedMatrixArray & Q = stateObservation::IndexedMatrixArray(),
             const stateObservation::IndexedMatrixArray & R = stateObservation::IndexedMatrixArray(),
             const Matrix3 & kfe = Matrix3::Zero(),

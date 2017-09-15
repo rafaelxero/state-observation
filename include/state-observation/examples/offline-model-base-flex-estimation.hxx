@@ -17,6 +17,7 @@ stateObservation::IndexedMatrixArray offlineModelBaseFlexEstimation(
   const stateObservation::IndexedMatrixArray numberOfContacts,
   double dt,
   double mass,
+  bool withForce,
   const stateObservation::IndexedMatrixArray & Q,
   const stateObservation::IndexedMatrixArray & R,
   const Matrix3 & kfe,
@@ -102,7 +103,6 @@ stateObservation::IndexedMatrixArray offlineModelBaseFlexEstimation(
   estimator.setWithUnmodeledForces(true);
 
 
-  bool withForce=true;
   estimator.setWithForcesMeasurements(withForce);
 
 

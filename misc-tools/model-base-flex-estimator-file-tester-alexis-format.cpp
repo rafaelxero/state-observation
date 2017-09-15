@@ -100,7 +100,7 @@ main (int argc, char *argv[])
     //ktv=60*Matrix3::Identity();
 
     IndexedMatrixArray xhat=
-      examples::offlineModelBaseFlexEstimation( y, u, xh0, numberOfContacts, dt, mass,
+      examples::offlineModelBaseFlexEstimation( y, u, xh0, numberOfContacts, dt, mass, true,
                                               IndexedMatrixArray(), IndexedMatrixArray(),
           kfe, kfv, kte, ktv,
           &prediction, &innovation, &predictedMea, &simumea, 1);

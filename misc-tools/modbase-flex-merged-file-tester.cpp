@@ -139,11 +139,10 @@ void loadInputsAndMeasurements(const IndexedMatrixArray & array,
                                IndexedMatrixArray & u, IndexedMatrixArray & y,
                                IndexedMatrixArray & nbrOfContacts,
                                double & mass, double & dt, bool simu,
-                               bool useHandSensor)
+                               bool useHandSensor, bool withForce)
 {
 
   Vector uk, yk, nbrCont;
-  bool withForce=true;
   Vector ark;
 
   if (withForce)
@@ -179,7 +178,6 @@ void loadInputsAndMeasurements(const IndexedMatrixArray & array,
       dt = ark(indexes::time)- array[k-1](indexes::time);
     }
 
-
     yk.head<6>() <<ark.segment<3>(indexes::accelerometer),ark.segment<3>(indexes::gyrometer);
 
     unsigned measurementIndex=6;
@@ -196,7 +194,7 @@ void loadInputsAndMeasurements(const IndexedMatrixArray & array,
         footweight=stateObservation::cst::gravity*1.325;//simulation
       else
         //footweight=-stateObservation::cst::gravity*1.057253969892212764e+00;//real robot
-        footweight<<-5.5,0,-stateObservation::cst::gravityConstant*1.55;//real robot
+        footweight<<-5.5,0,-stateObservation::cst::gravityConstant*1.6;//real robot
       cnbr=0;
       if (ark(indexes::rightFootForce+2)>mass*9.8*0.01)
       {
@@ -246,11 +244,11 @@ void loadInputsAndMeasurements(const IndexedMatrixArray & array,
     //std::cout <<"inrtMtrxInCoM" <<std::endl << inrtMtrxInOrign << std::endl;
     inrtMtrxInOrign -=mass * kine::skewSymmetric2(ark.segment<3>(indexes::posCom));
     uk.segment<6> (Input::inertia)<<  inrtMtrxInOrign(0,0),
-                                      inrtMtrxInOrign(1,1),
-                                      inrtMtrxInOrign(2,2),
-                                      inrtMtrxInOrign(0,1),
-                                      inrtMtrxInOrign(0,2),
-                                      inrtMtrxInOrign(1,2);
+               inrtMtrxInOrign(1,1),
+               inrtMtrxInOrign(2,2),
+               inrtMtrxInOrign(0,1),
+               inrtMtrxInOrign(0,2),
+               inrtMtrxInOrign(1,2);
     if (k>array.getFirstIndex())
     {
       uk.segment<6> (Input::dotInertia)<<(uk.segment<6> (Input::inertia)-prevInertia)/dt;
@@ -396,11 +394,14 @@ void loadInputsAndMeasurements(const IndexedMatrixArray & array,
 }
 
 void kanekoExtForceEstMethod(const IndexedMatrixArray & xhat,
-                               const IndexedMatrixArray & y,
-                               const IndexedMatrixArray & u,
-                               double mass,
-                               IndexedMatrixArray & estForce)
+                             const IndexedMatrixArray & y,
+                             const IndexedMatrixArray & u,
+                             double mass, double dt,
+                             IndexedMatrixArray & estForce)
 {
+  Vector3 filtForce;
+  filtForce.setZero();
+
   for (int k=xhat.getFirstIndex(); k<xhat.getNextIndex(); ++k)
   {
     Vector3 acc,force1,force2;
@@ -413,22 +414,23 @@ void kanekoExtForceEstMethod(const IndexedMatrixArray & xhat,
         kine::rotationVectorToRotationMatrix(uk.segment<3>(Input::oriIMU))*
         yk.head<3>();
 
-    std::cout <<k<<" "<< acc.transpose()<<std::endl;
-
     force1=kine::rotationVectorToRotationMatrix(xhatk.segment<3>(state::ori))*
-        kine::rotationVectorToRotationMatrix(uk.segment<3>(Input::contacts+3))*
-        yk.segment<3>(6);
-
-    std::cout <<k<<" "<< force1.transpose()<<std::endl;
+           kine::rotationVectorToRotationMatrix(uk.segment<3>(Input::contacts+3))*
+           yk.segment<3>(6);
 
     force2=kine::rotationVectorToRotationMatrix(xhatk.segment<3>(state::ori))*
-        kine::rotationVectorToRotationMatrix(uk.segment<3>(Input::contacts+12))*
-        yk.segment<3>(12);
+           kine::rotationVectorToRotationMatrix(uk.segment<3>(Input::contacts+12))*
+           yk.segment<3>(12);
 
-    std::cout <<k<<" "<< force2.transpose()<<std::endl;
+    Vector3 force;
 
+    force =mass*acc -force1 -force2;
 
-    estForce.pushBack(mass*acc -force1 -force2);
+    double cutoffFreq = 100;
+
+    filtForce+= cutoffFreq*dt *( force -filtForce );
+
+    estForce.pushBack(filtForce);
 
 
   }
@@ -444,8 +446,9 @@ int main (int argc, char *argv[])
   std::string filename;
   bool simulation=false;
   bool useHandSensor=true;
+  bool withForceSensor = true;
 
-  if (argc<2 || argc>4)
+  if (argc<2 || argc>5)
   {
     std::cout << "Parameters : filename"<<std::endl;
     std::cout << "Leaving"<<std::endl;
@@ -469,8 +472,6 @@ int main (int argc, char *argv[])
     std::cout << "False "<< std::endl;
   }
 
-
-
   std::cout << "Simulation: ";
 
   if (argc>3)
@@ -480,6 +481,19 @@ int main (int argc, char *argv[])
       simulation = false;
 
   if (simulation)
+    std::cout << "true"<<std::endl;
+  else
+    std::cout << "false"<<std::endl;
+
+  std::cout << "Use Force sensor ";
+
+  if (argc>4)
+    if (std::string(argv[4])=="-f")
+      withForceSensor = true;
+    else
+      withForceSensor = false;
+
+  if (withForceSensor)
     std::cout << "true"<<std::endl;
   else
     std::cout << "false"<<std::endl;
@@ -496,7 +510,7 @@ int main (int argc, char *argv[])
 
 
 
-  loadInputsAndMeasurements(initialFile,u,y,numberOfContacts,mass,dt,simulation,useHandSensor);
+  loadInputsAndMeasurements(initialFile,u,y,numberOfContacts,mass,dt,simulation,useHandSensor,withForceSensor);
 
   Matrix xh0 = Vector::Zero(state::size,1);
 
@@ -513,21 +527,50 @@ int main (int argc, char *argv[])
   Qidiag.setZero();
 
   Qidiag.segment<12>(state::pos).setConstant(0); /// kinematics
-  Qidiag.segment<12>(state::fc).setConstant(1e-5); /// contact forces model
-  Qidiag.segment<2>(state::fc)=Qidiag.segment<2>(state::fc+6).setConstant(1e-1) ;///tangential forces model
-  Qidiag(state::fc+5)=Qidiag(state::fc+11) = 1e-1; ///yaw moment model
+  Qidiag.segment<12>(state::fc).setConstant(1e-15); /// contact forces model
+  Qidiag.segment<2>(state::fc)=Qidiag.segment<2>(state::fc+6).setConstant(1e0) ;///tangential forces model
+  Qidiag(state::fc+5)=Qidiag(state::fc+11) = 1e-15; ///yaw moment model
   Qidiag.segment<6> (state::unmodeledForces).setConstant(1e-5); /// unmodeled forces and torques
-  //Qidiag.segment<3> (state::unmodeledForces).setConstant(0); /// unmodeled forces
 
+
+  if (!withForceSensor)
+  {
+    Qidiag.segment<6> (state::unmodeledForces).setConstant(1e-8); /// unmodeled forces and torques  (force sensor NOT USed)
+    Qidiag.segment<2>(state::fc)=Qidiag.segment<2>(state::fc+6).setConstant(1e-15) ;///tangential forces model (force sensor NOT USed)
+  }
+
+
+
+  //Qidiag.segment<3> (state::unmodeledForces).setConstant(0); /// unmodeled forces
+  //Qidiag(state::unmodeledForces+5)=0;///yaw umodeled forces  (force sensor NOT USed)
 
   Qi.diagonal()<<Qidiag;
   Q.pushBack(Qi);
 
+  Matrix Ri;
 
-  Matrix Ri = Matrix::Zero(18,18);
-  Ri.diagonal().segment<3>(0).setConstant(1e-4); //accelerometer
-  Ri.diagonal().segment<3>(3).setConstant(1e-8); //gyrometer
-  Ri.diagonal().segment<12>(6).setConstant(1e-15); //force sensor
+  if (withForceSensor)
+  {
+    Ri = Matrix::Zero(18,18);
+  }
+  else
+  {
+    Ri = Matrix::Zero(6,6);
+  }
+  Ri.diagonal().segment<3>(0).setConstant(1e-8); ///accelerometer
+  Ri.diagonal().segment<3>(0).setConstant(1e-8); ///accelerometer (when force sensor is NOT used)
+  if (withForceSensor)
+  {
+    Ri.diagonal().segment<3>(3).setConstant(1e-8); ///gyrometer
+  }
+  else
+  {
+    Ri.diagonal().segment<3>(3).setConstant(1e-8); ///gyrometer
+  }
+  if (withForceSensor)
+  {
+    Ri.diagonal().segment<12>(6).setConstant(1e-15); ///force sensor
+  }
 
 
   R.pushBack(Ri);
@@ -539,18 +582,18 @@ int main (int argc, char *argv[])
   Matrix3 ktv = Matrix3::Zero();
 
   kfe.diagonal()<<40000,
-                        40000,
-                              400000;
-  kte.diagonal()<<600,
-                      600,
-                          6000;
-  kfv=600*Matrix3::Identity();
+               40000,
+               100000;
+  kte.diagonal()<<400,
+               400,
+               6000;
+  kfv=6000*Matrix3::Identity();
   ktv=60*Matrix3::Identity();
 
 
   IndexedMatrixArray xhat=
     examples::offlineModelBaseFlexEstimation( y, u, xh0, numberOfContacts,
-        dt, mass, Q, R,
+        dt, mass, withForceSensor, Q, R,
         kfe,kfv,
         kte,ktv,
         &prediction, &innovation, &predictedMea,
@@ -562,7 +605,7 @@ int main (int argc, char *argv[])
   std::cout << "Kaneko Estimation start" <<std::endl;
   IndexedMatrixArray kanekoEstimation;
 
-  kanekoExtForceEstMethod(xhat,y,u,mass,kanekoEstimation);
+  kanekoExtForceEstMethod(xhat,y,u,mass,dt,kanekoEstimation);
   std::cout << "Done" << std::endl;
 
 
