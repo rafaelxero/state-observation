@@ -98,7 +98,7 @@ namespace stateObservation
         }
 
         /// Tranbsform a quaternion into rotation vector
-        inline Vector3 quaternionToRotaionVector(const Quaternion &q)
+        inline Vector3 quaternionToRotationVector(const Quaternion &q)
         {
           AngleAxis aa(q);
 
@@ -106,7 +106,7 @@ namespace stateObservation
         }
 
         /// Tranbsform a quaternion into rotation vector
-        inline Vector3 quaternionToRotaionVector(const Vector4 &v)
+        inline Vector3 quaternionToRotationVector(const Vector4 &v)
         {
           Quaternion q(v);
           AngleAxis aa(q);
