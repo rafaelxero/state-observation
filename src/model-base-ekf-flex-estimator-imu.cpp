@@ -198,10 +198,13 @@ namespace stateObservation
     void ModelBaseEKFFlexEstimatorIMU::setMeasurementNoiseCovariance
     (const Matrix & R)
     {
-      BOOST_ASSERT(unsigned(R.rows())==6 &&
-                   unsigned(R.cols())==6 &&
+      BOOST_ASSERT(R.rows()==R.cols() &&
+                    unsigned(R.rows()) >0 &&
+                    (R.rows() % 6) ==0 &&
                    "ERROR: The measurement noise covariance matrix R has \
                         incorrect size");
+                        ///the matrix should be square
+                        ///and have a size multiple of 6
 
       R_=R;
       updateMeasurementCovarianceMatrix_();
@@ -267,29 +270,44 @@ namespace stateObservation
 
     void ModelBaseEKFFlexEstimatorIMU::updateMeasurementCovarianceMatrix_()
     {
-      int currIndex = 6;
-      R_.conservativeResize(getMeasurementSize(),getMeasurementSize());
 
-      if(useFTSensors_)
+      if (R_.rows()!=getMeasurementSize())
       {
-        R_.block(currIndex,0,functor_.getContactsNumber()*6,currIndex).setZero();
-        R_.block(0,currIndex,currIndex,functor_.getContactsNumber()*6).setZero();
-        for (int i=0;i<functor_.getContactsNumber();++i)
+
+        int realIndex = R_.rows();
+        R_.conservativeResize(getMeasurementSize(),getMeasurementSize());
+
+        int currIndex = 6;
+        if(useFTSensors_)
         {
-          R_.block(currIndex,currIndex,6,6) = forceVariance_;
-          currIndex +=6;
+          ///if the force part of the matrix is not filled
+          if (realIndex < currIndex + functor_.getContactsNumber() * 6)
+          {
+            R_.block(currIndex,0,functor_.getContactsNumber()*6,currIndex).setZero();
+            R_.block(0,currIndex,currIndex,functor_.getContactsNumber()*6).setZero();
+            for (int i=0; i<functor_.getContactsNumber(); ++i)
+            {
+              R_.block(currIndex,currIndex,6,6) = forceVariance_;
+              currIndex +=6;
+            }
+          }
+        }
+
+
+        if(withAbsolutePos_)
+        {
+          if (realIndex < currIndex + 6)
+          {
+
+
+            R_.block(currIndex,0,6,currIndex).setZero();
+            R_.block(0,currIndex,currIndex,6).setZero();
+            R_.block(currIndex,currIndex,6,6) = Matrix::Identity(6,6)*absPosVariance_;
+
+            currIndex += 6;
+          }
         }
       }
-
-      if(withAbsolutePos_)
-      {
-        R_.block(currIndex,0,6,currIndex).setZero();
-        R_.block(0,currIndex,currIndex,6).setZero();
-        R_.block(currIndex,currIndex,6,6) = Matrix::Identity(6,6)*absPosVariance_;
-
-        currIndex += 6;
-      }
-
       ekf_.setR(R_);
     }
 
