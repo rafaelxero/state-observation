@@ -43,7 +43,7 @@ IndexedMatrixArray imuAttitudeTrajectoryReconstruction
     xh.setValue(xh0,y.getFirstIndex()-1);
 
     ///the reconstruction of the state
-    for (unsigned i=y.getFirstIndex();i<=y.getLastIndex();++i)
+    for (unsigned i=y.getFirstIndex();i<y.getNextIndex();++i)
     {
         ///introduction of the measurement
         filter.setMeasurement(y[i],i);
@@ -89,7 +89,7 @@ IndexedMatrixArray imuAttitudeTrajectoryReconstruction(
 
     ///initialization of a zero input
     IndexedMatrixArray u;
-    for (unsigned k=y.getFirstIndex()-1; k<y.getLastIndex(); ++k)
+    for (unsigned k=y.getFirstIndex()-1; k<y.getNextIndex(); ++k)
     {
         u.setValue(Vector::Zero(inputSize,1),k);
     }

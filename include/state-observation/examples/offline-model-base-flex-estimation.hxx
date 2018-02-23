@@ -92,7 +92,7 @@ stateObservation::IndexedMatrixArray offlineModelBaseFlexEstimation(
     xh.setValue(xh0,y.getFirstIndex()-1);
 
   ///the reconstruction of the state
-  for (unsigned i=y.getFirstIndex(); i<=y.getLastIndex(); ++i)
+  for (unsigned i=y.getFirstIndex(); i<y.getNextIndex(); ++i)
   {
 
     estimator.setContactsNumber(numberOfContacts[i](0));

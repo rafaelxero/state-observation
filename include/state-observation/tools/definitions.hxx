@@ -114,10 +114,17 @@ Matrix & IndexedMatrixArray::back()
 }
 
 ///Get the time index
-unsigned IndexedMatrixArray::getLastIndex()const
+int IndexedMatrixArray::getLastIndex()const
 {
   return k_+v_.size()-1;
 }
+
+///Get the time index
+unsigned IndexedMatrixArray::getNextIndex()const
+{
+  return k_+v_.size();
+}
+
 
 ///Get the time index
 unsigned IndexedMatrixArray::getFirstIndex()const

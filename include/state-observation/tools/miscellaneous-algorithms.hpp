@@ -324,7 +324,7 @@ namespace stateObservation
             const IndexedMatrixArray & po= positionOrientation;
 
             unsigned i0=positionOrientation.getFirstIndex();
-            unsigned i1=positionOrientation.getLastIndex()+1;
+            unsigned i1=positionOrientation.getNextIndex();
 
             IndexedMatrixArray a;
             a.setValue(r,i0);
