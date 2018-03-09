@@ -1,3 +1,79 @@
+template <typename T, bool lazy, bool alwaysCheck , bool assertion, bool eigenAlignedNew>
+CheckedItem<T,lazy,alwaysCheck,assertion , eigenAlignedNew>::CheckedItem():
+  IsSet(false)
+{
+}
+
+template <typename T, bool lazy, bool alwaysCheck , bool assertion, bool eigenAlignedNew>
+CheckedItem<T,lazy,alwaysCheck,assertion, eigenAlignedNew>::CheckedItem(const T&):
+  IsSet(true)
+{
+}
+
+template <typename T, bool lazy, bool alwaysCheck , bool assertion, bool eigenAlignedNew>
+inline T CheckedItem<T,lazy,alwaysCheck , assertion,eigenAlignedNew>::operator=(const T& v)
+{
+  IsSet::set(true);
+  return v_=v;
+}
+
+template <typename T, bool lazy, bool alwaysCheck , bool assertion, bool eigenAlignedNew>
+inline  CheckedItem<T,lazy,alwaysCheck , assertion,eigenAlignedNew>::operator T() const
+{
+  chckitm_check_();
+  return v_;
+}
+
+template <typename T, bool lazy, bool alwaysCheck , bool assertion, bool eigenAlignedNew>
+inline bool CheckedItem<T,lazy,alwaysCheck , assertion,eigenAlignedNew>::chckitm_check_() const throw(std::exception)
+{
+  if (assertion)
+  {
+    BOOST_ASSERT_MSG(chckitm_isSet(),AssertMsg::get());
+  }
+
+  if (alwaysCheck || isDebug)
+  {
+    if (!chckitm_isSet())
+    {
+      throw (*(ExceptionPtr::get()));
+    }
+  }
+  return (chckitm_isSet());
+}
+
+template <typename T, bool lazy, bool alwaysCheck , bool assertion, bool eigenAlignedNew>
+inline bool CheckedItem<T,lazy,alwaysCheck , assertion,eigenAlignedNew>::chckitm_isSet() const
+{
+  return IsSet::get();
+}
+
+template <typename T, bool lazy, bool alwaysCheck , bool assertion, bool eigenAlignedNew>
+inline void CheckedItem<T,lazy,alwaysCheck , assertion,eigenAlignedNew>::chckitm_reset()
+{
+  IsSet::set(false);
+}
+
+template <typename T, bool lazy, bool alwaysCheck , bool assertion, bool eigenAlignedNew>
+inline void CheckedItem<T,lazy,alwaysCheck , assertion,eigenAlignedNew>::chckitm_set(bool value)
+{
+  IsSet::set(value);
+}
+
+
+template <typename T, bool lazy, bool alwaysCheck , bool assertion, bool eigenAlignedNew>
+inline void CheckedItem<T,lazy,alwaysCheck , assertion,eigenAlignedNew>::chckitm_setAssertMessage(std::string s)
+{
+  AssertMsg::set(s);
+}
+
+template <typename T, bool lazy, bool alwaysCheck , bool assertion, bool eigenAlignedNew>
+inline void CheckedItem<T,lazy,alwaysCheck , assertion,eigenAlignedNew>::chckitm_setExceptionPtr(std::exception* e)
+{
+  ExceptionPtr::set(e);
+}
+
+
 ///Set the value of the matrix and the time sample
 inline void IndexedMatrix::set(const Matrix& v,unsigned k)
 {

@@ -16,6 +16,7 @@
 
 #include <vector>
 #include <deque>
+#include <stdexcept>
 
 #ifdef STATEOBSERVATION_VERBOUS_CONSTRUCTORS
 #   include <iostream>
@@ -133,6 +134,58 @@ namespace stateObservation
     }
   private:
     ///no boolean
+  };
+
+  namespace checkedItemDetail
+  {
+    extern const bool defaultTrue;
+    extern const char* defaultErrorMSG;
+    extern const std::runtime_error defaultException;
+    extern const std::exception* defaultExcepionAddr;
+  }
+
+  ///this is simply a structure allowing for automatically verifying that
+  /// the item has been initialized or not. The reset() function allows to
+  /// set it back to "not initialized" state.
+  /// -lazy means that the "set" value is true all the time if NDEBUG is defined
+  /// -alwaysCheck means that the check is always performed and throws exception
+  /// if it fails. Otherwise, the check is performed only for debug.
+  /// warning, this has no effect if lazy is set to true
+  /// - assertion means that an assertion will be introduced for the check.
+  /// - eigenAlignedNew should be set to true if any alignment is required for the
+  /// new operator (see eigen documentation)
+  template <typename T, bool lazy=false, bool alwaysCheck = false,
+                  bool assertion=true, bool eigenAlignedNew=false>
+  class CheckedItem:
+    protected DebugItem<bool,checkedItemDetail::defaultTrue,!lazy || isDebug>,
+    protected DebugItem<const char*,checkedItemDetail::defaultErrorMSG,
+    ( !lazy || isDebug ) && assertion>,
+    protected DebugItem<const std::exception*,checkedItemDetail::defaultExcepionAddr,
+    ( !lazy || isDebug ) && !assertion>
+  {
+  public:
+    typedef DebugItem<bool,checkedItemDetail::defaultTrue,!lazy || isDebug> IsSet;
+    typedef DebugItem<const char*,checkedItemDetail::defaultErrorMSG,
+            ( !lazy || isDebug ) && !assertion> AssertMsg;
+    typedef DebugItem<const std::exception*,checkedItemDetail::defaultExcepionAddr,
+            ( !lazy || isDebug ) && !assertion> ExceptionPtr;
+    CheckedItem();
+    explicit CheckedItem(const T&);
+    virtual ~CheckedItem() {}
+    inline T operator=(const T&);
+    inline operator T() const ;
+
+    inline bool chckitm_isSet() const;
+    inline void chckitm_reset();
+    inline void chckitm_set(bool value=true);
+
+    void chckitm_setAssertMessage(std::string s);
+    void chckitm_setExceptionPtr(std::exception* e);
+
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW_IF(eigenAlignedNew)
+  protected:
+    bool chckitm_check_() const throw(std::exception);
+    T v_;
   };
 
  
