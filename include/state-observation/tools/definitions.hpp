@@ -83,6 +83,59 @@ namespace stateObservation
   static const bool isDebug=false;
 #endif // NDEBUG
 
+  template <typename T, const T& defaultValue=T(), bool debug=true>
+  class DebugItem
+  {
+  public:
+    DebugItem():b_(defaultValue) {}
+    explicit DebugItem(const T& v):b_(v) {}
+    inline T operator=(T v)
+    {
+      return b_=v;
+    }
+    inline operator T()const
+    {
+      return b_;
+    }
+    inline T set(const T& v)
+    {
+      return b_=v;
+    }
+    T get()const
+    {
+      return b_;
+    }
+  private:
+    T b_;
+
+  };
+
+  template <typename T, const T& defaultValue>
+  class DebugItem<T,defaultValue,false>
+  {
+    DebugItem() {}
+    explicit DebugItem(T v) {}
+    inline T operator=(T v)
+    {
+      return defaultValue;
+    }
+    inline operator T() const
+    {
+      return defaultValue;
+    }
+    inline T set(T v)
+    {
+      return defaultValue;
+    }
+    T get()const
+    {
+      return defaultValue;
+    }
+  private:
+    ///no boolean
+  };
+
+ 
     /**
      * \class    IndexedMatrix
      * \brief    This class describes a structure composed by a matrix
