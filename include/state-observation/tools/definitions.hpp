@@ -28,17 +28,12 @@
 
 
 
-#define PI 3.14159265
-
 // basic file operations
 #include <fstream>
 
-#define CONTACTSSIZE 6
 
 namespace stateObservation
 {
-
-
     ///Dynamic sized scalar vector
     typedef Eigen::VectorXd Vector;
 
@@ -80,6 +75,13 @@ namespace stateObservation
 
     ///Euler Axis/Angle representation of orientation
     typedef Eigen::AngleAxis<double> AngleAxis;
+
+#undef SO_DEBUG_ONLY(expr)
+#ifndef NDEBUG
+  static const bool isDebug=true;
+#else
+  static const bool isDebug=false;
+#endif // NDEBUG
 
     /**
      * \class    IndexedMatrix
