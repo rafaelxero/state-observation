@@ -188,52 +188,63 @@ namespace stateObservation
     T v_;
   };
 
- 
-    /**
-     * \class    IndexedMatrix
-     * \brief    This class describes a structure composed by a matrix
-     *           of a given size and a time-index parameter. It can tell also if
-     *           it initialized or not.
-     *
-     *
-     */
-    class IndexedMatrix
-    {
-    public:
-        ///Default constructor
-        IndexedMatrix();
 
-        ///A constructor with a given matrix value and a time index
-        IndexedMatrix(const Matrix& v, unsigned k);
+  /**
+   * \class    IndexedMatrixT
+   * \brief    This class describes a structure composed by a matrix
+   *           of a given size and a time-index parameter. It can tell also if
+   *           it initialized or not.
+   *
+   *
+   */
+  template <typename MatrixType=Matrix, bool lazy = false>
+  class IndexedMatrixT:
+    protected DebugItem<bool,checkedItemDetail::defaultTrue,!lazy || isDebug>
+  {
+    typedef DebugItem<bool,checkedItemDetail::defaultTrue,!lazy || isDebug> IsSet;
+  public:
+    ///Default constructor
+    IndexedMatrixT();
 
-        ///Set the value of the matrix and the time sample
-        inline void set(const Matrix& v,unsigned k);
+    ///A constructor with a given matrix value and a time index
+    IndexedMatrixT(const MatrixType& v, unsigned k);
 
-        ///set the index of the matrix
-        inline void setIndex(int index);
+    ///Set the value of the matrix and the time sample
+    inline void set(const MatrixType& v,unsigned k);
 
-        ///Get the matrix value
-        inline Matrix operator()() const;
+    ///Switch the vector to "initialized" state
+    inline void set(bool value=true);
 
-        ///Get the time index
-        inline unsigned getTime() const;
+    ///set the index of the matrix
+    inline void setIndex(int index);
 
-        ///Says whether the matrix is initialized or not
-        inline bool isSet() const;
+    ///Get the matrix value
+    inline const MatrixType & operator()() const;
 
-        ///Switch off the initalization flag, the value is no longer accessible
-        inline void reset();
+    ///Get the matrix value
+    inline MatrixType & operator()();
 
-        EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 
-    protected:
-        ///Checks whether the matrix is set or not (assert)
-        ///does nothing in release mode
-        inline void check_() const;
+    ///Get the time index
+    inline unsigned getTime() const;
 
-        unsigned k_;
-        Matrix v_;
-    };
+    ///Says whether the matrix is initialized or not
+    inline bool isSet() const;
+
+    ///Switch off the initalization flag, the value is no longer accessible
+    inline void reset();
+
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
+
+  protected:
+    ///Checks whether the matrix is set or not (assert)
+    ///does nothing in release mode
+    inline bool check_() const;
+    unsigned k_;
+    MatrixType v_;
+  };
+
+  typedef IndexedMatrixT<> IndexedMatrix;
 
     /**
      * \class    IndexedMatrix

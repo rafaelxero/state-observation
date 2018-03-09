@@ -6,11 +6,6 @@
 
 namespace stateObservation
 {
-    IndexedMatrix::IndexedMatrix(const Matrix& v,unsigned k):
-            k_(k),
-            v_(v)
-    {
-    }
 
     namespace checkedItemDetail
     {
@@ -21,11 +16,6 @@ namespace stateObservation
          chckitm_reset() afterwards.";
       const std::runtime_error defaultException(defaultErrorMSG);
       const std::exception* defaultExcepionAddr=&defaultException;
-
-    IndexedMatrix::IndexedMatrix():
-            k_(0),
-            v_(Matrix::Zero(0,0))
-    {
     }
 
 

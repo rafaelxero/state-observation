@@ -74,55 +74,100 @@ inline void CheckedItem<T,lazy,alwaysCheck , assertion,eigenAlignedNew>::chckitm
 }
 
 
-///Set the value of the matrix and the time sample
-inline void IndexedMatrix::set(const Matrix& v,unsigned k)
+
+
+
+template <typename MatrixType, bool lazy>
+inline IndexedMatrixT<MatrixType,lazy>::IndexedMatrixT(const MatrixType& v,unsigned k):
+  IsSet(true),
+  k_(k),
+  v_(v)
 {
-    k_=k;
-    v_=v;
 }
 
-void IndexedMatrix::setIndex(int k)
+template <typename MatrixType, bool lazy>
+inline IndexedMatrixT<MatrixType,lazy>::IndexedMatrixT():
+  IsSet(false),
+  k_(0),
+  v_(Matrix::Zero(0,0))
+{
+}
+
+///Says whether the matrix is initialized or not
+template <typename MatrixType, bool lazy>
+inline bool IndexedMatrixT<MatrixType,lazy>::isSet()const
+{
+    return (IsSet::get());
+}
+
+///Set the value of the matrix and the time sample
+template <typename MatrixType, bool lazy>
+inline void IndexedMatrixT<MatrixType,lazy>::set(const MatrixType& v,unsigned k)
+{
+  IsSet::set(true);
+  k_=k;
+  v_=v;
+}
+
+///Set the value of the matrix and the time sample
+template <typename MatrixType, bool lazy>
+inline void IndexedMatrixT<MatrixType,lazy>::reset()
+{
+  IsSet::set(false);
+}
+
+
+
+///Checks whether the matrix is set or not (assert)
+///does nothing in release mode
+template <typename MatrixType, bool lazy>
+inline bool IndexedMatrixT<MatrixType,lazy>::check_() const
+{
+    BOOST_ASSERT(isSet() && "Error: Matrix not initialized, if you are initializing it, \
+                            use set() function.");
+    return isSet();
+}
+
+
+
+
+template <typename MatrixType, bool lazy>
+inline void IndexedMatrixT<MatrixType,lazy>::setIndex(int k)
 {
   check_();
   k_=k;
 }
 
 ///Get the matrix value
-Matrix IndexedMatrix::operator()()const
+template <typename MatrixType, bool lazy>
+inline  const MatrixType & IndexedMatrixT<MatrixType,lazy>::operator()()const
 {
-    check_();
-    return v_;
+  check_();
+  return v_;
+}
+
+///Get the matrix value
+template <typename MatrixType, bool lazy>
+inline MatrixType & IndexedMatrixT<MatrixType,lazy>::operator()()
+{
+  check_();
+  return v_;
 }
 
 ///Get the time index
-unsigned IndexedMatrix::getTime()const
+template <typename MatrixType, bool lazy>
+unsigned IndexedMatrixT<MatrixType,lazy>::getTime()const
 {
-    check_();
-    return k_;
+  check_();
+  return k_;
 }
 
-///Says whether the matrix is initialized or not
-bool IndexedMatrix::isSet()const
-{
-    return ( v_.rows()>0 && v_.cols() > 0 );
-}
 
-///Switch off the initalization flag, the value is no longer accessible
-void IndexedMatrix::reset()
-{
-  k_=0;
-  v_.resize(0,0);
-}
 
-///Checks whether the matrix is set or not (assert)
-///does nothing in release mode
-void IndexedMatrix::check_()const
-{
-    BOOST_ASSERT(isSet() && "Error: Matrix not initialized");
-}
+
 
 ///Set the value of the matrix and the time sample
-void IndexedMatrixArray::setValue(const Matrix& v,unsigned k)
+inline void IndexedMatrixArray::setValue(const Matrix& v,unsigned k)
 {
     if (checkIndex(k))
     {
@@ -138,7 +183,7 @@ void IndexedMatrixArray::setValue(const Matrix& v,unsigned k)
     }
 }
 
-void IndexedMatrixArray::pushBack(const Matrix& v)
+inline void IndexedMatrixArray::pushBack(const Matrix& v)
 {
     v_.push_back(v);
 }
