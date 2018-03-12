@@ -141,7 +141,7 @@ namespace stateObservation
         ///while the measurements and iputs are put in lists
 
         ///The state estimation of the observer (only one state is recorded)
-        IndexedMatrix x_;
+        IndexedVector x_;
 
         ///Container for the measurements.
         IndexedMatrixArray y_;

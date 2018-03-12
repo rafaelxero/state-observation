@@ -115,10 +115,10 @@ namespace stateObservation
         virtual MeasureVector predictSensor_(unsigned k);
 
         /// container for the prediction
-        IndexedMatrix xbar_;
+        IndexedVector xbar_;
 
         /// container for the prediction of the sensor
-        IndexedMatrix ybar_;
+        IndexedVector ybar_;
 
         /// boolean that provides if theris a need of not for input for the masurement
         bool directInputOutputFeedthrough_;
