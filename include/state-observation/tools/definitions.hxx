@@ -475,7 +475,6 @@ void IndexedMatrixArrayT<MatrixType>::readVectorsFromFile(const char * filename,
         continuation=false;
       else
       {
-        int size=0;
         std::vector<double> doublecontainer;
         double component;
         bool readingVector = true;
