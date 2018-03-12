@@ -340,7 +340,7 @@ namespace stateObservation
 
     Vector KalmanFilterBase::predictSensor_(unsigned k)
     {
-        oc_.xbar = prediction_(this->x_.getTime()+1);
-        return predictedMeasurement_=simulateSensor_(oc_.xbar,this->x_.getTime()+1);
+        oc_.xbar = prediction_(k);
+        return predictedMeasurement_=simulateSensor_(oc_.xbar,k);
     }
 }
