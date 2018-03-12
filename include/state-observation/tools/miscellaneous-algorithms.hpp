@@ -387,8 +387,6 @@ namespace stateObservation
             Vector3 t1dot = state.segment(kine::linVel,3);
             Vector3 t1dotdot = state.segment(kine::linAcc,3);
 
-
-
             Vector state2(Vector::Zero(18,1));
             state2.segment(kine::pos,3)= - r2 * t1 ;   //t2
             state2.segment(kine::linVel,3)= r2 * ( omega1x * t1 - t1dot); //t2dot

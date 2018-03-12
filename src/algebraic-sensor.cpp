@@ -88,5 +88,6 @@ namespace stateObservation
     {
         concat_ = n;
         noiselessMeasurement_.resize(getMeasurementSize());
+        return unsigned(getMeasurementSize());
     }
 }

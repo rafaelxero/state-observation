@@ -116,7 +116,7 @@ namespace stateObservation
     {
         if (u_.size()>0)
         {
-            return u_.getLastIndex();
+            return unsigned(u_.getLastIndex());
         }
         else
         {
@@ -128,7 +128,7 @@ namespace stateObservation
     {
         if (u_.size()>0)
         {
-            return u_.getLastIndex();
+            return unsigned(u_.getLastIndex());
         }
         else
         {
@@ -145,12 +145,12 @@ namespace stateObservation
     {
         BOOST_ASSERT(y_.size()>0
                 && "ERROR: There is no measurements registered (past measurements are erased)");
-        return y_.getLastIndex();
+        return unsigned(y_.getLastIndex());
     }
 
     unsigned ZeroDelayObserver::getMeasurementsNumber()const
     {
-        return y_.size();
+        return unsigned(y_.size());
     }
 
 

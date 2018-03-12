@@ -105,15 +105,15 @@ namespace stateObservation
       }
       else if (*i->second.type == typeid(int))
       {
-        scalar_(0,0)=*static_cast<const int *>(i->first);
+        scalar_(0,0)=double(*static_cast<const int *>(i->first));
       }
       else if (*i->second.type == typeid(unsigned))
       {
-        scalar_(0,0)=*static_cast<const unsigned *>(i->first);
+        scalar_(0,0)=double(*static_cast<const unsigned *>(i->first));
       }
       else if (*i->second.type == typeid(long))
       {
-        scalar_(0,0)=*static_cast<const long *>(i->first);
+        scalar_(0,0)=double(*static_cast<const long *>(i->first));
       }
       else if (*i->second.type == typeid(double))
       {
@@ -121,7 +121,7 @@ namespace stateObservation
       }
       else if (*i->second.type == typeid(float))
       {
-        scalar_(0,0)=*static_cast<const float *>(i->first);
+        scalar_(0,0)=double(*static_cast<const float *>(i->first));
       }
 
       i->second.array.pushBack(scalar_);
