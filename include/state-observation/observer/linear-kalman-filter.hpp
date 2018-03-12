@@ -135,6 +135,12 @@ namespace stateObservation
 
         /// The container of the Input-Measurement matrix
         Matrix b_;
+
+        struct
+        {
+          Vector prediction;
+          Vector sensorSimulation;
+        } optlkf_;
     };
 
 

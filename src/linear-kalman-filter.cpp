@@ -36,6 +36,8 @@ namespace stateObservation
         BOOST_ASSERT(checkCmatrix(c_) && "ERROR: The C is not initialized");
         BOOST_ASSERT(checkDmatrix(d_) && "ERROR: The D is not initialized");
 
+        optlkf_.prediction.noalias() = a_*x_();
+
 
         if (p_>0 && b_!=getBmatrixZero())
         {
@@ -44,10 +46,10 @@ namespace stateObservation
                              (the state at time k+1 needs the input at time k which was not given) \
                              if you don't need the input in the computation of state, you \
                              must set B matrix to zero");
-            return this->a_*this->x_()+this->b_*this->u_[k-1];
+            optlkf_.prediction.noalias()+= b_*this->u_[k-1];
         }
-        else
-            return this->a_*this->x_();
+
+        return optlkf_.prediction;
 
     }
 
