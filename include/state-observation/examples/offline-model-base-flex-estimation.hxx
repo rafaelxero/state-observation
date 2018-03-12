@@ -123,7 +123,7 @@ stateObservation::IndexedMatrixArray offlineModelBaseFlexEstimation(
   for (TimeIndex i=y.getFirstIndex(); i<y.getNextIndex(); ++i)
   {
 
-    estimator.setContactsNumber(numberOfContacts[i](0));
+    estimator.setContactsNumber(unsigned(numberOfContacts[i](0)));
 
     if (verbose>0)
     {

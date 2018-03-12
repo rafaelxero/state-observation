@@ -20,14 +20,13 @@ double rotationMatrixFromContactsPositionKine(const Vector3 vLFootPos, const Vec
 {
 Vector3 Vrl, axis, theta;
 AngleAxis j;
-double h, thetax, thetay, thetaz;
+double h, thetay, thetaz;
 // Definition of the length and the unit vector between the two foots.
 Vrl=vLFootPos-vRFootPos;
 j=kine::rotationVectorToAngleAxis(Vrl);
 h = j.angle(); // length between the ankles
 axis = j.axis(); // unit vector between the ankles
 //Definition of the transformation (rotation) between (x,y,z) and (perpendicular of j, j, z).
-thetax=atan2(axis[1],axis[2]);
 //theta=theta(0,0,atan(axis[0]/axis[1]));
 thetay = atan2(axis[0],axis[2]);//theta[1];
 thetaz = atan2(axis[0],axis[1]);//theta[2];
@@ -42,7 +41,7 @@ int test()
 
     time_t t;
     t = time(NULL);
-    srand(t);
+    srand(unsigned(t));
 
     Matrix3 R0;
     Vector3 Vrl0, axis0, ori, theta0;

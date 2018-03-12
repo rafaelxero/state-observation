@@ -237,6 +237,8 @@ namespace stateObservation
                                const Vector3& angVel,
                                Vector& fc, Vector& tc)
     {
+
+      (void)contactAngVelArray; //avoid warnings
       unsigned nbContacts(getContactsNumber());
       fc.setZero();
       tc.setZero();
@@ -614,6 +616,9 @@ namespace stateObservation
         const Vector3 & fm, const Vector3& tm,
         const Vector3 & addForces, const Vector3& addMoments)
     {
+
+      (void) linVelocity;
+      (void) oriVector; //
 
       kine::skewSymmetric(angularVel,op_.skewV);
       kine::skewSymmetric2(angularVel,op_.skewV2);

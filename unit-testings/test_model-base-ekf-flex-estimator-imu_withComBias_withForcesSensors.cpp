@@ -57,7 +57,7 @@ Vector computeZmp (unsigned footNumber, IndexedMatrixArray& forces, IndexedMatri
     return zmp;
 }
 
-Vector3 computeFc(unsigned nbContacts, stateObservation::Vector x, stateObservation::Vector u, stateObservation::flexibilityEstimation::ModelBaseEKFFlexEstimatorIMU& est1)
+Vector3 computeFc(unsigned nbContacts, stateObservation::Vector x, stateObservation::Vector u, stateObservation::flexibilityEstimation::ModelBaseEKFFlexEstimatorIMU&)
 {
     stateObservation::Vector3 Fc;
     stateObservation::Vector3 oriV, angVel, angAcc, pos, vel, acc, fm, tm, AngMomentum, dotAngMomentum;
@@ -231,7 +231,7 @@ int test()
 
         if(nbSupport[k](0)!=est.getContactsNumber())
         {
-            contactNbr = nbSupport[k](0);
+            contactNbr = unsigned(nbSupport[k](0));
             est.setContactsNumber(contactNbr);
         }
 

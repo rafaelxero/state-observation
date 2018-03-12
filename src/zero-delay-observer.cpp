@@ -114,21 +114,14 @@ namespace stateObservation
 
     TimeSize ZeroDelayObserver::getInputsNumber()const
     {
-        if (u_.size()>0)
-        {
-            return unsigned(u_.getLastIndex());
-        }
-        else
-        {
-            return 0;
-        }
+        return u_.size();
     }
 
-    unsigned ZeroDelayObserver::getInputTime()const
+    TimeIndex ZeroDelayObserver::getInputTime()const
     {
         if (u_.size()>0)
         {
-            return unsigned(u_.getLastIndex());
+            return u_.getLastIndex();
         }
         else
         {

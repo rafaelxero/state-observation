@@ -268,8 +268,9 @@ namespace flexibilityEstimation
         double absPosVariance_;
 
         bool useFTSensors_;
-        bool withComBias_;
+
         bool withAbsolutePos_;
+        bool withComBias_;
         bool withUnmodeledForces_;
 
         Vector3 limitTorques_;

@@ -223,7 +223,7 @@ public:
         virtual ekf::StateVector stateDynamics(const ekf::StateVector& x, const ekf::InputVector& u, stateObservation::TimeIndex k)
         {
             ekf::StateVector xk1;
-            unsigned kk=std::min(k,kmax);
+            unsigned kk=std::min(unsigned(k),kmax);
             xk1=a[kk]*x+(u.transpose()*u)(0,0)*s_;
 
             return xk1;
@@ -235,7 +235,7 @@ public:
             (void)u;//unused
 
             ekf::MeasureVector yk;
-            unsigned kk=std::min(k,kmax);
+            unsigned kk=std::min(unsigned(k),kmax);
             yk=c[kk]*x+(u.transpose()*u)(0,0)*n_;
             return yk;
         }
