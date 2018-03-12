@@ -77,7 +77,7 @@ namespace stateObservation
   ///Euler Axis/Angle representation of orientation
   typedef Eigen::AngleAxis<double> AngleAxis;
 
-#undef SO_DEBUG_ONLY(expr)
+
 #ifndef NDEBUG
   static const bool isDebug=true;
 #else
@@ -136,12 +136,14 @@ namespace stateObservation
     ///no boolean
   };
 
-  namespace checkedItemDetail
+  namespace detail
   {
     extern const bool defaultTrue;
     extern const char* defaultErrorMSG;
     extern const std::runtime_error defaultException;
     extern const std::exception* defaultExcepionAddr;
+
+
   }
 
   ///this is simply a structure allowing for automatically verifying that
@@ -157,17 +159,17 @@ namespace stateObservation
   template <typename T, bool lazy=false, bool alwaysCheck = false,
                   bool assertion=true, bool eigenAlignedNew=false>
   class CheckedItem:
-    protected DebugItem<bool,checkedItemDetail::defaultTrue,!lazy || isDebug>,
-    protected DebugItem<const char*,checkedItemDetail::defaultErrorMSG,
+    protected DebugItem<bool,detail::defaultTrue,!lazy || isDebug>,
+    protected DebugItem<const char*,detail::defaultErrorMSG,
     ( !lazy || isDebug ) && assertion>,
-    protected DebugItem<const std::exception*,checkedItemDetail::defaultExcepionAddr,
+    protected DebugItem<const std::exception*,detail::defaultExcepionAddr,
     ( !lazy || isDebug ) && !assertion>
   {
   public:
-    typedef DebugItem<bool,checkedItemDetail::defaultTrue,!lazy || isDebug> IsSet;
-    typedef DebugItem<const char*,checkedItemDetail::defaultErrorMSG,
+    typedef DebugItem<bool,detail::defaultTrue,!lazy || isDebug> IsSet;
+    typedef DebugItem<const char*,detail::defaultErrorMSG,
             ( !lazy || isDebug ) && !assertion> AssertMsg;
-    typedef DebugItem<const std::exception*,checkedItemDetail::defaultExcepionAddr,
+    typedef DebugItem<const std::exception*,detail::defaultExcepionAddr,
             ( !lazy || isDebug ) && !assertion> ExceptionPtr;
     CheckedItem();
     explicit CheckedItem(const T&);
@@ -199,9 +201,9 @@ namespace stateObservation
    */
   template <typename MatrixType=Matrix, bool lazy = false>
   class IndexedMatrixT:
-    protected DebugItem<bool,checkedItemDetail::defaultTrue,!lazy || isDebug>
+    protected DebugItem<bool,detail::defaultTrue,!lazy || isDebug>
   {
-    typedef DebugItem<bool,checkedItemDetail::defaultTrue,!lazy || isDebug> IsSet;
+    typedef DebugItem<bool,detail::defaultTrue,!lazy || isDebug> IsSet;
   public:
     ///Default constructor
     IndexedMatrixT();
@@ -224,7 +226,6 @@ namespace stateObservation
     ///Get the matrix value
     inline MatrixType & operator()();
 
-
     ///Get the time index
     inline unsigned getTime() const;
 
@@ -244,73 +245,80 @@ namespace stateObservation
     MatrixType v_;
   };
 
-  typedef IndexedMatrixT<> IndexedMatrix;
+  typedef IndexedMatrixT<Matrix> IndexedMatrix;
+  typedef IndexedMatrixT<Vector> IndexedVector;
 
   /**
-   * \class    IndexedMatrix
+   * \class    IndexedMatrixArray
    * \brief    This class describes a structure that enables to store array of matrices
    *           with time indexation.
    *
    */
 
-  class IndexedMatrixArray
+  template <typename MatrixType=Matrix>
+  class IndexedMatrixArrayT
   {
   public:
     ///Default constructor
-    IndexedMatrixArray();
+    IndexedMatrixArrayT();
+
+
+
+    typedef std::vector< MatrixType > Array;
+    typedef typename Array::size_type arraySize;
 
     ///Sets the vector v at the time index k
     ///It checks the time index, the array must have contiguous indexes
     ///It can be used to push a value into the back of the array
-    inline void setValue(const Matrix& v,unsigned k);
+    inline void setValue(const MatrixType& v,unsigned k);
 
     ///Pushes back the matrix to the array, the new value will take the next time
-    inline void pushBack(const Matrix& v);
+    inline void pushBack(const MatrixType& v);
 
     ///removes the first (oldest) element of the array
     inline void popFront();
 
     ///gets the value with the given time index
-    inline Matrix operator[](unsigned index) const;
+    inline MatrixType operator[](size_t index) const;
 
     ///gets the value with the given time index, non const version
-    inline Matrix  & operator[](unsigned index);
+    inline MatrixType  & operator[](size_t index);
 
     ///gets the first value
-    inline const Matrix & front() const;
+    inline const MatrixType & front() const;
 
     ///gets the first value
-    inline Matrix& front();
+    inline MatrixType& front();
 
     ///gets the last value
-    inline const Matrix & back() const;
+    inline const MatrixType & back() const;
 
     ///gets the last value
-    inline Matrix & back();
+    inline MatrixType & back();
 
     ///removes all the elements with larger or equal indexes than timeIndex
     void truncate(unsigned timeIndex);
 
     ///resizes the array
-    inline void resize(unsigned i, const Matrix & m= Matrix::Zero(0,0));
+    inline void resize(unsigned i, const MatrixType & m= MatrixType());
 
     ///Get the time index
-    inline int getLastIndex() const;
+    inline long int getLastIndex() const;
 
     ///Get the time index of the next value that will be pushed back
     /// Can be used in for loops
-    inline unsigned getNextIndex() const;
+    inline size_t getNextIndex() const;
 
     ///Set the time index of the last element
-    inline unsigned setLastIndex(int index);
+    inline size_t setLastIndex(int index);
 
     ///Get the time index
-    inline unsigned getFirstIndex() const;
+    inline size_t getFirstIndex() const;
 
     ///set the time index of the first element
-    inline unsigned setFirstIndex(int index);
+    inline size_t setFirstIndex(int index);
 
-    inline unsigned size() const;
+    inline arraySize size() const;
 
     ///Resets the array to initial state
     ///the value is no longer accessible
@@ -320,7 +328,7 @@ namespace stateObservation
     inline void clear();
 
     ///converts the array into a standard vector
-    std::vector<Matrix> getArray() const;
+    Array getArray() const;
 
     ///checks whether the index is present in the array
     inline bool checkIndex(unsigned k) const;
@@ -352,21 +360,28 @@ namespace stateObservation
     void writeInFile(const std::string & filename, bool clear=false, bool append =false);
 
   protected:
+    typedef std::deque< MatrixType > Deque;
+
     ///Asserts that the index is present in the array
     ///does nothing in release mode
-    inline void check_(unsigned time) const;
+    inline void check_(size_t time) const;
 
     ///Asserts that the array is not empty
     ///does nothing in release mode
     inline void check_() const;
 
+    ///Asserts that the given time can be pushed at the back of the vector
+    ///does nothing in release mode
     inline void checkNext_(unsigned time) const;
 
-    unsigned k_;
+    size_t k_;
 
-    std::deque<Matrix> v_;
+    Deque v_;
 
   };
+
+  typedef IndexedMatrixArrayT<Matrix> IndexedMatrixArray;
+  typedef IndexedMatrixArrayT<Vector> IndexedVectorArray;
 
   namespace kine
   {

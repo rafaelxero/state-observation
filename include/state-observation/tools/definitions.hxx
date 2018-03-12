@@ -88,8 +88,7 @@ inline IndexedMatrixT<MatrixType,lazy>::IndexedMatrixT(const MatrixType& v,unsig
 template <typename MatrixType, bool lazy>
 inline IndexedMatrixT<MatrixType,lazy>::IndexedMatrixT():
   IsSet(false),
-  k_(0),
-  v_(Matrix::Zero(0,0))
+  k_(0)
 {
 }
 
@@ -167,7 +166,8 @@ unsigned IndexedMatrixT<MatrixType,lazy>::getTime()const
 
 
 ///Set the value of the matrix and the time sample
-inline void IndexedMatrixArray::setValue(const Matrix& v,unsigned k)
+template <typename MatrixType>
+inline void IndexedMatrixArrayT<MatrixType>::setValue(const MatrixType& v,unsigned k)
 {
     if (checkIndex(k))
     {
@@ -183,12 +183,14 @@ inline void IndexedMatrixArray::setValue(const Matrix& v,unsigned k)
     }
 }
 
-inline void IndexedMatrixArray::pushBack(const Matrix& v)
+template <typename MatrixType>
+inline void IndexedMatrixArrayT<MatrixType>::pushBack(const MatrixType& v)
 {
     v_.push_back(v);
 }
 
-void IndexedMatrixArray::popFront()
+template <typename MatrixType>
+inline void IndexedMatrixArrayT<MatrixType>::popFront()
 {
     check_();
     v_.pop_front();
@@ -196,14 +198,16 @@ void IndexedMatrixArray::popFront()
 }
 
 ///Get the matrix value
-Matrix IndexedMatrixArray::operator[](unsigned time)const
+template <typename MatrixType>
+inline MatrixType IndexedMatrixArrayT<MatrixType>::operator[](size_t time)const
 {
     check_(time);
     return v_[time - k_];
 }
 
 ///Get the matrix value
-Matrix & IndexedMatrixArray::operator[](unsigned time)
+template <typename MatrixType>
+inline MatrixType & IndexedMatrixArrayT<MatrixType>::operator[](size_t time)
 {
     check_(time);
     return v_[time - k_];
@@ -211,97 +215,114 @@ Matrix & IndexedMatrixArray::operator[](unsigned time)
 
 
 ///gets the first value
-const Matrix & IndexedMatrixArray::front() const
+template <typename MatrixType>
+inline const MatrixType & IndexedMatrixArrayT<MatrixType>::front() const
 {
     return v_.front();
 }
 
 ///gets the first value
-Matrix& IndexedMatrixArray::front()
+template <typename MatrixType>
+inline MatrixType& IndexedMatrixArrayT<MatrixType>::front()
 {
     return v_.front();
 }
 
 ///gets the last value
-const Matrix & IndexedMatrixArray::back() const
+template <typename MatrixType>
+inline const MatrixType & IndexedMatrixArrayT<MatrixType>::back() const
 {
     return v_.back();
 }
 
 ///gets the last value
-Matrix & IndexedMatrixArray::back()
+template <typename MatrixType>
+inline MatrixType & IndexedMatrixArrayT<MatrixType>::back()
 {
     return v_.back();
 }
 
 ///Get the time index
-int IndexedMatrixArray::getLastIndex()const
+template <typename MatrixType>
+inline long int IndexedMatrixArrayT<MatrixType>::getLastIndex()const
 {
-  return k_+v_.size()-1;
+  return long(k_+v_.size())-1;
 }
 
 ///Get the time index
-unsigned IndexedMatrixArray::getNextIndex()const
+template <typename MatrixType>
+inline size_t IndexedMatrixArrayT<MatrixType>::getNextIndex()const
 {
   return k_+v_.size();
 }
 
 
 ///Get the time index
-unsigned IndexedMatrixArray::getFirstIndex()const
+template <typename MatrixType>
+inline size_t IndexedMatrixArrayT<MatrixType>::getFirstIndex()const
 {
   return k_;
 }
 
-unsigned IndexedMatrixArray::setLastIndex(int index)
+template <typename MatrixType>
+inline size_t IndexedMatrixArrayT<MatrixType>::setLastIndex(int index)
 {
-  k_=index-(v_.size()+1);
+  return k_=index-(v_.size()+1);
 }
 
-unsigned IndexedMatrixArray::setFirstIndex(int index)
+template <typename MatrixType>
+inline size_t IndexedMatrixArrayT<MatrixType>::setFirstIndex(int index)
 {
-  k_=index;
+  return k_=index;
 }
 
-unsigned IndexedMatrixArray::size() const
+template <typename MatrixType>
+inline typename IndexedMatrixArrayT<MatrixType>::arraySize
+                                  IndexedMatrixArrayT<MatrixType>::size() const
 {
     return v_.size();
 }
 
 ///Switch off the initialization flag, the value is no longer accessible
-void IndexedMatrixArray::reset()
+template <typename MatrixType>
+inline void IndexedMatrixArrayT<MatrixType>::reset()
 {
     k_=0;
     v_.clear();
 }
 
-void IndexedMatrixArray::clear()
+template <typename MatrixType>
+void IndexedMatrixArrayT<MatrixType>::clear()
 {
   k_=k_+v_.size();
   v_.clear();
 }
 
-bool IndexedMatrixArray::checkIndex(unsigned time) const
+template <typename MatrixType>
+inline bool IndexedMatrixArrayT<MatrixType>::checkIndex(unsigned time) const
 {
     return (v_.size()>0 && k_<=time && k_+v_.size() > time);
 }
 
 ///Checks whether the matrix is set or not (assert)
 ///does nothing in release mode
-void IndexedMatrixArray::check_(unsigned time)const
+template <typename MatrixType>
+inline void IndexedMatrixArrayT<MatrixType>::check_(size_t time)const
 {
-    (void)time;//avoid warning
+    (void)time;//avoid warning in release mode
     BOOST_ASSERT(checkIndex(time) && "Error: Time out of range");
 }
 
 ///Checks whether the matrix is set or not (assert)
 ///does nothing in release mode
-void IndexedMatrixArray::check_()const
+template <typename MatrixType>
+inline void IndexedMatrixArrayT<MatrixType>::check_()const
 {
     BOOST_ASSERT(v_.size() && "Error: Matrix array is empty");
 }
 
-void IndexedMatrixArray::checkNext_(unsigned time)const
+template <typename MatrixType>
+inline void IndexedMatrixArrayT<MatrixType>::checkNext_(unsigned time)const
 {
     (void)time;//avoid warning
     BOOST_ASSERT( (v_.size()==0 || k_+v_.size() == time )&&
@@ -309,9 +330,215 @@ void IndexedMatrixArray::checkNext_(unsigned time)const
 }
 
 ///resizes the array
-void IndexedMatrixArray::resize(unsigned i, const Matrix & m )
+template <typename MatrixType>
+inline void IndexedMatrixArrayT<MatrixType>::resize(unsigned i, const MatrixType & m )
 {
     v_.resize(i,m);
 }
 
+///Default constructor
+template <typename MatrixType>
+IndexedMatrixArrayT<MatrixType>::IndexedMatrixArrayT():
+  k_(0)
+{
+}
 
+template <typename MatrixType>
+typename IndexedMatrixArrayT<MatrixType>::Array IndexedMatrixArrayT<MatrixType>::getArray() const
+{
+  Array v;
+
+  for (unsigned i=0; i<v_.size(); ++i)
+  {
+    v.push_back(v_[i]);
+  }
+
+  return v;
+}
+
+template <typename MatrixType>
+void IndexedMatrixArrayT<MatrixType>::truncate(unsigned time)
+{
+  if (v_.size()>0)
+  {
+    if (time > getFirstIndex())
+    {
+      for (unsigned i=getLastIndex(); i>=time ; --i)
+      {
+        v_.pop_back();
+      }
+    }
+    else
+    {
+      v_.clear();
+    }
+  }
+}
+
+template <typename MatrixType>
+void IndexedMatrixArrayT<MatrixType>::readFromFile(const char * filename, size_t rows, size_t cols, bool withTimeStamp)
+{
+  reset();
+
+  std::ifstream f;
+
+  f.open(filename);
+
+  if (f.is_open())
+  {
+
+    Matrix m(Matrix::Zero(rows,cols));
+
+    bool continuation=true;
+    int k=0;
+
+    while (continuation)
+    {
+
+
+      if (withTimeStamp)
+      {
+        f >> k;
+      }
+
+
+      if (f.fail())
+        continuation=false;
+      else
+      {
+        for (size_t i = 0 ; i<rows; ++i)
+        {
+          for (size_t j = 0 ; j<cols; ++j)
+          {
+            f >> m(i,j);
+          }
+        }
+
+        setValue(m,k);
+        ++k;
+      }
+    }
+  }
+}
+
+template <typename MatrixType>
+void IndexedMatrixArrayT<MatrixType>::readVectorsFromFile(const char * filename, bool withTimeStamp )
+{
+  reset();
+
+  std::ifstream f;
+
+  f.open(filename);
+
+  if (f.is_open())
+  {
+    std::string s;
+    Vector v;
+    int k=0;
+
+    bool continuation=true;
+
+    while (continuation)
+    {
+      std::getline(f,s);
+
+      std::stringstream ss(s);
+
+      if (withTimeStamp)
+      {
+        ss >> k;
+      }
+
+
+
+      if (f.fail())
+        continuation=false;
+      else
+      {
+        int size=0;
+        std::vector<double> doublecontainer;
+        double component;
+        bool readingVector = true;
+        while (readingVector)
+        {
+          ss>> component;
+
+          if (ss.fail())
+          {
+            readingVector=false;
+          }
+          else
+          {
+            doublecontainer.push_back(component);
+          }
+        }
+        v.resize(doublecontainer.size());
+        for (unsigned i=0 ; i<doublecontainer.size() ; ++i)
+        {
+          v(i)=doublecontainer[i];
+        }
+        setValue(v,k);
+        ++k;
+
+      }
+    }
+  }
+}
+
+template <typename MatrixType>
+void IndexedMatrixArrayT<MatrixType>::writeInFile(const std::string & filename,  bool clearLog, bool append)
+{
+  writeInFile(filename.c_str(),  clearLog, append);
+}
+
+
+template <typename MatrixType>
+void IndexedMatrixArrayT<MatrixType>::writeInFile(const char * filename, bool clearLog, bool append)
+{
+  std::ofstream f;
+  if (!append)
+  {
+    f.open(filename);
+  }
+  else
+  {
+    f.open(filename,std::ofstream::app);
+  }
+
+  if (f.is_open())
+  {
+    if (size()>0)
+    {
+
+      for (size_t k=getFirstIndex(); k<getNextIndex(); ++k)
+      {
+
+        f << k;
+
+        MatrixType & m = operator[](k);
+
+        for (int i = 0 ; i< m.rows(); ++i)
+        {
+          for (int j = 0 ; j< m.cols(); ++j)
+          {
+            f << " "<< m(i,j);
+          }
+        }
+        f << std::endl;
+      }
+    }
+
+    if (clearLog)
+    {
+      clear();
+    }
+  }
+  else
+  {
+    std::stringstream ss;
+    ss<< "Logger: File " <<filename<<" could not be created/opened.";
+    std::runtime_error e(ss.str().c_str());
+    throw e;
+  }
+
+}
