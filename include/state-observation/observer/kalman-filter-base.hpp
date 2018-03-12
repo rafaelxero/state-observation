@@ -223,7 +223,7 @@ namespace stateObservation
         virtual void setMeasureSize(unsigned m);
 
         /// Get simulation of the measurement y_k using the state estimation
-        virtual MeasureVector getSimulatedMeasurement(unsigned k);
+        virtual MeasureVector getSimulatedMeasurement(TimeIndex k);
 
         ///Get the last vector of inovation of the Kalman filter
         virtual StateVector getInovation();
@@ -258,14 +258,14 @@ namespace stateObservation
         virtual StateVector oneStepEstimation_();
 
         /// The abstract method to overload to implement f(x,u)
-        virtual StateVector prediction_(unsigned k)=0;
+        virtual StateVector prediction_(TimeIndex k)=0;
 
         /// The abstract method to overload to implement h(x,u)
-        virtual MeasureVector simulateSensor_(const StateVector& x, unsigned k)=0;
+        virtual MeasureVector simulateSensor_(const StateVector& x, TimeIndex k)=0;
 
         /// Predicts the sensor measurement,
         /// by default simulates the sensor on the predicted state
-        virtual MeasureVector predictSensor_(unsigned k);
+        virtual MeasureVector predictSensor_(TimeIndex k);
 
         /// Containers for the jacobian matrix of the process
         Matrix a_;

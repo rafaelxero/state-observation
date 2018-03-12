@@ -44,7 +44,7 @@ stateObservation::IndexedMatrixArray offlineEKFFlexibilityEstimation(
     xh.setValue(xh0,y.getFirstIndex()-1);
 
     ///the reconstruction of the state
-    for (unsigned i=y.getFirstIndex();i<y.getNextIndex();++i)
+    for (TimeIndex i=y.getFirstIndex();i<y.getNextIndex();++i)
     {
         //std::cout << i << std::endl;
 
@@ -83,7 +83,7 @@ stateObservation::IndexedMatrixArray offlineEKFFlexibilityEstimation(
 
     ///initialization of a zero input
     stateObservation::IndexedMatrixArray u;
-    for (unsigned k=y.getFirstIndex()-1; k<y.getNextIndex(); ++k)
+    for (TimeIndex k=y.getFirstIndex()-1; k<y.getNextIndex(); ++k)
     {
         u.setValue(Vector::Zero(inputSize,1),k);
     }

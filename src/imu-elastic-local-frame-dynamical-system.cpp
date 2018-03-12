@@ -93,12 +93,12 @@ namespace stateObservation
       op_.rFlex = computeRotation_(op_.orientationFlexV,0);
 
       // Getting contact forces
-      for (int i=0; i<hrp2::contact::nbModeledMax; ++i)
+      for (unsigned i=0; i<hrp2::contact::nbModeledMax; ++i)
         op_.efforts.setValue(x.segment(state::fc+6*i,6),i);
 
       op_.fm=x.segment(state::unmodeledForces,3);
       op_.tm=x.segment(state::unmodeledForces+3,3);
-      for (int i=0; i<hrp2::contact::nbModeledMax; ++i)
+      for (unsigned i=0; i<hrp2::contact::nbModeledMax; ++i)
       {
         fc_.segment<3>(3*i) = op_.efforts[i].block<3,1>(0,0);
         tc_.segment<3>(3*i) = op_.efforts[i].block<3,1>(3,0);
@@ -145,7 +145,7 @@ namespace stateObservation
       op_.velocityFlex=x.segment(state::linVel,3);
       op_.angularVelocityFlex=x.segment(state::angVel,3);
 
-      for (int i=0; i<hrp2::contact::nbModeledMax; ++i)
+      for (unsigned i=0; i<hrp2::contact::nbModeledMax; ++i)
       {
         op_.efforts.setValue(x.segment(state::fc+6*i,6),i);
         fc_.segment<3>(3*i) = op_.efforts[i].block<3,1>(0,0);
@@ -545,7 +545,7 @@ namespace stateObservation
       op_.velocityFlex=x.segment(state::linVel,3);
       op_.angularVelocityFlex=x.segment(state::angVel,3);
 
-      for (int i=0; i<hrp2::contact::nbModeledMax; ++i)
+      for (unsigned i=0; i<hrp2::contact::nbModeledMax; ++i)
       {
         op_.efforts.setValue(x.segment(state::fc+6*i,6),i);
         fc_.segment<3>(3*i) = op_.efforts[i].block<3,1>(0,0);
@@ -881,7 +881,7 @@ namespace stateObservation
     }
 
     Vector IMUElasticLocalFrameDynamicalSystem::stateDynamics
-    (const Vector& x, const Vector& u, unsigned k)
+    (const Vector& x, const Vector& u, TimeIndex)
     {
 
       assertStateVector_(x);
@@ -895,7 +895,7 @@ namespace stateObservation
       op_.velocityFlex=x.segment(state::linVel,3);
       op_.angularVelocityFlex=x.segment(state::angVel,3);
 
-      for (int i=0; i<hrp2::contact::nbModeledMax; ++i)
+      for (unsigned i=0; i<hrp2::contact::nbModeledMax; ++i)
         op_.efforts.setValue(x.segment(state::fc+6*i,6),i);
 
       op_.positionComBias <<  x.segment(state::comBias,2),
@@ -927,7 +927,7 @@ namespace stateObservation
       op_.AngMomentum=u.segment<3>(input::angMoment);
       op_.dotAngMomentum=u.segment<3>(input::dotAngMoment);
 
-      for (int i=0; i<hrp2::contact::nbModeledMax; ++i)
+      for (unsigned i=0; i<hrp2::contact::nbModeledMax; ++i)
       {
         fc_.segment<3>(3*i) = op_.efforts[i].block<3,1>(0,0);
         tc_.segment<3>(3*i) = op_.efforts[i].block<3,1>(3,0);
@@ -950,7 +950,7 @@ namespace stateObservation
       }
       //x_{k+1}
 
-      for (int i=0; i<hrp2::contact::nbModeledMax; ++i)
+      for (unsigned i=0; i<hrp2::contact::nbModeledMax; ++i)
       {
         //std::cout << "Contact " << i << std::endl
         //          << fc_.segment<3>(3*i).transpose() << std::endl
@@ -967,7 +967,7 @@ namespace stateObservation
       xk1_.segment<3>(state::linVel) = op_.velocityFlex;
       xk1_.segment<3>(state::angVel) = op_.angularVelocityFlex;
 
-      for (int i=0; i<hrp2::contact::nbModeledMax; ++i)
+      for (unsigned i=0; i<hrp2::contact::nbModeledMax; ++i)
         xk1_.segment(state::fc+6*i,6) = op_.efforts[i].col(0);
 
       // xk1_.segment<2>(state::comBias) = op_.positionComBias.head<2>();
@@ -1006,7 +1006,7 @@ namespace stateObservation
     }
 
     Vector IMUElasticLocalFrameDynamicalSystem::measureDynamics
-    (const Vector& x, const Vector& u, unsigned k)
+    (const Vector& x, const Vector& u, TimeIndex k)
     {
       assertStateVector_(x);
       assertInputVector_(u);
@@ -1020,7 +1020,7 @@ namespace stateObservation
       op_.orientationFlexV=x.segment(state::ori,3);
       op_.angularVelocityFlex=x.segment(state::angVel,3);
 
-      for (int i=0; i<hrp2::contact::nbModeledMax; ++i)
+      for (unsigned i=0; i<hrp2::contact::nbModeledMax; ++i)
         op_.efforts[i]=x.segment(state::fc+6*i,6);
 
       op_.fm=x.segment(state::unmodeledForces,3);
@@ -1055,7 +1055,7 @@ namespace stateObservation
 
       op_.rimu = op_.rFlex * op_.rControl;
 
-      for (int i=0; i<hrp2::contact::nbModeledMax; ++i)
+      for (unsigned i=0; i<hrp2::contact::nbModeledMax; ++i)
       {
         fc_.segment<3>(3*i) = op_.efforts[i].block<3,1>(0,0);
         tc_.segment<3>(3*i) = op_.efforts[i].block<3,1>(3,0);

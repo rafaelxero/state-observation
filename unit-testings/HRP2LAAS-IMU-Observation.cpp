@@ -75,7 +75,7 @@ int test(const IndexedMatrixArray & y)
     double estimatedError=0;
 
     ///the reconstruction of the state
-    for (unsigned i=xh.getFirstIndex()+1;i<xh.getNextIndex();++i)
+    for (TimeIndex i=xh.getFirstIndex()+1;i<xh.getNextIndex();++i)
     {
         ///display part,
         Vector3 gh;

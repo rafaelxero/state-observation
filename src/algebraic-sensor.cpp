@@ -9,7 +9,7 @@ namespace stateObservation
     {
     }
 
-    void AlgebraicSensor::setState(const Vector & state, unsigned k)
+    void AlgebraicSensor::setState(const Vector & state, TimeIndex k)
     {
         directInputToOutput_ = state.tail(concat_);
         state_=state.head(getStateSize_());
@@ -62,7 +62,7 @@ namespace stateObservation
         BOOST_ASSERT( checkStateVector(v) && "ERROR: The state vector is incorrectly set.");
     }
 
-    unsigned AlgebraicSensor::getTime() const
+    TimeIndex AlgebraicSensor::getTime() const
     {
         return time_;
     }

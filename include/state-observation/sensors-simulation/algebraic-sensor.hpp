@@ -46,10 +46,10 @@ namespace stateObservation
         virtual Vector getMeasurements(bool noisy=true);
 
         ///Sets the value of the state at instant k
-        virtual void setState(const Vector & state, unsigned k);
+        virtual void setState(const Vector & state, TimeIndex k);
 
         ///gets the current time
-        virtual unsigned getTime() const;
+        virtual TimeIndex getTime() const;
 
         ///gets the state vector size. Pure virtual method.
         virtual unsigned getStateSize() const;
@@ -76,7 +76,7 @@ namespace stateObservation
 
         virtual void checkState_(const Vector &);
 
-        unsigned time_;
+        TimeIndex time_;
 
         unsigned concat_;
 

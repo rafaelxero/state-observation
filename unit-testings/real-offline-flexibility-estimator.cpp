@@ -102,7 +102,7 @@ int testDerivator()
 
     IndexedMatrixArray dta;
 
-    for (unsigned i=x.getFirstIndex() ; i<x.getNextIndex() ; ++i)
+    for (TimeIndex i=x.getFirstIndex() ; i<x.getNextIndex() ; ++i)
     {
         Vector xi = Vector::Zero(6,1);
 
@@ -118,7 +118,7 @@ int testDerivator()
     std::ofstream f;
     f.open("trajectory.dat");
 
-    for (unsigned i=x.getFirstIndex() ; i<x.getNextIndex() ; ++i)
+    for (TimeIndex i=x.getFirstIndex() ; i<x.getNextIndex() ; ++i)
     {
         //f<<dta[i].transpose()<<"\t#####\t\t"<<Vector(Vector(x[i]).segment(9,3)).transpose()<<"\t#####\t\t"<<(x[i]-state[i]).transpose()<<std::endl;
         f<<(x[i]-state[i])<<std::endl<<std::endl;
@@ -231,7 +231,7 @@ int test (const IndexedMatrixArray & y, const IndexedMatrixArray & u)
     double error;
 
     ///the reconstruction of the state
-    for (unsigned i=y.getFirstIndex();i<y.getNextIndex();++i)
+    for (TimeIndex i=y.getFirstIndex();i<y.getNextIndex();++i)
     {
         ///display part, useless
         Vector3 g;

@@ -42,7 +42,7 @@ namespace stateObservation
         virtual Vector getMeasurements(bool noisy=true)=0;
 
         ///Sets the value of the state at instant k
-        virtual void setState(const Vector & state, unsigned k)=0;
+        virtual void setState(const Vector & state, TimeIndex k)=0;
 
         ///Sets a pointer on the noise on the measurements. The class does NOT destroy the noise
         ///when the destructor is called.
@@ -55,7 +55,7 @@ namespace stateObservation
         virtual void resetNoise();
 
         ///gets the current time, pure virtual method
-        virtual unsigned getTime() const=0;
+        virtual TimeIndex getTime() const=0;
 
         ///gets the state vector size. Pure virtual method.
         virtual unsigned getStateSize() const=0;

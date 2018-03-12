@@ -41,48 +41,48 @@ namespace stateObservation
         virtual void setDynamicsFunctor(DynamicalSystemFunctorBase * );
 
         ///Sets the state value at instant k
-        virtual void setState( const Vector & x, unsigned k);
+        virtual void setState( const Vector & x, TimeIndex k);
 
         ///Set the value of the input at instant k
         ///If no value of the input is available when simulating the system
         ///the previous input value is automatically set.
-        virtual void setInput( const Vector & u, unsigned k);
+        virtual void setInput( const Vector & u, TimeIndex k);
 
         ///Gets the state of the current time
         virtual Vector getCurrentState() const;
 
         ///Gets the current time
-        virtual unsigned getCurrentTime() const;
+        virtual TimeIndex getCurrentTime() const;
 
         ///Runs one loop of the dynamics simulation
         virtual void simulateDynamics();
 
         ///Runs the simulation until a given time index
-        virtual void simulateDynamicsTo(unsigned k);
+        virtual void simulateDynamicsTo(TimeIndex k);
 
         ///Gets the input of a given time index,
         ///if the Input is not available the previous input is provided
-        virtual Vector getInput(unsigned k) const;
+        virtual Vector getInput(TimeIndex k) const;
 
         ///Gets the measurement value at a given time index
         ///if the value is not available, the dynamics is simulated
         ///to the time k
-        virtual Vector getMeasurement( unsigned k );
+        virtual Vector getMeasurement( TimeIndex k );
 
         ///Gets the state value at a given time index
         ///if the value is not available, the dynamics is simulated
         ///to the time k
-        virtual Vector getState( unsigned k );
+        virtual Vector getState( TimeIndex k );
 
         ///Gives a IndexedMatrixArray of the measurements starting at startingTime
         ///and having the given  duration
         virtual IndexedMatrixArray getMeasurementArray
-                    (unsigned startingTime, unsigned duration);
+                    (TimeIndex startingTime, TimeSize duration);
 
         ///Gives a IndexedMatrixArray of the states starting at startingTime
         ///and having the given  duration
         virtual IndexedMatrixArray getStateArray
-                    (unsigned startingTime, unsigned duration);
+                    (TimeIndex startingTime, TimeSize duration);
 
         ///resets all the states, the measurements and the inputs
         virtual void resetDynamics();
@@ -97,7 +97,7 @@ namespace stateObservation
 
         IndexedMatrixArray y_;
 
-        std::map<unsigned, Vector> u_;
+        std::map<TimeIndex, Vector> u_;
 
     };
 }

@@ -323,14 +323,14 @@ namespace stateObservation
 
             const IndexedMatrixArray & po= positionOrientation;
 
-            unsigned i0=positionOrientation.getFirstIndex();
-            unsigned i1=positionOrientation.getNextIndex();
+            TimeIndex i0=positionOrientation.getFirstIndex();
+            TimeIndex i1=positionOrientation.getNextIndex();
 
             IndexedMatrixArray a;
             a.setValue(r,i0);
             a.resize(po.size(),r);
 
-            for (unsigned i=i0; i<i1; ++i)
+            for (TimeIndex i=i0; i<i1; ++i)
             {
                 Vector poi = po[i];
 
@@ -339,7 +339,7 @@ namespace stateObservation
                 a.setValue(r,i);
             }
 
-            for (unsigned i=i0; i<i1-1; ++i)
+            for (TimeIndex i=i0; i<i1-1; ++i)
             {
                 r = a[i];
 
@@ -357,7 +357,7 @@ namespace stateObservation
 
             }
 
-            for (unsigned i=i0; i<i1-2; ++i)
+            for (TimeIndex i=i0; i<i1-2; ++i)
             {
                 r = a[i];
                 Vector r2 = a[i+1];

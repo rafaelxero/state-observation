@@ -45,12 +45,12 @@ namespace flexibilityEstimation
         ///Description of the state dynamics
         virtual stateObservation::Vector stateDynamics
         (const stateObservation::Vector& x, const stateObservation::Vector& u,
-            unsigned k);
+            TimeIndex k);
 
         ///Description of the sensor's dynamics
         virtual stateObservation::Vector measureDynamics
         (const stateObservation::Vector& x, const stateObservation::Vector& u,
-            unsigned k);
+            TimeIndex k);
 
         ///Sets a noise which disturbs the state dynamics
         virtual void setProcessNoise( stateObservation::NoiseBase * );

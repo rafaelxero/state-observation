@@ -4,7 +4,7 @@ namespace stateObservation
 {
 
     void ZeroDelayObserver::setState
-                            (const ObserverBase::StateVector& x_k,unsigned k)
+                            (const ObserverBase::StateVector& x_k,TimeIndex k)
     {
         BOOST_ASSERT(checkStateVector(x_k)
                             && "The size of the state vector is incorrect");
@@ -28,7 +28,7 @@ namespace stateObservation
     }
 
     void ZeroDelayObserver::setMeasurement
-                    (const ObserverBase::MeasureVector& y_k,unsigned k)
+                    (const ObserverBase::MeasureVector& y_k,TimeIndex k)
     {
 
         BOOST_ASSERT(checkMeasureVector(y_k)
@@ -51,7 +51,7 @@ namespace stateObservation
     }
 
     void ZeroDelayObserver::setInput
-                    (const ObserverBase::InputVector& u_k,unsigned k)
+                    (const ObserverBase::InputVector& u_k,TimeIndex k)
     {
         if (p_>0)
         {
@@ -80,14 +80,14 @@ namespace stateObservation
     }
 
     ObserverBase::StateVector
-    ZeroDelayObserver::getEstimatedState(unsigned k)
+    ZeroDelayObserver::getEstimatedState(TimeIndex k)
     {
-        unsigned k0=x_.getTime();
+        TimeIndex k0=x_.getTime();
 
         BOOST_ASSERT(k0<=k
                 && "ERROR: The observer cannot estimate previous states");
 
-        for (unsigned i=k0;i<k;++i)
+        for (TimeIndex i=k0;i<k;++i)
         {
             oneStepEstimation_();
             if (y_.getFirstIndex()<k)
@@ -102,17 +102,17 @@ namespace stateObservation
     }
 
 
-    unsigned ZeroDelayObserver::getCurrentTime()const
+    TimeIndex ZeroDelayObserver::getCurrentTime()const
     {
         return x_.getTime();
     }
 
-    Vector ZeroDelayObserver::getInput(unsigned k) const
+    Vector ZeroDelayObserver::getInput(TimeIndex k) const
     {
         return u_[k];
     }
 
-    unsigned ZeroDelayObserver::getInputsNumber()const
+    TimeSize ZeroDelayObserver::getInputsNumber()const
     {
         if (u_.size()>0)
         {
@@ -136,19 +136,19 @@ namespace stateObservation
         }
     }
 
-    Vector ZeroDelayObserver::getMeasurement(unsigned k) const
+    Vector ZeroDelayObserver::getMeasurement(TimeIndex k) const
     {
         return y_[k];
     }
 
-    unsigned ZeroDelayObserver::getMeasurementTime()const
+    TimeIndex ZeroDelayObserver::getMeasurementTime()const
     {
         BOOST_ASSERT(y_.size()>0
                 && "ERROR: There is no measurements registered (past measurements are erased)");
-        return unsigned(y_.getLastIndex());
+        return y_.getLastIndex();
     }
 
-    unsigned ZeroDelayObserver::getMeasurementsNumber()const
+    TimeSize ZeroDelayObserver::getMeasurementsNumber()const
     {
         return unsigned(y_.size());
     }

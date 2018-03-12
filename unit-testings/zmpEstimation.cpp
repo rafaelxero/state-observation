@@ -25,7 +25,7 @@ timespec diff(const timespec & start, const timespec & end)
         return temp;
 }
 
-Vector& computeZmp (Vector& forces, Matrix& sensorPosition1, Matrix& sensorPosition2, unsigned contactNbr)
+Vector computeZmp (Vector& forces, Matrix& sensorPosition1, Matrix& sensorPosition2, unsigned contactNbr)
 {
     double fnormal = 0;
     double sumZmpx = 0;
@@ -106,7 +106,6 @@ int test()
     const unsigned kinit=0;
     const unsigned kmax=42761;
     const unsigned measurementSize=6;
-    const unsigned inputSizeBase=54;
 
     const unsigned stateSize=18;
     unsigned contactNbr = 2;

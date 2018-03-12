@@ -22,7 +22,7 @@ int homoMatrixDerivationTestFromFile(char * homo, char * vel, const std::string 
     f1.open((prefix + "computed.dat").c_str());
     f2.open((prefix + "real.dat").c_str());
 
-    for (size_t i=homoMatrices.getFirstIndex();i<homoMatrices.getLastIndex();++i)
+    for (TimeIndex i=homoMatrices.getFirstIndex();i<homoMatrices.getLastIndex();++i)
     {
         computedVelocities.setValue(kine::derivateHomogeneousMatrixFD(
                             homoMatrices[i],homoMatrices[i+1],dt),i);

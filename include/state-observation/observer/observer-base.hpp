@@ -84,26 +84,26 @@ namespace stateObservation
         virtual unsigned getInputSize() const;
 
         ///Set the value of the state vector at time index k
-        virtual void setState(const StateVector& x_k,unsigned k)=0;
+        virtual void setState(const StateVector& x_k,TimeIndex k)=0;
 
         ///Remove all the given past values of the state
         virtual void clearStates()=0;
 
         ///Set the value of the measurements vector at time index k
-        virtual void setMeasurement(const MeasureVector& y_k,unsigned k)=0;
+        virtual void setMeasurement(const MeasureVector& y_k,TimeIndex k)=0;
 
         ///Remove all the given past values of the measurements
         virtual void clearMeasurements()=0;
 
         ///Set the value of the input vector at time index k
-        virtual void setInput(const InputVector& x_k,unsigned k)=0;
+        virtual void setInput(const InputVector& x_k,TimeIndex k)=0;
 
         ///Remove all the given past values of the inputs
         virtual void clearInputs()=0;
 
         ///Run the observer loop and gets the state estimation of the state at
         ///instant k
-        virtual StateVector getEstimatedState(unsigned k)=0;
+        virtual StateVector getEstimatedState(TimeIndex k)=0;
 
         ///Reinitializes the whole observer
         ///default behavior is to call the three "ObserverBase::clear*" methods

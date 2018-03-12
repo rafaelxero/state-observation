@@ -48,7 +48,7 @@ namespace flexibilityEstimation
 
 
     Vector StableIMUFixedContactDynamicalSystem::stateDynamics
-        (const Vector& x, const Vector& , unsigned )
+        (const Vector& x, const Vector& , TimeIndex )
     {
         assertStateVector_(x);
 
@@ -101,7 +101,7 @@ namespace flexibilityEstimation
     }
 
     Vector StableIMUFixedContactDynamicalSystem::measureDynamics
-                (const Vector& x, const Vector& u, unsigned k)
+                (const Vector& x, const Vector& u, TimeIndex k)
     {
         assertStateVector_(x);
 

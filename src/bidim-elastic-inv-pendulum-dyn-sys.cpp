@@ -20,7 +20,7 @@ namespace stateObservation
     }
 
     Vector BidimElasticInvPendulum::stateDynamics
-        (const Vector& x, const Vector& u, unsigned)
+        (const Vector& x, const Vector& u, TimeIndex)
     {
         assertStateVector_(x);
         assertInputVector_(u);
@@ -70,7 +70,7 @@ namespace stateObservation
     }
 
 
-    Vector BidimElasticInvPendulum::measureDynamics (const Vector& , const Vector& , unsigned )
+    Vector BidimElasticInvPendulum::measureDynamics (const Vector& , const Vector& , TimeIndex )
     {
         ///There is no measurements
         return Vector::Zero(0);

@@ -169,14 +169,14 @@ public:
       ///Description of the state dynamics
       virtual stateObservation::Vector stateDynamics
       (const stateObservation::Vector& x, const stateObservation::Vector& u,
-       unsigned k);
+       TimeIndex k);
 
       ///compute the jacobien of the state dynamics at the last computed value
       stateObservation::Matrix stateDynamicsJacobian();
 
       ///compute the jacobien of the state dynamics at a given state
       stateObservation::Matrix stateDynamicsJacobian(const stateObservation::Vector& x, const stateObservation::Vector& u,
-       unsigned k);
+       TimeIndex k);
 
       ///sets the finite differences derivation step vector
       void setFDstep(const stateObservation::Vector & dx);
@@ -185,14 +185,14 @@ public:
       ///Description of the sensor's dynamics
       virtual stateObservation::Vector measureDynamics
       (const stateObservation::Vector& x, const stateObservation::Vector& u,
-       unsigned k);
+       TimeIndex k);
 
       ///compute the Jacobien of the measurements dynamics at the last computed value
       stateObservation::Matrix measureDynamicsJacobian();
 
       ///compute the Jacobien of the measurements dynamics at a given state value
       stateObservation::Matrix measureDynamicsJacobian(const stateObservation::Vector& x, const stateObservation::Vector& u,
-       unsigned k);
+       TimeIndex k);
 
       ///Sets a noise which disturbs the state dynamics
       virtual void setProcessNoise( stateObservation::NoiseBase * );
@@ -407,7 +407,7 @@ public:
       Matrix3 Kfe_, Kte_, Kfv_, Ktv_;
       Matrix3 KfeRopes_, KteRopes_, KfvRopes_, KtvRopes_;
 
-      unsigned kcurrent_;
+      TimeIndex kcurrent_;
 
       bool withForceMeasurements_;
       bool withComBias_;
@@ -458,7 +458,7 @@ public:
         Vector yk;
         Vector ykdy;
 
-        unsigned k_fory;
+        TimeIndex k_fory;
 
         Matrix3 orinertia;
 

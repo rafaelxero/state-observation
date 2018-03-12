@@ -106,13 +106,13 @@ namespace stateObservation
 
     protected:
         /// simulate the dynamics of the state using the functor
-        virtual StateVector prediction_(unsigned k);
+        virtual StateVector prediction_(TimeIndex k);
 
         /// simulate the dynamic of the measurement using the functor
-        virtual MeasureVector simulateSensor_(const StateVector& x, unsigned k);
+        virtual MeasureVector simulateSensor_(const StateVector& x, TimeIndex k);
 
         /// predicts the measurement using the functor, assumed that the predicted state is up-to-date
-        virtual MeasureVector predictSensor_(unsigned k);
+        virtual MeasureVector predictSensor_(TimeIndex k);
 
         /// container for the prediction
         IndexedVector xbar_;

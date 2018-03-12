@@ -36,7 +36,7 @@ namespace stateObservation
         }
     }
 
-    ObserverBase::StateVector ExtendedKalmanFilter::prediction_(unsigned k)
+    ObserverBase::StateVector ExtendedKalmanFilter::prediction_(TimeIndex k)
     {
         if (!this->xbar_.isSet() || this->xbar_.getTime()!=k)
         {
@@ -63,7 +63,7 @@ namespace stateObservation
         return xbar_();
     }
 
-    ObserverBase::MeasureVector ExtendedKalmanFilter::predictSensor_(unsigned k)
+    ObserverBase::MeasureVector ExtendedKalmanFilter::predictSensor_(TimeIndex k)
     {
 
         if (!this->ybar_.isSet() || this->ybar_.getTime()!=k)
@@ -74,7 +74,7 @@ namespace stateObservation
         return ybar_();
     }
 
-    ObserverBase::MeasureVector ExtendedKalmanFilter::simulateSensor_(const ObserverBase::StateVector& x, unsigned k)
+    ObserverBase::MeasureVector ExtendedKalmanFilter::simulateSensor_(const ObserverBase::StateVector& x, TimeIndex k)
     {
         BOOST_ASSERT (f_!=0x0 && "ERROR: The Kalman filter functor is not set");
 
@@ -106,7 +106,7 @@ must set directInputOutputFeedthrough to 'false' in the constructor");
     ExtendedKalmanFilter::getAMatrixFD(const ObserverBase::StateVector
                                        &dx)
     {
-        unsigned k=this->x_.getTime();
+        TimeIndex k=this->x_.getTime();
         opt.a_=getAmatrixZero();
         opt.xbar_=prediction_(k+1);
         opt.x_=this->x_();
@@ -138,7 +138,7 @@ must set directInputOutputFeedthrough to 'false' in the constructor");
     ExtendedKalmanFilter::getCMatrixFD(const ObserverBase::StateVector
                                        &dx)
     {
-        unsigned k=this->x_.getTime();
+        TimeIndex k=this->x_.getTime();
 
         opt.c_.resize(m_,n_);
 

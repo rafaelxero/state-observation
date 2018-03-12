@@ -125,10 +125,10 @@ namespace stateObservation
 
     protected:
         /// The implementation of the (linear) prediction (state dynamics)
-        virtual StateVector prediction_(unsigned k);
+        virtual StateVector prediction_(TimeIndex k);
 
         /// The implementation of the (linear) measurement (state dynamics)
-        virtual MeasureVector simulateSensor_(const StateVector& x, unsigned k);
+        virtual MeasureVector simulateSensor_(const StateVector& x, TimeIndex k);
 
         /// The container of the Input-State matrix
         Matrix d_;

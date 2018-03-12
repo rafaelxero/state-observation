@@ -23,7 +23,7 @@ using namespace stateObservation;
 
 /// ///////////////////////////////////////////////////////////////
 
-main (int argc, char *argv[])
+int main (int argc, char *argv[])
 
 {
   try
@@ -31,7 +31,7 @@ main (int argc, char *argv[])
     if (argc%2 ==0)
       throw std::invalid_argument("argc");
 
-    for (unsigned i=1; i<argc; i=i+2) /// i is incremented twice
+    for (int i=1; i<argc; i=i+2) /// i is incremented twice
     {
       std::string type, filename;
       type = argv[i];
@@ -67,7 +67,7 @@ main (int argc, char *argv[])
         additionalForces,
         contact1,
         contact2 ;
-        for (int i=u.getFirstIndex(); i<u.getNextIndex(); ++i)
+        for (TimeIndex i=u.getFirstIndex(); i<u.getNextIndex(); ++i)
         {
           ui=u[i];
           posCom.setValue(ui.segment<3>(input::posCom),i);
@@ -157,7 +157,7 @@ main (int argc, char *argv[])
 
         std::cout << "Splitting" << std::endl;
 
-        for (int i=y.getFirstIndex(); i<y.getNextIndex(); ++i)
+        for (TimeIndex i=y.getFirstIndex(); i<y.getNextIndex(); ++i)
         {
           yi=y[i];
 
@@ -234,7 +234,7 @@ main (int argc, char *argv[])
         comBias,
         drift          ;
 
-        for (int i=x.getFirstIndex(); i<x.getNextIndex(); ++i)
+        for (TimeIndex i=x.getFirstIndex(); i<x.getNextIndex(); ++i)
         {
           xi=x[i];
           pos             .setValue(xi.segment<3>(state::pos),i);

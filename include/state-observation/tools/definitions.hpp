@@ -77,6 +77,9 @@ namespace stateObservation
   ///Euler Axis/Angle representation of orientation
   typedef Eigen::AngleAxis<double> AngleAxis;
 
+  typedef long int TimeIndex;
+  typedef size_t TimeSize;
+
 
 #ifndef NDEBUG
   static const bool isDebug=true;
@@ -209,16 +212,16 @@ namespace stateObservation
     IndexedMatrixT();
 
     ///A constructor with a given matrix value and a time index
-    IndexedMatrixT(const MatrixType& v, unsigned k);
+    IndexedMatrixT(const MatrixType& v, TimeIndex k);
 
     ///Set the value of the matrix and the time sample
-    inline void set(const MatrixType& v,unsigned k);
+    inline void set(const MatrixType& v,TimeIndex k);
 
     ///Switch the vector to "initialized" state
     inline void set(bool value=true);
 
     ///set the index of the matrix
-    inline void setIndex(int index);
+    inline void setIndex(TimeIndex index);
 
     ///Get the matrix value
     inline const MatrixType & operator()() const;
@@ -227,7 +230,7 @@ namespace stateObservation
     inline MatrixType & operator()();
 
     ///Get the time index
-    inline unsigned getTime() const;
+    inline TimeIndex getTime() const;
 
     ///Says whether the matrix is initialized or not
     inline bool isSet() const;
@@ -241,7 +244,7 @@ namespace stateObservation
     ///Checks whether the matrix is set or not (assert)
     ///does nothing in release mode
     inline bool check_() const;
-    unsigned k_;
+    TimeIndex k_;
     MatrixType v_;
   };
 
@@ -265,12 +268,11 @@ namespace stateObservation
 
 
     typedef std::vector< MatrixType > Array;
-    typedef typename Array::size_type arraySize;
 
     ///Sets the vector v at the time index k
     ///It checks the time index, the array must have contiguous indexes
     ///It can be used to push a value into the back of the array
-    inline void setValue(const MatrixType& v,unsigned k);
+    inline void setValue(const MatrixType& v, TimeIndex  k);
 
     ///Pushes back the matrix to the array, the new value will take the next time
     inline void pushBack(const MatrixType& v);
@@ -279,10 +281,10 @@ namespace stateObservation
     inline void popFront();
 
     ///gets the value with the given time index
-    inline MatrixType operator[](size_t index) const;
+    inline MatrixType operator[](TimeIndex index) const;
 
     ///gets the value with the given time index, non const version
-    inline MatrixType  & operator[](size_t index);
+    inline MatrixType  & operator[](TimeIndex index);
 
     ///gets the first value
     inline const MatrixType & front() const;
@@ -300,25 +302,25 @@ namespace stateObservation
     void truncate(unsigned timeIndex);
 
     ///resizes the array
-    inline void resize(unsigned i, const MatrixType & m= MatrixType());
+    inline void resize(TimeSize i, const MatrixType & m= MatrixType());
 
     ///Get the time index
     inline long int getLastIndex() const;
 
     ///Get the time index of the next value that will be pushed back
     /// Can be used in for loops
-    inline size_t getNextIndex() const;
+    inline TimeIndex getNextIndex() const;
 
     ///Set the time index of the last element
-    inline size_t setLastIndex(int index);
+    inline TimeIndex setLastIndex(int index);
 
     ///Get the time index
-    inline size_t getFirstIndex() const;
+    inline TimeIndex getFirstIndex() const;
 
     ///set the time index of the first element
-    inline size_t setFirstIndex(int index);
+    inline TimeIndex setFirstIndex(int index);
 
-    inline arraySize size() const;
+    inline TimeSize size() const;
 
     ///Resets the array to initial state
     ///the value is no longer accessible
@@ -331,7 +333,7 @@ namespace stateObservation
     Array getArray() const;
 
     ///checks whether the index is present in the array
-    inline bool checkIndex(unsigned k) const;
+    inline bool checkIndex(TimeIndex k) const;
 
     ///gets the array from a file
     ///the line starts with the time index and then the matrix is read
@@ -364,7 +366,7 @@ namespace stateObservation
 
     ///Asserts that the index is present in the array
     ///does nothing in release mode
-    inline void check_(size_t time) const;
+    inline void check_(TimeIndex time) const;
 
     ///Asserts that the array is not empty
     ///does nothing in release mode
@@ -372,9 +374,9 @@ namespace stateObservation
 
     ///Asserts that the given time can be pushed at the back of the vector
     ///does nothing in release mode
-    inline void checkNext_(unsigned time) const;
+    inline void checkNext_(TimeIndex time) const;
 
-    size_t k_;
+    TimeIndex k_;
 
     Deque v_;
 

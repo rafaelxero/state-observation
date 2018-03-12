@@ -42,11 +42,11 @@ namespace stateObservation
 
         ///Description of the state dynamics
         virtual Vector stateDynamics
-        (const Vector& x, const Vector& u, unsigned k);
+        (const Vector& x, const Vector& u, TimeIndex k);
 
         ///Description of the sensor's dynamics
         virtual Vector measureDynamics
-        (const Vector& x, const Vector& u, unsigned k);
+        (const Vector& x, const Vector& u, TimeIndex k);
 
         ///Sets a noise which disturbs the state dynamics
         virtual void setProcessNoise( NoiseBase * );

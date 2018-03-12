@@ -274,10 +274,10 @@ namespace stateObservation
       if (R_.rows()!=getMeasurementSize())
       {
 
-        int realIndex = R_.rows();
+        size_t realIndex = R_.rows();
         R_.conservativeResize(getMeasurementSize(),getMeasurementSize());
 
-        int currIndex = 6;
+        size_t currIndex = 6;
         if(useFTSensors_)
         {
           ///if the force part of the matrix is not filled
@@ -285,7 +285,7 @@ namespace stateObservation
           {
             R_.block(currIndex,0,functor_.getContactsNumber()*6,currIndex).setZero();
             R_.block(0,currIndex,currIndex,functor_.getContactsNumber()*6).setZero();
-            for (int i=0; i<functor_.getContactsNumber(); ++i)
+            for (size_t i=0; i<functor_.getContactsNumber(); ++i)
             {
               R_.block(currIndex,currIndex,6,6) = forceVariance_;
               currIndex +=6;
@@ -370,7 +370,7 @@ namespace stateObservation
           clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &time2);
           k_=ekf_.getMeasurementTime();
 
-          unsigned i;
+          TimeIndex i;
           for (i=ekf_.getCurrentTime()+1; i<=k_; ++i)
           {
             if (finiteDifferencesJacobians_)

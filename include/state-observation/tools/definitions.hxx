@@ -78,7 +78,7 @@ inline void CheckedItem<T,lazy,alwaysCheck , assertion,eigenAlignedNew>::chckitm
 
 
 template <typename MatrixType, bool lazy>
-inline IndexedMatrixT<MatrixType,lazy>::IndexedMatrixT(const MatrixType& v,unsigned k):
+inline IndexedMatrixT<MatrixType,lazy>::IndexedMatrixT(const MatrixType& v,TimeIndex k):
   IsSet(true),
   k_(k),
   v_(v)
@@ -101,7 +101,7 @@ inline bool IndexedMatrixT<MatrixType,lazy>::isSet()const
 
 ///Set the value of the matrix and the time sample
 template <typename MatrixType, bool lazy>
-inline void IndexedMatrixT<MatrixType,lazy>::set(const MatrixType& v,unsigned k)
+inline void IndexedMatrixT<MatrixType,lazy>::set(const MatrixType& v,TimeIndex k)
 {
   IsSet::set(true);
   k_=k;
@@ -131,7 +131,7 @@ inline bool IndexedMatrixT<MatrixType,lazy>::check_() const
 
 
 template <typename MatrixType, bool lazy>
-inline void IndexedMatrixT<MatrixType,lazy>::setIndex(int k)
+inline void IndexedMatrixT<MatrixType,lazy>::setIndex(TimeIndex k)
 {
   check_();
   k_=k;
@@ -155,7 +155,7 @@ inline MatrixType & IndexedMatrixT<MatrixType,lazy>::operator()()
 
 ///Get the time index
 template <typename MatrixType, bool lazy>
-unsigned IndexedMatrixT<MatrixType,lazy>::getTime()const
+TimeIndex IndexedMatrixT<MatrixType,lazy>::getTime()const
 {
   check_();
   return k_;
@@ -167,7 +167,7 @@ unsigned IndexedMatrixT<MatrixType,lazy>::getTime()const
 
 ///Set the value of the matrix and the time sample
 template <typename MatrixType>
-inline void IndexedMatrixArrayT<MatrixType>::setValue(const MatrixType& v,unsigned k)
+inline void IndexedMatrixArrayT<MatrixType>::setValue(const MatrixType& v,TimeIndex k)
 {
     if (checkIndex(k))
     {
@@ -199,7 +199,7 @@ inline void IndexedMatrixArrayT<MatrixType>::popFront()
 
 ///Get the matrix value
 template <typename MatrixType>
-inline MatrixType IndexedMatrixArrayT<MatrixType>::operator[](size_t time)const
+inline MatrixType IndexedMatrixArrayT<MatrixType>::operator[](TimeIndex time)const
 {
     check_(time);
     return v_[time - k_];
@@ -207,7 +207,7 @@ inline MatrixType IndexedMatrixArrayT<MatrixType>::operator[](size_t time)const
 
 ///Get the matrix value
 template <typename MatrixType>
-inline MatrixType & IndexedMatrixArrayT<MatrixType>::operator[](size_t time)
+inline MatrixType & IndexedMatrixArrayT<MatrixType>::operator[](TimeIndex time)
 {
     check_(time);
     return v_[time - k_];
@@ -251,7 +251,7 @@ inline long int IndexedMatrixArrayT<MatrixType>::getLastIndex()const
 
 ///Get the time index
 template <typename MatrixType>
-inline size_t IndexedMatrixArrayT<MatrixType>::getNextIndex()const
+inline TimeIndex IndexedMatrixArrayT<MatrixType>::getNextIndex()const
 {
   return k_+v_.size();
 }
@@ -259,26 +259,25 @@ inline size_t IndexedMatrixArrayT<MatrixType>::getNextIndex()const
 
 ///Get the time index
 template <typename MatrixType>
-inline size_t IndexedMatrixArrayT<MatrixType>::getFirstIndex()const
+inline TimeIndex IndexedMatrixArrayT<MatrixType>::getFirstIndex()const
 {
   return k_;
 }
 
 template <typename MatrixType>
-inline size_t IndexedMatrixArrayT<MatrixType>::setLastIndex(int index)
+inline TimeIndex IndexedMatrixArrayT<MatrixType>::setLastIndex(int index)
 {
   return k_=index-(v_.size()+1);
 }
 
 template <typename MatrixType>
-inline size_t IndexedMatrixArrayT<MatrixType>::setFirstIndex(int index)
+inline TimeIndex IndexedMatrixArrayT<MatrixType>::setFirstIndex(int index)
 {
   return k_=index;
 }
 
 template <typename MatrixType>
-inline typename IndexedMatrixArrayT<MatrixType>::arraySize
-                                  IndexedMatrixArrayT<MatrixType>::size() const
+inline TimeSize IndexedMatrixArrayT<MatrixType>::size() const
 {
     return v_.size();
 }
@@ -299,7 +298,7 @@ void IndexedMatrixArrayT<MatrixType>::clear()
 }
 
 template <typename MatrixType>
-inline bool IndexedMatrixArrayT<MatrixType>::checkIndex(unsigned time) const
+inline bool IndexedMatrixArrayT<MatrixType>::checkIndex(TimeIndex time) const
 {
     return (v_.size()>0 && k_<=time && k_+v_.size() > time);
 }
@@ -307,7 +306,7 @@ inline bool IndexedMatrixArrayT<MatrixType>::checkIndex(unsigned time) const
 ///Checks whether the matrix is set or not (assert)
 ///does nothing in release mode
 template <typename MatrixType>
-inline void IndexedMatrixArrayT<MatrixType>::check_(size_t time)const
+inline void IndexedMatrixArrayT<MatrixType>::check_(TimeIndex time)const
 {
     (void)time;//avoid warning in release mode
     BOOST_ASSERT(checkIndex(time) && "Error: Time out of range");
@@ -322,7 +321,7 @@ inline void IndexedMatrixArrayT<MatrixType>::check_()const
 }
 
 template <typename MatrixType>
-inline void IndexedMatrixArrayT<MatrixType>::checkNext_(unsigned time)const
+inline void IndexedMatrixArrayT<MatrixType>::checkNext_(TimeIndex time)const
 {
     (void)time;//avoid warning
     BOOST_ASSERT( (v_.size()==0 || k_+v_.size() == time )&&
@@ -331,7 +330,7 @@ inline void IndexedMatrixArrayT<MatrixType>::checkNext_(unsigned time)const
 
 ///resizes the array
 template <typename MatrixType>
-inline void IndexedMatrixArrayT<MatrixType>::resize(unsigned i, const MatrixType & m )
+inline void IndexedMatrixArrayT<MatrixType>::resize(TimeSize i, const MatrixType & m )
 {
     v_.resize(i,m);
 }
@@ -348,7 +347,7 @@ typename IndexedMatrixArrayT<MatrixType>::Array IndexedMatrixArrayT<MatrixType>:
 {
   Array v;
 
-  for (unsigned i=0; i<v_.size(); ++i)
+  for (TimeSize i=0; i<v_.size(); ++i)
   {
     v.push_back(v_[i]);
   }
@@ -510,7 +509,7 @@ void IndexedMatrixArrayT<MatrixType>::writeInFile(const char * filename, bool cl
     if (size()>0)
     {
 
-      for (size_t k=getFirstIndex(); k<getNextIndex(); ++k)
+      for (TimeIndex k=getFirstIndex(); k<getNextIndex(); ++k)
       {
 
         f << k;

@@ -173,7 +173,7 @@ int test()
     double error;
 
     ///the reconstruction of the state
-    for (unsigned i=y.getFirstIndex();i<y.getNextIndex();++i)
+    for (TimeIndex i=y.getFirstIndex();i<y.getNextIndex();++i)
     {
         ///display part, useless
         Vector3 g;

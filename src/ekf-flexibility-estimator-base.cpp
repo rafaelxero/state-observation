@@ -110,7 +110,7 @@ namespace flexibilityEstimation
             k_=ekf_.getMeasurementTime();
            // std::cout << "\n\n\n\n\n k " << k_ << std::endl;
 
-            for (unsigned i=ekf_.getCurrentTime()+1; i<=k_; ++i)
+            for (TimeIndex i=ekf_.getCurrentTime()+1; i<=k_; ++i)
             {
                 if (finiteDifferencesJacobians_)
                 {

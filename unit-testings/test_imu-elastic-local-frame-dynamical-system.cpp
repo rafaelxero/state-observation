@@ -40,7 +40,7 @@ return h;
 int test()
 {
 
-    int t;
+    time_t t;
     t = time(NULL);
     srand(t);
 

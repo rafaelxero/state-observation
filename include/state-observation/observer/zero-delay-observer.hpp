@@ -62,7 +62,7 @@ namespace stateObservation
         ///with the highest time-index is kept and others are deleted, the
         ///highest index is called the current time k_0
         virtual void setState(
-            const ObserverBase::StateVector& x_k,unsigned k);
+            const ObserverBase::StateVector& x_k,TimeIndex k);
 
         ///Remove all the given past values of the state
         virtual void clearStates();
@@ -70,7 +70,7 @@ namespace stateObservation
         ///Set the value of the measurements vector at time index k. The
         ///measurements have to be inserted in chronological order without gaps.
         virtual void setMeasurement(
-            const ObserverBase::MeasureVector& y_k,unsigned k);
+            const ObserverBase::MeasureVector& y_k,TimeIndex k);
 
         ///Remove all the given past values of the measurements
         virtual void clearMeasurements();
@@ -78,7 +78,7 @@ namespace stateObservation
         ///Set the value of the input vector at time index k. The
         ///inputs have to be inserted in chronological order without gaps.
         ///If there is no input in the system (p==0), this instruction has no effect
-        virtual void setInput(const ObserverBase::InputVector& u_k,unsigned k);
+        virtual void setInput(const ObserverBase::InputVector& u_k,TimeIndex k);
 
         ///Remove all the given past values of the inputs
         ///If there is no input, this instruction has no effect
@@ -100,28 +100,28 @@ namespace stateObservation
         ///y_{k_0+1} to y_{k} and u_{k_0} to u_{k-1}
         ///
         /// This method sets the current time to k
-        virtual ObserverBase::StateVector getEstimatedState(unsigned k);
+        virtual ObserverBase::StateVector getEstimatedState(TimeIndex k);
 
         ///Get the value of the current time index
-        virtual unsigned getCurrentTime()const;
+        virtual TimeIndex getCurrentTime()const;
 
         ///Get the value of the input of the time index k
-        Vector getInput(unsigned k) const;
+        Vector getInput(TimeIndex k) const;
 
-        ///Get the time index of the last given measurement
-        virtual unsigned getInputsNumber()const;
+        ///Get the number of available inputs
+        virtual TimeSize getInputsNumber()const;
 
         ///Get the time index of the last given input
-        virtual unsigned getInputTime()const;
+        virtual TimeIndex getInputTime()const;
 
         ///Get the measurement of the time index k
-        Vector getMeasurement(unsigned k) const;
+        Vector getMeasurement(TimeIndex k) const;
 
         ///Get the time index of the last given measurement
-        virtual unsigned getMeasurementTime()const;
+        virtual TimeIndex getMeasurementTime()const;
 
         ///Gets the number of regitered measurements
-        virtual unsigned getMeasurementsNumber()const;
+        virtual TimeSize getMeasurementsNumber()const;
 
         ///changes the size of the state vector: resets the stored state vector
         virtual void setStateSize(unsigned n);

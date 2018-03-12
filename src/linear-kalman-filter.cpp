@@ -27,7 +27,7 @@ namespace stateObservation
     }
 
 
-    ObserverBase::StateVector LinearKalmanFilter::prediction_(unsigned k)
+    ObserverBase::StateVector LinearKalmanFilter::prediction_(TimeIndex k)
     {
         (void)k; //unused
 
@@ -53,7 +53,7 @@ namespace stateObservation
 
     }
 
-    ObserverBase::MeasureVector LinearKalmanFilter::simulateSensor_(const StateVector& x, unsigned k)
+    ObserverBase::MeasureVector LinearKalmanFilter::simulateSensor_(const StateVector& x, TimeIndex k)
     {
 
         BOOST_ASSERT(checkCmatrix(c_) && "ERROR: The C is not initialized");

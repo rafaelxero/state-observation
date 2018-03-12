@@ -154,7 +154,7 @@ namespace flexibilityEstimation
 
         Vector lastX_;
 
-        unsigned k_;
+        TimeIndex k_;
 
     private:
 

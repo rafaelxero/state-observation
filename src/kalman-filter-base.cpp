@@ -89,7 +89,7 @@ namespace stateObservation
 
     ObserverBase::StateVector KalmanFilterBase::oneStepEstimation_()
     {
-        unsigned k=this->x_.getTime();
+        TimeIndex k=this->x_.getTime();
 
         BOOST_ASSERT(this->y_.size()> 0 && this->y_.checkIndex(k+1) && "ERROR: The measurement vector is not set");
 
@@ -313,7 +313,7 @@ namespace stateObservation
         }
     }
 
-    Vector KalmanFilterBase::getSimulatedMeasurement(unsigned k)
+    Vector KalmanFilterBase::getSimulatedMeasurement(TimeIndex k)
     {
         return simulateSensor_(getEstimatedState(k),k);
     }
@@ -338,7 +338,7 @@ namespace stateObservation
         return oc_.kGain;
     }
 
-    Vector KalmanFilterBase::predictSensor_(unsigned k)
+    Vector KalmanFilterBase::predictSensor_(TimeIndex k)
     {
         oc_.xbar = prediction_(k);
         return predictedMeasurement_=simulateSensor_(oc_.xbar,k);

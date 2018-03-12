@@ -93,7 +93,7 @@ Vector3 computeFc(unsigned nbContacts, stateObservation::Vector x, stateObservat
         contactOriV.setValue(u.segment<3>(stateObservation::flexibilityEstimation::IMUElasticLocalFrameDynamicalSystem::input::contacts +12*i+3),i);
     }
 
-    for (int i=0; i<hrp2::contact::nbModeledMax; ++i)
+    for (unsigned i=0; i<hrp2::contact::nbModeledMax; ++i)
     {
         efforts[i]=x.segment(stateObservation::flexibilityEstimation::IMUElasticLocalFrameDynamicalSystem::state::fc+6*i,6);
         fc_.segment<3>(3*i) = efforts[i].block<3,1>(0,0);

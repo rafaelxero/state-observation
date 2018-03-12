@@ -47,7 +47,7 @@ double testExtendedKalmanFilter()
         }
 
         ///The dynamics of the state xk1=f(xk,u,k)
-        virtual ekf::StateVector stateDynamics(const ekf::StateVector& xk, const ekf::InputVector& u, unsigned k)
+        virtual ekf::StateVector stateDynamics(const ekf::StateVector& xk, const ekf::InputVector& u, stateObservation::TimeIndex k)
         {
             (void)k;//unused
             (void)u;//unused
@@ -59,7 +59,7 @@ double testExtendedKalmanFilter()
         }
 
         ///The dynamics of the state yk=h(xk,u,k)
-        virtual ekf::MeasureVector measureDynamics(const ekf::StateVector& xk, const ekf::InputVector &u,unsigned k)
+        virtual ekf::MeasureVector measureDynamics(const ekf::StateVector& xk, const ekf::InputVector &u, stateObservation::TimeIndex k)
         {
             (void)k;//unused
             (void)u;//unused
@@ -220,7 +220,7 @@ public:
 
         }
 
-        virtual ekf::StateVector stateDynamics(const ekf::StateVector& x, const ekf::InputVector& u, unsigned k)
+        virtual ekf::StateVector stateDynamics(const ekf::StateVector& x, const ekf::InputVector& u, stateObservation::TimeIndex k)
         {
             ekf::StateVector xk1;
             unsigned kk=std::min(k,kmax);
@@ -229,7 +229,7 @@ public:
             return xk1;
         }
 
-        virtual ekf::MeasureVector measureDynamics(const ekf::StateVector& x, const ekf::InputVector &u,unsigned k)
+        virtual ekf::MeasureVector measureDynamics(const ekf::StateVector& x, const ekf::InputVector &u,stateObservation::TimeIndex k)
         {
             (void)k;//unused
             (void)u;//unused
@@ -389,7 +389,7 @@ double testExtendedKalmanFilterZeroInput()
             n_=f.measureVectorRandom();
         }
 
-        virtual ekf::StateVector stateDynamics(const ekf::StateVector& x, const ekf::InputVector& u, unsigned k)
+        virtual ekf::StateVector stateDynamics(const ekf::StateVector& x, const ekf::InputVector& u, stateObservation::TimeIndex k)
         {
             (void)k;//unused
             (void)u;//unused
@@ -399,7 +399,7 @@ double testExtendedKalmanFilterZeroInput()
             return xk1;
         }
 
-        virtual ekf::MeasureVector measureDynamics(const ekf::StateVector& x, const ekf::InputVector &u,unsigned k)
+        virtual ekf::MeasureVector measureDynamics(const ekf::StateVector& x, const ekf::InputVector &u,stateObservation::TimeIndex k)
         {
             (void)k;//unused
             (void)u;//unused

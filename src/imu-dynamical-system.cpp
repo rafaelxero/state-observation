@@ -22,7 +22,7 @@ namespace stateObservation
     }
 
     Vector IMUDynamicalSystem::stateDynamics
-        (const Vector& x, const Vector& u, unsigned)
+        (const Vector& x, const Vector& u, TimeIndex)
     {
         assertStateVector_(x);
         assertInputVector_(u);
@@ -80,7 +80,7 @@ namespace stateObservation
         return quaternion_;
     }
 
-    Vector IMUDynamicalSystem::measureDynamics (const Vector& x, const Vector& , unsigned k)
+    Vector IMUDynamicalSystem::measureDynamics (const Vector& x, const Vector& , TimeIndex k)
     {
         assertStateVector_(x);
 
