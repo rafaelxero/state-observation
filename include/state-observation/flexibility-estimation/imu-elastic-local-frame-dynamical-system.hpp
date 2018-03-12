@@ -80,8 +80,6 @@ namespace stateObservation
         ///indexes of the different components of a vector of the input state
         static const unsigned elasticContact= 1;
         static const unsigned pendulum= 2;
-        static const unsigned pendulum1= 3;
-        static const unsigned pendulum2= 4;
         static const unsigned none= 0;
 
       };
@@ -264,20 +262,6 @@ public:
        Vector& fc, Vector& tc);
 
       virtual void computeElastPendulumForcesAndMoments
-      (const IndexedMatrixArray& PrArray,
-       const Vector3& position, const Vector3& linVelocity,
-       const Vector3& oriVector, const Matrix3& orientation,
-       const Vector3& angVel,
-       Vector& forces, Vector& moments);
-
-      virtual void computeElastPendulumForcesAndMoments1
-      (const IndexedMatrixArray& PrArray,
-       const Vector3& position, const Vector3& linVelocity,
-       const Vector3& oriVector, const Matrix3& orientation,
-       const Vector3& angVel,
-       Vector& forces, Vector& moments);
-
-      virtual void computeElastPendulumForcesAndMoments2
       (const IndexedMatrixArray& PrArray,
        const Vector3& position, const Vector3& linVelocity,
        const Vector3& oriVector, const Matrix3& orientation,

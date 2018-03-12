@@ -333,117 +333,6 @@ namespace stateObservation
       forces.segment<3>(0).noalias() += -KfvRopes_*linVelocity;
     }
 
-    void IMUElasticLocalFrameDynamicalSystem::computeElastPendulumForcesAndMoments1
-    (const IndexedMatrixArray& PrArray,
-     const Vector3& position, const Vector3& linVelocity,
-     const Vector3& oriVector, const Matrix3& orientation,
-     const Vector3& angVel,
-     Vector& forces, Vector& moments)
-    {
-      unsigned nbContacts(getContactsNumber());
-      forces.setZero();
-      moments.setZero();
-
-      stateObservation::Vector3 forcei;
-      stateObservation::Vector3 momenti;
-      stateObservation::Vector3 u, du;
-
-      double ropeLength;
-      double modifiedRopeLength;
-      double lengthRate;
-
-      for (unsigned i = 0; i<nbContacts ; ++i)
-      {
-        u = position;
-        u.noalias() += orientation*PrArray[i] ;
-        u.noalias() -= pe;
-
-        du = linVelocity;
-        du.noalias() += kine::skewSymmetric(angVel)*orientation*PrArray[i] ;
-
-        ropeLength=(PrArray[i]-pe).norm();
-        modifiedRopeLength=u.norm();
-
-        lengthRate=(modifiedRopeLength-ropeLength)/modifiedRopeLength;
-
-        forcei = -lengthRate*(KfeRopes_*u+KfvRopes_*du);
-        forces.segment<3>(0) += forcei;
-
-        momenti.noalias() = kine::skewSymmetric(u)*forcei;
-        moments.segment<3>(0) += momenti;
-      }
-
-      moments.segment<3>(0).noalias() += - KteRopes_*oriVector;
-      moments.segment<3>(0).noalias() += - KtvRopes_*angVel;
-
-      if(printed_==false)
-      {
-        //            std::cout << "ropeLength=" << ropeLength << std::endl;
-        //        std::cout << "modifiedRopeLength=" << modifiedRopeLength << std::endl;
-        //            std::cout << "contactOriUnitVector=" << contactOriUnitVector.transpose() << std::endl;
-        //            std::cout << "forcei=" << forcei.transpose() << std::endl;
-        //            std::cout << "momenti=" << momenti.transpose() << std::endl;
-        printed_=true;
-      }
-
-    }
-
-    void IMUElasticLocalFrameDynamicalSystem::computeElastPendulumForcesAndMoments2
-    (const IndexedMatrixArray& PrArray,
-     const Vector3& position, const Vector3& linVelocity,
-     const Vector3& oriVector, const Matrix3& orientation,
-     const Vector3& angVel,
-     Vector& forces, Vector& moments)
-    {
-      unsigned nbContacts(getContactsNumber());
-      forces.setZero();
-      moments.setZero();
-
-      stateObservation::Vector3 forcei;
-      stateObservation::Vector3 momenti;
-      stateObservation::Vector3 u, du;
-
-      double ropeLength;
-      double modifiedRopeLength;
-      double lengthRate;
-      unsigned lengthRateVel;
-
-      for (unsigned i = 0; i<nbContacts ; ++i)
-      {
-        u = position;
-        u.noalias() += orientation*PrArray[i] ;
-        u.noalias() -= pe;
-
-        du = linVelocity;
-        du.noalias() += kine::skewSymmetric(angVel)*orientation*PrArray[i] ;
-
-        ropeLength=(PrArray[i]-pe).norm();
-        modifiedRopeLength=u.norm();
-
-        lengthRate=(modifiedRopeLength-ropeLength)/modifiedRopeLength;
-        lengthRateVel=(ropeLength/std::pow(modifiedRopeLength,3))*du.sum();
-
-        forcei = -KfeRopes_*lengthRate*u-KfvRopes_*(lengthRateVel*u+lengthRate*du);
-        forces.segment<3>(0) += forcei;
-
-        momenti.noalias() = kine::skewSymmetric(u)*forcei;
-        moments.segment<3>(0) += momenti;
-      }
-
-      moments.segment<3>(0).noalias() += - KteRopes_*oriVector;
-      moments.segment<3>(0).noalias() += - KtvRopes_*angVel;
-
-      if(printed_==false)
-      {
-        //            std::cout << "ropeLength=" << ropeLength << std::endl;
-        //        std::cout << "modifiedRopeLength=" << modifiedRopeLength << std::endl;
-        //            std::cout << "contactOriUnitVector=" << contactOriUnitVector.transpose() << std::endl;
-        //            std::cout << "forcei=" << forcei.transpose() << std::endl;
-        //            std::cout << "momenti=" << momenti.transpose() << std::endl;
-        printed_=true;
-      }
-
-    }
 
     inline void IMUElasticLocalFrameDynamicalSystem::computeForcesAndMoments
                           (const IndexedMatrixArray& contactpos,
@@ -463,14 +352,6 @@ namespace stateObservation
 
       case contactModel::pendulum :
         computeElastPendulumForcesAndMoments(contactpos, position, linVelocity, oriVector, orientation, angVel, fc, tc);
-        break;
-
-      case contactModel::pendulum1 :
-        computeElastPendulumForcesAndMoments1(contactpos, position, linVelocity, oriVector, orientation, angVel, fc, tc);
-        break;
-
-      case contactModel::pendulum2 :
-        computeElastPendulumForcesAndMoments2(contactpos, position, linVelocity, oriVector, orientation, angVel, fc, tc);
         break;
 
       default:
