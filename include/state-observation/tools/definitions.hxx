@@ -356,16 +356,37 @@ typename IndexedMatrixArrayT<MatrixType>::Array IndexedMatrixArrayT<MatrixType>:
 }
 
 template <typename MatrixType>
-void IndexedMatrixArrayT<MatrixType>::truncate(unsigned time)
+void IndexedMatrixArrayT<MatrixType>::truncateAfter(TimeIndex time)
 {
   if (v_.size()>0)
   {
-    if (time > getFirstIndex())
+    if (time >= getFirstIndex())
     {
-      for (unsigned i=getLastIndex(); i>=time ; --i)
+      if (time < getLastIndex())
       {
-        v_.pop_back();
+        resize (time-getFirstIndex()+1);
       }
+    }
+    else
+    {
+      v_.clear();
+    }
+  }
+}
+
+template <typename MatrixType>
+void IndexedMatrixArrayT<MatrixType>::truncateBefore(TimeIndex time)
+{
+  if (v_.size()>0)
+  {
+    if (time < getLastIndex())
+    {
+      for (TimeIndex i=getFirstIndex(); i<time ; ++i)
+      {
+        v_.pop_front();
+      }
+
+      setFirstIndex(time);
     }
     else
     {

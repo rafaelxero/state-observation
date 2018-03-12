@@ -22,7 +22,7 @@ namespace stateObservation
     {
         BOOST_ASSERT((x_.size()==0 || (x_.getFirstIndex()<=k && x_.getNextIndex()>=k)) &&
             "ERROR: Only consecutive states can be set. If you want to restart a new dynamics please call resetDynamics before");
-        x_.truncate(k);
+        x_.truncateAfter(k-1);
         x_.setValue(x,k);
     }
 

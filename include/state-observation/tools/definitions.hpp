@@ -298,8 +298,11 @@ namespace stateObservation
     ///gets the last value
     inline MatrixType & back();
 
-    ///removes all the elements with larger or equal indexes than timeIndex
-    void truncate(unsigned timeIndex);
+    ///removes all the elements with larger indexes than timeIndex
+    void truncateAfter(TimeIndex timeIndex);
+
+    ///removes all the elements with smaller indexes than timeIndex
+    void truncateBefore(TimeIndex timeIndex);
 
     ///resizes the array
     inline void resize(TimeSize i, const MatrixType & m= MatrixType());
