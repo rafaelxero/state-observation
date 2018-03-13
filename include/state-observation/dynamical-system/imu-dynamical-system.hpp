@@ -14,7 +14,7 @@
 #define IMU_DYNAMICAL_SYSTEM_HPP
 
 #include <state-observation/dynamical-system/dynamical-system-functor-base.hpp>
-#include <state-observation/dynamical-system/algorithm/rigid-body-kinematics.hpp>
+#include <state-observation/tools/rigid-body-kinematics.hpp>
 #include <state-observation/sensors-simulation/accelerometer-gyrometer.hpp>
 #include <state-observation/noise/noise-base.hpp>
 
@@ -31,7 +31,7 @@ namespace stateObservation
     *
     */
     class IMUDynamicalSystem : public DynamicalSystemFunctorBase,
-        private algorithm::RigidBodyKinematics
+        protected algorithm::RigidBodyKinematics
     {
     public:
         ///The constructor

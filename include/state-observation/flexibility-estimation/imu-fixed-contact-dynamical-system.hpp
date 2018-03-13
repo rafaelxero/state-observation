@@ -17,7 +17,7 @@
 #include <state-observation/dynamical-system/dynamical-system-functor-base.hpp>
 #include <state-observation/noise/noise-base.hpp>
 #include <state-observation/sensors-simulation/accelerometer-gyrometer.hpp>
-#include <state-observation/dynamical-system/algorithm/rigid-body-kinematics.hpp>
+#include <state-observation/tools/rigid-body-kinematics.hpp>
 
 namespace stateObservation
 {
@@ -33,7 +33,7 @@ namespace flexibilityEstimation
     */
     class IMUFixedContactDynamicalSystem :
         public stateObservation::DynamicalSystemFunctorBase,
-        private stateObservation::algorithm::RigidBodyKinematics
+        protected stateObservation::algorithm::RigidBodyKinematics
     {
     public:
         ///constructor

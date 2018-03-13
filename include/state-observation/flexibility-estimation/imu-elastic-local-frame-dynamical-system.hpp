@@ -14,7 +14,7 @@
 #include <state-observation/dynamical-system/dynamical-system-functor-base.hpp>
 #include <state-observation/noise/noise-base.hpp>
 #include <state-observation/sensors-simulation/accelerometer-gyrometer.hpp>
-#include <state-observation/dynamical-system/algorithm/rigid-body-kinematics.hpp>
+#include <state-observation/tools/rigid-body-kinematics.hpp>
 #include <state-observation/tools/hrp2.hpp>
 
 #include <Eigen/Cholesky>
@@ -36,7 +36,7 @@ namespace stateObservation
     */
     class 	IMUElasticLocalFrameDynamicalSystem :
       public stateObservation::DynamicalSystemFunctorBase,
-      private stateObservation::algorithm::RigidBodyKinematics
+      protected stateObservation::algorithm::RigidBodyKinematics
     {
     public:
       struct input
