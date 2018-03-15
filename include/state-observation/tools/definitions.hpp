@@ -194,6 +194,10 @@ namespace stateObservation
     T v_;
   };
 
+  typedef CheckedItem<Matrix3,false,false,true,true> CheckedMatrix3;
+  typedef CheckedItem<Vector3,false,false,true,true> CheckedVector3;
+  typedef CheckedItem<Quaternion,false,false,true,true> CheckedQuaternion;
+
 
   /**
    * \class    IndexedMatrixT
