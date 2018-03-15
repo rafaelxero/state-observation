@@ -126,8 +126,6 @@ namespace flexibilityEstimation
             return ekf_.getC();
         }
 
-        virtual double& getComputeFlexibilityTime();
-
 
         virtual unsigned getMeasurementSize() const ;
 
@@ -261,7 +259,6 @@ namespace flexibilityEstimation
 
         double dt_;//sampling period
         bool on_;
-        double computeFlexibilityTime_;
 
         double unmodeledForceVariance_;
         Matrix forceVariance_;//force sensor variance
@@ -283,7 +280,6 @@ namespace flexibilityEstimation
             stateObservation::Matrix CA;
         }op_;
         std::vector<Vector3, Eigen::aligned_allocator<Vector3> > contactPositions_;
-
 
     private:
     };

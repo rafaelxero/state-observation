@@ -23,6 +23,7 @@
 #endif
 
 #include <boost/assert.hpp>
+#include <boost/timer/timer.hpp>
 
 #include <Eigen/Core>
 #include <Eigen/Geometry>
@@ -411,6 +412,19 @@ namespace stateObservation
 
   }
 
+  typedef boost::timer::auto_cpu_timer auto_cpu_timer;
+  typedef boost::timer::cpu_timer cpu_timer;
+  typedef boost::timer::cpu_timer cpu_times;
+
+  struct SimplestStopwatch
+  {
+    inline void start();
+    inline double stop();
+
+    inline double diff(const timespec & start, const timespec & end);
+
+    timespec time1, time2, time3;
+  };
 
 #include <state-observation/tools/definitions.hxx>
 }

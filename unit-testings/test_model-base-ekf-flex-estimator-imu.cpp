@@ -13,19 +13,6 @@
 
 using namespace stateObservation;
 
-timespec diff(const timespec & start, const timespec & end)
-{
-        timespec temp;
-        if ((end.tv_nsec-start.tv_nsec)<0) {
-                temp.tv_sec = end.tv_sec-start.tv_sec-1;
-                temp.tv_nsec = 1000000000+end.tv_nsec-start.tv_nsec;
-        } else {
-                temp.tv_sec = end.tv_sec-start.tv_sec;
-                temp.tv_nsec = end.tv_nsec-start.tv_nsec;
-        }
-        return temp;
-}
-
 int test()
 {
     std::cout << "Starting" << std::endl;
@@ -121,14 +108,18 @@ int test()
     IndexedMatrixArray y;
     std::cout << "Loading measurements file" << std::endl;
     y.readFromFile("source_measurement.dat",1,measurementSize);
+    std::cout << "Done, size " << y.size()<<  std::endl;
      // Input
     IndexedMatrixArray u;
      std::cout << "Loading input file" << std::endl;
     u.readFromFile("source_input.dat",1,inputSize);
+    std::cout << "Done, size " << u.size()<<  std::endl;
       //state
     IndexedMatrixArray xRef;
-      std::cout << "Loading reference state file" << std::endl;
+    std::cout << "Loading reference state file" << std::endl;
     xRef.readFromFile("source_state.dat",stateSize,1);
+    std::cout << "Done, size " << xRef.size()<<  std::endl;
+
 
    /// Definition of ouptut vectors
      // State: what we want
@@ -150,7 +141,7 @@ int test()
     flexibility.resize(18);
     Vector xdifference(flexibility);
 
-    timespec time1, time2, time3;
+    SimplestStopwatch stopwatch;
     IndexedMatrixArray computationTime_output;
     double computationTime_moy=0;
     Vector computeTime;
@@ -167,13 +158,11 @@ int test()
         est.setMeasurement(y[k].transpose());
         est.setMeasurementInput(u[k].transpose());
 
-        clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &time1);
-        clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &time2);
+        stopwatch.start();
 
         flexibility = est.getFlexibilityVector();
 
-        clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &time3);
-        computeTime[0]=(double)diff(time2,time3).tv_nsec-(double)diff(time1,time2).tv_nsec;
+        computeTime[0]=stopwatch.stop();
 
         xdifference =flexibility.head(18)-xRef[k];
 
@@ -184,7 +173,6 @@ int test()
         u_output.setValue(u[k],k);
         deltax_output.setValue(xdifference,k);
 
-        computeTime[0]=est.getComputeFlexibilityTime();
         computationTime_output.setValue(computeTime,k);
         computationTime_moy+=computeTime[0];
     }
@@ -203,7 +191,7 @@ int test()
 
     Vector error(6);
 
-    error(0)= sqrt((errorsum(kine::pos) + errorsum(kine::pos+1) + errorsum(kine::pos+2))/(kmax-kinit-2));
+    error(0) = sqrt((errorsum(kine::pos) + errorsum(kine::pos+1) + errorsum(kine::pos+2))/(kmax-kinit-2));
     error(1) = sqrt((errorsum(kine::linVel) + errorsum(kine::linVel+1) + errorsum(kine::linVel+2))/(kmax-kinit-2));
     error(2) = sqrt((errorsum(kine::linAcc) + errorsum(kine::linAcc+1) + errorsum(kine::linAcc+2))/(kmax-kinit-2));
     error(3) = sqrt((errorsum(kine::ori) + errorsum(kine::ori+1) + errorsum(kine::ori+2))/(kmax-kinit-2));

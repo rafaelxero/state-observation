@@ -358,16 +358,13 @@ namespace stateObservation
 
     const Vector & ModelBaseEKFFlexEstimatorIMU::getFlexibilityVector()
     {
-      timespec time1, time2, time3;
+
 
       if(on_==true)
       {
-        clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &time1);
-        clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &time2);
+
         if (ekf_.getMeasurementsNumber()>0)
         {
-          clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &time1);
-          clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &time2);
           k_=ekf_.getMeasurementTime();
 
           TimeIndex i;
@@ -433,9 +430,6 @@ namespace stateObservation
           }
         }
 
-        clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &time3);
-
-        computeFlexibilityTime_=(double)diff(time2,time3).tv_nsec-(double)diff(time1,time2).tv_nsec;
 
         // To be deleted: constrain the internal linear velocity of the flexibility of each foot to zero.
 //        x_.segment<3>(state::linVel).setZero();
@@ -543,11 +537,6 @@ namespace stateObservation
     Matrix ModelBaseEKFFlexEstimatorIMU::getKtv() const
     {
       return functor_.getKtv();
-    }
-
-    double& ModelBaseEKFFlexEstimatorIMU::getComputeFlexibilityTime()
-    {
-      return computeFlexibilityTime_;
     }
 
     void ModelBaseEKFFlexEstimatorIMU::setWithForcesMeasurements(bool b)

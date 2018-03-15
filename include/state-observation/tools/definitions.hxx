@@ -561,3 +561,24 @@ void IndexedMatrixArrayT<MatrixType>::writeInFile(const char * filename, bool cl
   }
 
 }
+
+
+inline void SimplestStopwatch::start()
+{
+  clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &time1);
+  clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &time2);
+}
+
+inline double SimplestStopwatch::stop()
+{
+  clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &time3);
+
+  return diff(time2,time3)-diff(time1,time2);
+}
+
+double SimplestStopwatch::diff(const timespec & start, const timespec & end)
+{
+  return 1e9*double(end.tv_sec-start.tv_sec) + double(end.tv_nsec - start.tv_nsec);
+}
+
+
