@@ -167,8 +167,8 @@ namespace stateObservation
 
 
         this->x_.set(oc_.xhat,k+1);
-        pr_=oc_.stateIdentity;
-        pr_ -= oc_.kGain*c_;
+        pr_ = -oc_.kGain*c_;
+        pr_.diagonal().array()+=1;
         pr_ *= oc_.pbar;
 
         // simmetrize the pr_ matrix
@@ -320,7 +320,6 @@ namespace stateObservation
         if (n!=n_)
         {
             ZeroDelayObserver::setStateSize(n);
-            oc_.stateIdentity = Matrix::Identity(n,n);
             clearA();
             clearC();
             clearQ();

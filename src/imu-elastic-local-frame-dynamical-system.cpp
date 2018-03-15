@@ -709,7 +709,7 @@ namespace stateObservation
       pos3 = position;
       ori3 = orientationFlex;
 
-      integrateConfiguration( pos3, linVelocity2, ori3, angVelocity2, dt/2);
+      integrateKinematics( pos3, linVelocity2, ori3, angVelocity2, dt/2);
 
       oriaa3.fromRotationMatrix(ori3);
       oriv3 = oriaa3.angle()*oriaa3.axis();
@@ -730,7 +730,7 @@ namespace stateObservation
       pos4 = position;
       ori4 = orientationFlex;
 
-      integrateConfiguration( pos4, linVelocity3, ori4, angVelocity3, dt);
+      integrateKinematics( pos4, linVelocity3, ori4, angVelocity3, dt);
 
       oriaa4.fromRotationMatrix(ori4);
       oriv4 = oriaa4.angle()*oriaa4.axis();
@@ -748,10 +748,10 @@ namespace stateObservation
 
       /////////////////////////////
 
-      integrateConfiguration( position, linVelocity, orientationFlex, angularVel, dt/6);
-      integrateConfiguration( position, linVelocity2, orientationFlex, angVelocity2, dt/3);
-      integrateConfiguration( position, linVelocity3, orientationFlex, angVelocity3, dt/3);
-      integrateConfiguration( position, linVelocity4, orientationFlex, angVelocity4, dt/6);
+      integrateKinematics( position, linVelocity, orientationFlex, angularVel, dt/6);
+      integrateKinematics( position, linVelocity2, orientationFlex, angVelocity2, dt/3);
+      integrateKinematics( position, linVelocity3, orientationFlex, angVelocity3, dt/3);
+      integrateKinematics( position, linVelocity4, orientationFlex, angVelocity4, dt/6);
 
       linVelocity+= (dt/6)*(linAcc1+2*linAcc2+2*linAcc3+linAcc4);
       angularVel+= (dt/6)*(angAcc1+2*angAcc2+2*angAcc3+angAcc4);

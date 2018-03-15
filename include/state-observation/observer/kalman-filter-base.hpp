@@ -311,7 +311,6 @@ namespace stateObservation
 
         struct optimizationContainer
         {
-            Matrix stateIdentity;
             Vector xbar;
             Matrix pbar;
             Vector xhat;
