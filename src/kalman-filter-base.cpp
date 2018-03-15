@@ -12,6 +12,30 @@
 namespace stateObservation
 {
 
+    KalmanFilterBase::KalmanFilterBase():
+      nt_(0),
+      sum_(detail::defaultSum_),
+      difference_(detail::defaultDifference_)
+    {
+    }
+
+    KalmanFilterBase::KalmanFilterBase(unsigned n,unsigned m,unsigned p)
+            :ZeroDelayObserver(n,m,p),
+            nt_(n),
+            sum_(detail::defaultSum_),
+            difference_(detail::defaultDifference_)
+    {
+    }
+
+    KalmanFilterBase::KalmanFilterBase(unsigned n, unsigned nt, unsigned m,unsigned p)
+            :ZeroDelayObserver(n,m,p),
+            nt_(nt),
+            sum_(detail::defaultSum_),
+            difference_(detail::defaultDifference_)
+    {
+    }
+
+
     void KalmanFilterBase::setA(const Amatrix& A)
     {
         BOOST_ASSERT(checkAmatrix(A)&& "ERROR: The A matrix dimensions are wrong");
@@ -117,10 +141,11 @@ namespace stateObservation
 
         //innovation
         oc_.kGain.noalias() = oc_.pbar * (c_.transpose() * oc_.inoMeasCovInverse);
-        inovation_.noalias() = oc_.kGain*oc_.inoMeas;
+        innovation_.noalias() = oc_.kGain*oc_.inoMeas;
 
         //update
-        oc_.xhat.noalias()= oc_.xbar+ inovation_;
+
+        sum_(oc_.xbar,innovation_,oc_.xhat);
 
 #ifdef VERBOUS_KALMANFILTER
         Eigen::IOFormat CleanFmt(2, 0, " ", "\n", "", "");
@@ -318,9 +343,9 @@ namespace stateObservation
         return simulateSensor_(getEstimatedState(k),k);
     }
 
-    Vector KalmanFilterBase::getInovation()
+    Vector KalmanFilterBase::getInnovation()
     {
-        return inovation_;
+        return innovation_;
     }
 
     Vector KalmanFilterBase::getLastPrediction() const
@@ -342,5 +367,19 @@ namespace stateObservation
     {
         oc_.xbar = prediction_(k);
         return predictedMeasurement_=simulateSensor_(oc_.xbar,k);
+    }
+
+    namespace detail
+    {
+
+      void defaultSum_(const  Vector& stateVector, const Vector& tangentVector, Vector& result)
+      {
+        result.noalias() = stateVector + tangentVector;
+      }
+
+      void defaultDifference_(const  Vector& stateVector1, const Vector& stateVector2, Vector& difference)
+      {
+        difference.noalias() = stateVector1 - stateVector2;
+      }
     }
 }

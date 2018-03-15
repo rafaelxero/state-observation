@@ -159,9 +159,9 @@ namespace flexibilityEstimation
         return ekf_.getSimulatedMeasurement(ekf_.getCurrentTime());
     }
 
-    Vector EKFFlexibilityEstimatorBase::getInovation()
+    Vector EKFFlexibilityEstimatorBase::getInnovation()
     {
-        return ekf_.getInovation();
+        return ekf_.getInnovation();
     }
 
     Vector EKFFlexibilityEstimatorBase::getPredictedMeasurement()

@@ -30,6 +30,14 @@
 namespace stateObservation
 {
 
+      namespace detail
+    {
+
+      void defaultSum_(const  Vector& stateVector, const Vector& tangentVector, Vector& sum);
+      void defaultDifference_(const  Vector& stateVector1, const Vector& stateVector2, Vector& difference);
+    }
+
+
 
 /**
      * \class  KalmanFilterBase
@@ -71,17 +79,28 @@ namespace stateObservation
         typedef Eigen::LLT<Pmatrix> LLTPMatrix;
 
         /// Default constructor
-        KalmanFilterBase(){}
+        KalmanFilterBase();
 
         /// The constructor
         ///  \li n : size of the state vector
         ///  \li m : size of the measurements vector
         ///  \li p : size of the input vector
-        KalmanFilterBase(unsigned n,unsigned m,unsigned p=0)
-            :ZeroDelayObserver(n,m,p)
-        {
-            oc_.stateIdentity = Matrix::Identity(n,n);
-        }
+        KalmanFilterBase(unsigned n,unsigned m,unsigned p=0);
+
+        /// The constructor to use in case the dimension of the state space
+        /// is smaller that its vector representation. For example
+        /// The state could be made of rotations matrices (3x3 matrix: size = 9)
+        /// Or quaternions (size =4) while they lie in a 3D space.
+        /// In general the representation is in a Lie group and the representation
+        /// of state derivatives are expressed in a Lie algebra.
+        /// Use setSumFunction for Kalman update (mandatory)
+        ///
+        /// The update can then be done using exponential maps.
+        ///  \li n : size of the state vector representation
+        ///  \li nt : size of the tangent vector
+        ///  \li m : size of the measurements vector
+        ///  \li p : size of the input vector
+        KalmanFilterBase(unsigned n, unsigned nt, unsigned m, unsigned p);
 
         /// Set the value of the jacobian df/dx
         virtual void setA(const Amatrix& A);
@@ -225,8 +244,8 @@ namespace stateObservation
         /// Get simulation of the measurement y_k using the state estimation
         virtual MeasureVector getSimulatedMeasurement(TimeIndex k);
 
-        ///Get the last vector of inovation of the Kalman filter
-        virtual StateVector getInovation();
+        ///Get the last vector of innovation of the Kalman filter
+        virtual StateVector getInnovation();
 
         /// A function that gives the prediction (this is NOT the estimation of the state),
         /// for the estimation call getEstimateState method
@@ -241,15 +260,17 @@ namespace stateObservation
         inline MeasureVector updateStateAndMeasurementPrediction();
 
         ///get the last predicted state
-        Vector getLastPrediction() const;
+        StateVector getLastPrediction() const;
 
         ///get the last predicted measurement
-        Vector getLastPredictedMeasurement() const;
+        MeasureVector getLastPredictedMeasurement() const;
 
         ///get the last Kalman gain matrix
         Matrix getLastGain() const;
 
     protected:
+
+        unsigned nt_;
 
         /// The type of Kalman gain matrix
         typedef Matrix Kmatrix;
@@ -286,7 +307,7 @@ namespace stateObservation
         Vector predictedMeasurement_;
 
         ///Vector containing the inovation of the Kalman filter
-        Vector inovation_;
+        Vector innovation_;
 
         struct optimizationContainer
         {
@@ -302,7 +323,8 @@ namespace stateObservation
             Matrix t;
         } oc_;
 
-
+        void (* sum_)(const  Vector& stateVector, const Vector& tangentVector, Vector& result);
+        void (* difference_)(const  Vector& stateVector1, const Vector& stateVector2, Vector& difference);
     };
 
     /*inline*/ Vector KalmanFilterBase::updateStatePrediction()

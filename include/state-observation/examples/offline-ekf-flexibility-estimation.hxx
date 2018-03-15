@@ -58,7 +58,7 @@ stateObservation::IndexedMatrixArray offlineEKFFlexibilityEstimation(
 
         if (ino != 0)
         {
-            ino->setValue(estimator.getInovation(),i);
+            ino->setValue(estimator.getInnovation(),i);
         }
 
         if (premea != 0)

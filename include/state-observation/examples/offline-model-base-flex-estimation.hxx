@@ -185,7 +185,7 @@ stateObservation::IndexedMatrixArray offlineModelBaseFlexEstimation(
 
     if (ino != 0x0)
     {
-      ino->setValue(estimator.getInovation(),i);
+      ino->setValue(estimator.getInnovation(),i);
     }
 
     if (premea != 0x0)

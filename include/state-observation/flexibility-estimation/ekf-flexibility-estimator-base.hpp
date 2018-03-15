@@ -127,7 +127,7 @@ namespace flexibilityEstimation
         virtual void resetCovarianceMatrices()=0;
 
         ///Get the last vector of inovation of the Kalman filter
-        virtual Vector getInovation();
+        virtual Vector getInnovation();
 
         ///Get the simulated measurement of the predicted state
         virtual Vector getPredictedMeasurement();
