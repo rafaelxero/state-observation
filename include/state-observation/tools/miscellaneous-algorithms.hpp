@@ -12,6 +12,9 @@
 #ifndef STATEOBSERVATIONTOOLSMISCELANEOUSALGORITHMS
 #define STATEOBSERVATIONTOOLSMISCELANEOUSALGORITHMS
 
+
+#include <boost/utility.hpp>
+
 #include <state-observation/tools/definitions.hpp>
 
 
@@ -407,6 +410,49 @@ namespace stateObservation
             m2.block(0,3,3,1) = - rt * m.block(0,3,3,1);
             return m2;
         }
+
+
+        struct kinematics
+
+        {
+          struct Flags
+          {
+            typedef unsigned char byte;
+            static const byte position= BOOST_BINARY(0000001);
+            static const byte quaternion= BOOST_BINARY(0000010);
+            static const byte rotationMatrix= BOOST_BINARY(0000100);
+            static const byte linVel= BOOST_BINARY(0001000);
+            static const byte angVel= BOOST_BINARY(0010000);
+            static const byte linAcc= BOOST_BINARY(0100000);
+            static const byte angAcc= BOOST_BINARY(1000000);
+
+            static const byte all= position | quaternion | rotationMatrix |
+                                    linVel | angVel | linAcc | angAcc;
+          };
+
+
+          CheckedVector3 position;
+          CheckedQuaternion orienation;
+          CheckedMatrix3 rotationMat;
+
+          CheckedVector3 linVel;
+          CheckedVector3 angVel;
+
+          CheckedVector3 linAcc;
+          CheckedVector3 angAcc;
+
+          kinematics integrate(double dt, Flags::byte=Flags::all);
+
+          kinematics update(const kinematics & newValue, double dt, Flags::byte=Flags::all);
+
+          kinematics synchronizeRotations();
+
+          Vector3 rotateVector( const Vector3 & input);
+
+
+          EIGEN_MAKE_ALIGNED_OPERATOR_NEW
+
+        };
 
     }
 

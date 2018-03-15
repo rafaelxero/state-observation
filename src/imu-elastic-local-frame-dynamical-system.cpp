@@ -688,7 +688,7 @@ namespace stateObservation
       pos2 = position;
       ori2 = orientationFlex;
 
-      integrateConfiguration(pos2, linVelocity, ori2, angularVel, dt/2);
+      integrateKinematics(pos2, linVelocity, ori2, angularVel, dt/2);
 
       oriaa2.fromRotationMatrix(ori2);
       oriv2 = oriaa2.angle()*oriaa2.axis();
