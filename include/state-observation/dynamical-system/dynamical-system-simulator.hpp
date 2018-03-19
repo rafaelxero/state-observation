@@ -74,14 +74,14 @@ namespace stateObservation
         ///to the time k
         virtual Vector getState( TimeIndex k );
 
-        ///Gives a IndexedMatrixArray of the measurements starting at startingTime
+        ///Gives a IndexedVectorArray of the measurements starting at startingTime
         ///and having the given  duration
-        virtual IndexedMatrixArray getMeasurementArray
+        virtual IndexedVectorArray getMeasurementArray
                     (TimeIndex startingTime, TimeSize duration);
 
-        ///Gives a IndexedMatrixArray of the states starting at startingTime
+        ///Gives a IndexedVectorArray of the states starting at startingTime
         ///and having the given  duration
-        virtual IndexedMatrixArray getStateArray
+        virtual IndexedVectorArray getStateArray
                     (TimeIndex startingTime, TimeSize duration);
 
         ///resets all the states, the measurements and the inputs
@@ -93,9 +93,9 @@ namespace stateObservation
     protected:
         DynamicalSystemFunctorBase * f_;
 
-        IndexedMatrixArray x_;
+        IndexedVectorArray x_;
 
-        IndexedMatrixArray y_;
+        IndexedVectorArray y_;
 
         std::map<TimeIndex, Vector> u_;
 

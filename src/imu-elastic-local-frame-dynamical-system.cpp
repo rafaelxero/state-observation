@@ -228,10 +228,10 @@ namespace stateObservation
     }
 
     void IMUElasticLocalFrameDynamicalSystem::computeElastContactForcesAndMoments
-                              (const IndexedMatrixArray& contactPosArray,
-                               const IndexedMatrixArray& contactOriArray,
-                               const IndexedMatrixArray& contactVelArray,
-                               const IndexedMatrixArray& contactAngVelArray,
+                              (const IndexedVectorArray& contactPosArray,
+                               const IndexedVectorArray& contactOriArray,
+                               const IndexedVectorArray& contactVelArray,
+                               const IndexedVectorArray& contactAngVelArray,
                                const Vector3& position, const Vector3& linVelocity,
                                const Vector3& oriVector, const Matrix3& orientation,
                                const Vector3& angVel,
@@ -280,7 +280,7 @@ namespace stateObservation
     }
 
     void IMUElasticLocalFrameDynamicalSystem::computeElastPendulumForcesAndMoments
-                              (const IndexedMatrixArray& PrArray,
+                              (const IndexedVectorArray& PrArray,
                                const Vector3& position, const Vector3& linVelocity,
                                const Vector3& oriVector, const Matrix3& orientation,
                                const Vector3& angVel,
@@ -335,10 +335,10 @@ namespace stateObservation
 
 
     inline void IMUElasticLocalFrameDynamicalSystem::computeForcesAndMoments
-                          (const IndexedMatrixArray& contactpos,
-                           const IndexedMatrixArray& contactori,
-                           const IndexedMatrixArray& contactvel,
-                           const IndexedMatrixArray& contactangvel,
+                          (const IndexedVectorArray& contactpos,
+                           const IndexedVectorArray& contactori,
+                           const IndexedVectorArray& contactvel,
+                           const IndexedVectorArray& contactangvel,
                            const Vector3& position, const Vector3& linVelocity,
                            const Vector3& oriVector, const Matrix3& orientation,
                            const Vector3& angVel,
@@ -388,7 +388,7 @@ namespace stateObservation
 
     void IMUElasticLocalFrameDynamicalSystem::computeContactWrench
             (const Matrix3& orientation, const Vector3& position,
-             const IndexedMatrixArray& contactPosV, const IndexedMatrixArray& contactOriV,
+             const IndexedVectorArray& contactPosV, const IndexedVectorArray& contactOriV,
              const Vector& fc, const Vector& tc, const Vector3 & fm, const Vector3& tm,
              const Vector3& addForce,const Vector3& addMoment)
     {
@@ -488,8 +488,8 @@ namespace stateObservation
         const Vector3& accelerationCom, const Vector3& AngMomentum,
         const Vector3& dotAngMomentum,
         const Matrix3& Inertia, const Matrix3& dotInertia,
-        const IndexedMatrixArray& contactPosV,
-        const IndexedMatrixArray& contactOriV,
+        const IndexedVectorArray& contactPosV,
+        const IndexedVectorArray& contactOriV,
         const Vector3& position, const Vector3& linVelocity, Vector3& linearAcceleration,
         const Vector3 &oriVector ,const Matrix3& orientation,
         const Vector3& angularVel, Vector3& angularAcceleration,
@@ -553,8 +553,8 @@ namespace stateObservation
      const Vector3& accelerationCom, const Vector3& AngMomentum,
      const Vector3& dotAngMomentum,
      const Matrix3& inertia, const Matrix3& dotInertia,
-     const IndexedMatrixArray& contactPos,
-     const IndexedMatrixArray& contactOri,
+     const IndexedVectorArray& contactPos,
+     const IndexedVectorArray& contactOri,
      Vector3& position, Vector3& linVelocity, Vector& fc,
      Vector3 &oriVector, Vector3& angularVel, Vector& tc,
      const Vector3 & fm, const Vector3& tm, const Vector3 &addiForces,
@@ -625,8 +625,8 @@ namespace stateObservation
               const Vector3& accelerationCom, const Vector3& AngMomentum,
               const Vector3& dotAngMomentum,
               const Matrix3& inertia, const Matrix3& dotInertia,
-              const IndexedMatrixArray& contactPos,
-              const IndexedMatrixArray& contactOri,
+              const IndexedVectorArray& contactPos,
+              const IndexedVectorArray& contactOri,
               Vector3& position, Vector3& linVelocity, Vector& fc,
               Vector3 &oriVector, Vector3& angularVel, Vector& tc,
               const Vector3 & fm, const Vector3& tm,

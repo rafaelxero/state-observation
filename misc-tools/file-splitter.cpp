@@ -41,7 +41,7 @@ int main (int argc, char *argv[])
 
 ///-------------- input----------------------------------
 
-        IndexedMatrixArray u;
+        IndexedVectorArray u;
         std::cout << "Input "<< std::endl;
         std::cout << " filename: "<<filename<< std::endl;
         u.readVectorsFromFile(filename.c_str());
@@ -51,22 +51,22 @@ int main (int argc, char *argv[])
 
         std::cout << "Splitting" << std::endl;
 
-        IndexedMatrixArray
-        posCom,
-        velCom,
-        accCom,
-        inertia,
-        angMoment,
-        dotInertia,
-        dotAngMoment,
-        posIMU,
-        oriIMU,
-        linVelIMU,
-        angVelIMU,
-        linAccIMU,
-        additionalForces,
-        contact1,
-        contact2 ;
+        IndexedVectorArray
+          posCom,
+          velCom,
+          accCom,
+          inertia,
+          angMoment,
+          dotInertia,
+          dotAngMoment,
+          posIMU,
+          oriIMU,
+          linVelIMU,
+          angVelIMU,
+          linAccIMU,
+          additionalForces,
+          contact1,
+          contact2 ;
         for (TimeIndex i=u.getFirstIndex(); i<u.getNextIndex(); ++i)
         {
           ui=u[i];
@@ -145,13 +145,13 @@ int main (int argc, char *argv[])
       else if (type ==  "-y")
       {
 
-        IndexedMatrixArray y;
+        IndexedVectorArray y;
         std::cout << "Measurements"<< std::endl;
          std::cout << " filename: "<<filename<< std::endl;
         y.readVectorsFromFile(filename.c_str());
         std::cout << "Measurements loaded, size:"<< y.size() << std::endl;
 
-        IndexedMatrixArray accelerometer, gyrometer, force1, force2;
+        IndexedVectorArray accelerometer, gyrometer, force1, force2;
 
         Vector yi;
 
@@ -213,7 +213,7 @@ int main (int argc, char *argv[])
 
       else if (type ==  "-x")
       {
-        IndexedMatrixArray x;
+        IndexedVectorArray x;
         std::cout << "State "<<std::endl;
         std::cout << " filename: "<<filename<< std::endl;
         x.readVectorsFromFile(filename.c_str());
@@ -223,16 +223,16 @@ int main (int argc, char *argv[])
 
         ///------------- state------------------------
         Vector xi;
-        IndexedMatrixArray
-        pos,
-        ori,
-        linVel,
-        angVel,
-        fc1,
-        fc2,
-        unmodeledForces,
-        comBias,
-        drift          ;
+        IndexedVectorArray
+          pos,
+          ori,
+          linVel,
+          angVel,
+          fc1,
+          fc2,
+          unmodeledForces,
+          comBias,
+          drift          ;
 
         for (TimeIndex i=x.getFirstIndex(); i<x.getNextIndex(); ++i)
         {

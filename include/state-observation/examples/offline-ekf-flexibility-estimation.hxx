@@ -1,12 +1,12 @@
-stateObservation::IndexedMatrixArray offlineEKFFlexibilityEstimation(
-            const stateObservation::IndexedMatrixArray & y,
-            const stateObservation::IndexedMatrixArray & u,
-            const Matrix & xh0,
+stateObservation::IndexedVectorArray offlineEKFFlexibilityEstimation(
+            const stateObservation::IndexedVectorArray & y,
+            const stateObservation::IndexedVectorArray & u,
+            const Vector & xh0,
             unsigned numberOfContacts,
             const std::vector<Vector3,Eigen::aligned_allocator<Vector3> > & contactsPositions,
             double dt,
-            IndexedMatrixArray * ino,
-            IndexedMatrixArray * premea)
+            IndexedVectorArray * ino,
+            IndexedVectorArray * premea)
 {
 
     (void)dt;
@@ -40,7 +40,7 @@ stateObservation::IndexedMatrixArray offlineEKFFlexibilityEstimation(
     estimator.setFlexibilityGuess(xh0);
 
     ///the array of the state estimations over time
-    stateObservation::IndexedMatrixArray xh;
+    stateObservation::IndexedVectorArray xh;
     xh.setValue(xh0,y.getFirstIndex()-1);
 
     ///the reconstruction of the state
@@ -72,9 +72,9 @@ stateObservation::IndexedMatrixArray offlineEKFFlexibilityEstimation(
 }
 
 
-stateObservation::IndexedMatrixArray offlineEKFFlexibilityEstimation(
-            const stateObservation::IndexedMatrixArray & y,
-            const Matrix & xh0,
+stateObservation::IndexedVectorArray offlineEKFFlexibilityEstimation(
+            const stateObservation::IndexedVectorArray & y,
+            const Vector & xh0,
             unsigned numberOfContacts,
             const std::vector<Vector3, Eigen::aligned_allocator<Vector3> > & contactsPositions,
             double dt)
@@ -82,7 +82,7 @@ stateObservation::IndexedMatrixArray offlineEKFFlexibilityEstimation(
     const unsigned inputSize=15;
 
     ///initialization of a zero input
-    stateObservation::IndexedMatrixArray u;
+    stateObservation::IndexedVectorArray u;
     for (TimeIndex k=y.getFirstIndex()-1; k<y.getNextIndex(); ++k)
     {
         u.setValue(Vector::Zero(inputSize,1),k);

@@ -5,7 +5,7 @@
 
 using namespace stateObservation;
 
-IndexedMatrixArray getMeasurements(const char * accelerometerSignal, const char * gyrometerSignal)
+IndexedVectorArray getMeasurements(const char * accelerometerSignal, const char * gyrometerSignal)
 {
     std::ifstream facc;
     std::ifstream fgyr;
@@ -18,7 +18,7 @@ IndexedMatrixArray getMeasurements(const char * accelerometerSignal, const char 
 
     Vector yk=Vector::Zero(6,1);
 
-    IndexedMatrixArray y;
+    IndexedVectorArray y;
 
     bool continuation=true;
 
@@ -45,7 +45,7 @@ IndexedMatrixArray getMeasurements(const char * accelerometerSignal, const char 
     return y;
 }
 
-int test(const IndexedMatrixArray & y)
+int test(const IndexedVectorArray & y)
 {
 
     std::cout << "Starting observation" <<std::endl;
@@ -65,7 +65,7 @@ int test(const IndexedMatrixArray & y)
     Matrix q = Matrix::Identity(stateSize,stateSize)*0.01;
     Matrix r = Matrix::Identity(measurementSize,measurementSize)*100;
 
-    IndexedMatrixArray xh = examples::imuAttitudeTrajectoryReconstruction
+    IndexedVectorArray xh = examples::imuAttitudeTrajectoryReconstruction
                                         (y, xh0, p, q, r, dt);
 
     ///file of output

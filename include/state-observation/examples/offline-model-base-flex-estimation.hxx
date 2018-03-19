@@ -10,11 +10,11 @@
 
 typedef flexibilityEstimation::IMUElasticLocalFrameDynamicalSystem::state state;
 
-stateObservation::IndexedMatrixArray offlineModelBaseFlexEstimation(
-  const stateObservation::IndexedMatrixArray & y,
-  const stateObservation::IndexedMatrixArray & u,
+stateObservation::IndexedVectorArray offlineModelBaseFlexEstimation(
+  const stateObservation::IndexedVectorArray & y,
+  const stateObservation::IndexedVectorArray & u,
   const Matrix & xh0,
-  const stateObservation::IndexedMatrixArray numberOfContacts,
+  const stateObservation::IndexedVectorArray numberOfContacts,
   double dt,
   double mass,
   bool withForce,
@@ -24,10 +24,10 @@ stateObservation::IndexedMatrixArray offlineModelBaseFlexEstimation(
   const Matrix3 & kfv,
   const Matrix3 & kte,
   const Matrix3 & ktv,
-  IndexedMatrixArray * prediction,
-  IndexedMatrixArray * ino,
-  IndexedMatrixArray * premea,
-  IndexedMatrixArray * simumea,
+  IndexedVectorArray * prediction,
+  IndexedVectorArray * ino,
+  IndexedVectorArray * premea,
+  IndexedVectorArray * simumea,
   int verbose)
 {
 
@@ -115,7 +115,7 @@ stateObservation::IndexedMatrixArray offlineModelBaseFlexEstimation(
   }
 
   ///the array of the state estimations over time
-  stateObservation::IndexedMatrixArray xh;
+  stateObservation::IndexedVectorArray xh;
   if (y.getFirstIndex()>0)
     xh.setValue(xh0,y.getFirstIndex()-1);
 

@@ -95,11 +95,11 @@ namespace stateObservation
         }
     }
 
-    IndexedMatrixArray DynamicalSystemSimulator::getMeasurementArray
+    IndexedVectorArray DynamicalSystemSimulator::getMeasurementArray
                     (TimeIndex startingTime, TimeSize duration)
     {
         BOOST_ASSERT(startingTime>y_.getFirstIndex() && "ERROR: The starting time is too early, try later starting time");
-        IndexedMatrixArray a;
+        IndexedVectorArray a;
 
         for (TimeIndex i= startingTime; i<startingTime+TimeIndex(duration);++i)
         {
@@ -108,12 +108,12 @@ namespace stateObservation
         return a;
     }
 
-    IndexedMatrixArray DynamicalSystemSimulator::getStateArray
+    IndexedVectorArray DynamicalSystemSimulator::getStateArray
                     (TimeIndex startingTime, TimeSize duration)
     {
         BOOST_ASSERT(startingTime>x_.getFirstIndex() && "ERROR: The starting time is too early, try later starting time");
 
-        IndexedMatrixArray a;
+        IndexedVectorArray a;
 
         for (TimeIndex i= startingTime; i<startingTime+TimeIndex(duration);++i)
         {

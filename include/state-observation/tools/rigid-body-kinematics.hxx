@@ -351,18 +351,18 @@ namespace stateObservation
 
     ///uses the derivation to reconstruct the velocities and accelerations given
     ///trajectories in positions and orientations only
-    inline IndexedMatrixArray reconstructStateTrajectory
-    (const IndexedMatrixArray & positionOrientation,
+    inline IndexedVectorArray reconstructStateTrajectory
+    (const IndexedVectorArray & positionOrientation,
      double dt)
     {
       Vector r(Vector::Zero(18,1));
 
-      const IndexedMatrixArray & po= positionOrientation;
+      const IndexedVectorArray & po= positionOrientation;
 
       TimeIndex i0=positionOrientation.getFirstIndex();
       TimeIndex i1=positionOrientation.getNextIndex();
 
-      IndexedMatrixArray a;
+      IndexedVectorArray a;
       a.setValue(r,i0);
       a.resize(po.size(),r);
 

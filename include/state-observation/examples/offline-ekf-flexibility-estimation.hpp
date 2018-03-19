@@ -22,9 +22,9 @@ namespace stateObservation
     namespace examples
     {
 
-        /*! \fn IndexedMatrixArray offlineEKFFlexibilityEstimation(
-         *   const stateObservation::IndexedMatrixArray & y,
-         *   const stateObservation::IndexedMatrixArray & u,
+        /*! \fn IndexedVectorArray offlineEKFFlexibilityEstimation(
+         *   const stateObservation::IndexedVectorArray & y,
+         *   const stateObservation::IndexedVectorArray & u,
          *   const Matrix & xh0,
          *   unsigned numberOfContacts,
          *   const std::vector<Vector3> & contactsPositions,
@@ -45,20 +45,20 @@ namespace stateObservation
          *  \param contactsPositions a vector of positions of the vector
          *  \param dt the time discretization period
          */
-        stateObservation::IndexedMatrixArray offlineEKFFlexibilityEstimation(
-            const stateObservation::IndexedMatrixArray & y,
-            const stateObservation::IndexedMatrixArray & u,
-            const Matrix & xh0,
+        stateObservation::IndexedVectorArray offlineEKFFlexibilityEstimation(
+            const stateObservation::IndexedVectorArray & y,
+            const stateObservation::IndexedVectorArray & u,
+            const Vector & xh0,
             unsigned numberOfContacts,
             const std::vector<Vector3, Eigen::aligned_allocator<Vector3> > & contactsPositions,
             double dt,
-            IndexedMatrixArray * ino=0x0,
-            IndexedMatrixArray * premea = 0x0);
+            IndexedVectorArray * ino=0x0,
+            IndexedVectorArray * premea = 0x0);
 
 
-        /*! \fn IndexedMatrixArray offlineEKFFlexibilityEstimation(
-         *   const stateObservation::IndexedMatrixArray & y,
-         *   const stateObservation::IndexedMatrixArray & u,
+        /*! \fn IndexedVectorArray offlineEKFFlexibilityEstimation(
+         *   const stateObservation::IndexedVectorArray & y,
+         *   const stateObservation::IndexedVectorArray & u,
          *   const Matrix & xh0,
          *   unsigned numberOfContacts,
          *   const std::vector<Vector3> & contactsPositions,
@@ -77,9 +77,9 @@ namespace stateObservation
          *  \param contactsPositions a vector of positions of the vector
          *  \param dt the time discretization period
          */
-        stateObservation::IndexedMatrixArray offlineEKFFlexibilityEstimation(
-            const stateObservation::IndexedMatrixArray & y,
-            const Matrix & xh0,
+        stateObservation::IndexedVectorArray offlineEKFFlexibilityEstimation(
+            const stateObservation::IndexedVectorArray & y,
+            const Vector & xh0,
             unsigned numberOfContacts,
             const std::vector<Vector3, Eigen::aligned_allocator<Vector3> > & contactsPositions,
             double dt);

@@ -20,9 +20,9 @@ int test()
     //const unsigned inputSize=6;
 
     ///The array containing all the states, the measurements and the inputs
-    IndexedMatrixArray x;
-    IndexedMatrixArray y;
-    IndexedMatrixArray u;
+    IndexedVectorArray x;
+    IndexedVectorArray y;
+    IndexedVectorArray u;
 
     ///The covariance matrix of the process noise and the measurement noise
     Matrix q;
@@ -110,7 +110,7 @@ int test()
     p=p*p.transpose();
 
 
-    IndexedMatrixArray xh = examples::imuAttitudeTrajectoryReconstruction
+    IndexedVectorArray xh = examples::imuAttitudeTrajectoryReconstruction
                                                     (y, u, xh0, p, q, r, dt);
 
 

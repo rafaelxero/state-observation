@@ -22,9 +22,9 @@ namespace stateObservation
     namespace examples
     {
 
-        /*! \fn IndexedMatrixArray offlineEKFFlexibilityEstimation(
-         *   const stateObservation::IndexedMatrixArray & y,
-         *   const stateObservation::IndexedMatrixArray & u,
+        /*! \fn IndexedVectorArray offlineEKFFlexibilityEstimation(
+         *   const stateObservation::IndexedVectorArray & y,
+         *   const stateObservation::IndexedVectorArray & u,
          *   const Matrix & xh0,
          *   unsigned numberOfContacts,
          *   const std::vector<Vector3> & contactsPositions,
@@ -53,11 +53,11 @@ namespace stateObservation
          *  \param R measurement noise covariance matrix. Size interpretation is the same
          *         as for Q.
          */
-        stateObservation::IndexedMatrixArray offlineModelBaseFlexEstimation(
-            const stateObservation::IndexedMatrixArray & y,
-            const stateObservation::IndexedMatrixArray & u,
+        stateObservation::IndexedVectorArray offlineModelBaseFlexEstimation(
+            const stateObservation::IndexedVectorArray & y,
+            const stateObservation::IndexedVectorArray & u,
             const Matrix & xh0,
-            const stateObservation::IndexedMatrixArray numberOfContacts,
+            const stateObservation::IndexedVectorArray numberOfContacts,
             double dt,
             double mass,
             bool withForce,
@@ -67,10 +67,10 @@ namespace stateObservation
             const Matrix3 & kfv = Matrix3::Zero(),
             const Matrix3 & kte = Matrix3::Zero(),
             const Matrix3 & ktv = Matrix3::Zero(),
-            IndexedMatrixArray * prediction=0x0,
-            IndexedMatrixArray * inovation=0x0,
-            IndexedMatrixArray * predictedMeasurements = 0x0,
-            IndexedMatrixArray * simulatedMeasurements = 0x0,
+            IndexedVectorArray * prediction=0x0,
+            IndexedVectorArray * inovation=0x0,
+            IndexedVectorArray * predictedMeasurements = 0x0,
+            IndexedVectorArray * simulatedMeasurements = 0x0,
             int verbose=0x0);
 
 

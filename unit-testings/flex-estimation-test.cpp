@@ -24,8 +24,8 @@ int testConstant()
     const unsigned inputSize=15;
 
     ///The array containing all the states, the measurements and the inputs
-    IndexedMatrixArray y;
-    IndexedMatrixArray u;
+    IndexedVectorArray y;
+    IndexedVectorArray u;
 
     Vector3 contact(Vector3::Zero());
 
@@ -58,7 +58,7 @@ int testConstant()
 
     contactPositions.push_back(contact);
 
-    stateObservation::IndexedMatrixArray xh=
+    stateObservation::IndexedVectorArray xh=
         stateObservation::examples::offlineEKFFlexibilityEstimation
         (y,u,xh0,1,contactPositions,dt);
 
@@ -107,9 +107,9 @@ int test()
     //const unsigned inputSize=15;
 
     ///The array containing all the states, the measurements and the inputs
-    IndexedMatrixArray x;
-    IndexedMatrixArray y;
-    IndexedMatrixArray u;
+    IndexedVectorArray x;
+    IndexedVectorArray y;
+    IndexedVectorArray u;
 
     ///The covariance matrix of the process noise and the measurement noise
     Matrix q;
@@ -250,7 +250,7 @@ int test()
     contactPositions.push_back(contact);
 
 
-    stateObservation::IndexedMatrixArray xh=
+    stateObservation::IndexedVectorArray xh=
         stateObservation::examples::offlineEKFFlexibilityEstimation
         (y,u,xh0,1,contactPositions,dt);
 

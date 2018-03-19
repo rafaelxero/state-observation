@@ -1,7 +1,7 @@
-IndexedMatrixArray imuAttitudeTrajectoryReconstruction
+IndexedVectorArray imuAttitudeTrajectoryReconstruction
     (
-    const IndexedMatrixArray & y,
-    const IndexedMatrixArray & u,
+    const IndexedVectorArray & y,
+    const IndexedVectorArray & u,
     const Vector & xh0,
     const Matrix & p,
     const Matrix & q,
@@ -39,7 +39,7 @@ IndexedMatrixArray imuAttitudeTrajectoryReconstruction
     Vector dx=filter.stateVectorConstant(1)*1e-8;
 
     ///the array of the state estimations over time
-    IndexedMatrixArray xh;
+    IndexedVectorArray xh;
     xh.setValue(xh0,y.getFirstIndex()-1);
 
     ///the reconstruction of the state
@@ -77,8 +77,8 @@ IndexedMatrixArray imuAttitudeTrajectoryReconstruction
     return xh;
 }
 
-IndexedMatrixArray imuAttitudeTrajectoryReconstruction(
-    const IndexedMatrixArray & y,
+IndexedVectorArray imuAttitudeTrajectoryReconstruction(
+    const IndexedVectorArray & y,
     const Vector & xh0,
     const Matrix & p,
     const Matrix & q,
@@ -88,7 +88,7 @@ IndexedMatrixArray imuAttitudeTrajectoryReconstruction(
     const unsigned inputSize=6;
 
     ///initialization of a zero input
-    IndexedMatrixArray u;
+    IndexedVectorArray u;
     for (TimeIndex k=y.getFirstIndex()-1; k<y.getNextIndex(); ++k)
     {
         u.setValue(Vector::Zero(inputSize,1),k);

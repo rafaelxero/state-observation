@@ -140,8 +140,8 @@ namespace stateObservation
 
     ///uses the derivation to reconstruct the velocities and accelerations given
     ///trajectories in positions and orientations only
-    inline IndexedMatrixArray reconstructStateTrajectory
-    (const IndexedMatrixArray & positionOrientation,
+    inline IndexedVectorArray reconstructStateTrajectory
+    (const IndexedVectorArray & positionOrientation,
      double dt);
 
     inline Vector invertState( const Vector & state);

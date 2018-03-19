@@ -27,9 +27,9 @@ int testDerivator()
     //const unsigned inputSize=6;
 
     ///The array containing all the states, the measurements and the inputs
-    IndexedMatrixArray x;
-    IndexedMatrixArray y;
-    IndexedMatrixArray u;
+    IndexedVectorArray x;
+    IndexedVectorArray y;
+    IndexedVectorArray u;
 
     ///The covariance matrix of the process noise and the measurement noise
     Matrix q;
@@ -100,7 +100,7 @@ int testDerivator()
         x = sim.getStateArray(1,kmax);
     }
 
-    IndexedMatrixArray dta;
+    IndexedVectorArray dta;
 
     for (TimeIndex i=x.getFirstIndex() ; i<x.getNextIndex() ; ++i)
     {
@@ -112,7 +112,7 @@ int testDerivator()
         dta.setValue(xi,i);
     }
 
-    IndexedMatrixArray state = kine::reconstructStateTrajectory(dta,dt);
+    IndexedVectorArray state = kine::reconstructStateTrajectory(dta,dt);
 
     ///file of output
     std::ofstream f;
@@ -129,7 +129,7 @@ int testDerivator()
 
 }
 
-IndexedMatrixArray getMeasurements(const char * accelerometerSignal, const  char * gyrometerSignal)
+IndexedVectorArray getMeasurements(const char * accelerometerSignal, const  char * gyrometerSignal)
 {
     std::ifstream facc;
     std::ifstream fgyr;
@@ -142,7 +142,7 @@ IndexedMatrixArray getMeasurements(const char * accelerometerSignal, const  char
 
     Vector yk=Vector::Zero(6,1);
 
-    IndexedMatrixArray y;
+    IndexedVectorArray y;
 
     bool continuation=true;
 
@@ -169,7 +169,7 @@ IndexedMatrixArray getMeasurements(const char * accelerometerSignal, const  char
     return y;
 }
 
-IndexedMatrixArray getTrajectory(const char * PositionOrientation)
+IndexedVectorArray getTrajectory(const char * PositionOrientation)
 {
     std::ifstream f;
 
@@ -177,7 +177,7 @@ IndexedMatrixArray getTrajectory(const char * PositionOrientation)
 
     Vector6 configuration;
 
-    IndexedMatrixArray up;
+    IndexedVectorArray up;
 
     bool continuation=true;
 
@@ -199,14 +199,14 @@ IndexedMatrixArray getTrajectory(const char * PositionOrientation)
         }
     }
 
-    IndexedMatrixArray state = kine::reconstructStateTrajectory(up,dt);
+    IndexedVectorArray state = kine::reconstructStateTrajectory(up,dt);
 
     return state;
 }
 
 
 
-int test (const IndexedMatrixArray & y, const IndexedMatrixArray & u)
+int test (const IndexedVectorArray & y, const IndexedVectorArray & u)
 {
     /// The number of samples
     const unsigned stateSize = 18;
@@ -220,7 +220,7 @@ int test (const IndexedMatrixArray & y, const IndexedMatrixArray & u)
 
     contactPositions.push_back(Matrix::Zero(3,0));
 
-    stateObservation::IndexedMatrixArray xh=
+    stateObservation::IndexedVectorArray xh=
         stateObservation::examples::offlineEKFFlexibilityEstimation
         (y,u,xh0,1,contactPositions,dt);
 
@@ -279,11 +279,11 @@ int test (const IndexedMatrixArray & y, const IndexedMatrixArray & u)
 int main()
 {
 
-    IndexedMatrixArray y =
+    IndexedVectorArray y =
             getMeasurements("dg_HRP2LAAS-accelerometer.dat",
                 "dg_HRP2LAAS-gyrometer.dat");
 
-    IndexedMatrixArray u= getTrajectory("IMUTrajectory.dat");
+    IndexedVectorArray u= getTrajectory("IMUTrajectory.dat");
 
 
 

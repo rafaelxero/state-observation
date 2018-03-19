@@ -25,7 +25,7 @@ int main (int argc, char *argv[])
   }
   else
   {
-    IndexedMatrixArray y,u,numberOfContacts;
+    IndexedVectorArray y,u,numberOfContacts;
 
     std::cout << "Read Sensors filename: "<<argv[1]<< std::endl;
     y.readVectorsFromFile(argv[1]);
@@ -49,7 +49,7 @@ int main (int argc, char *argv[])
     double mass=atof(argv[5]);
 
     std::cout << "Rebuiding state" << std::endl;
-    IndexedMatrixArray xhat=
+    IndexedVectorArray xhat=
       examples::offlineModelBaseFlexEstimation( y, u, xh0, numberOfContacts, dt, mass, true,
                                                IndexedMatrixArray(), IndexedMatrixArray(),
                                                 Matrix3::Zero(), Matrix3::Zero(), Matrix3::Zero(), Matrix3::Zero(),

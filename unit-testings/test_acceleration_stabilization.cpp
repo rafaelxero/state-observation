@@ -29,8 +29,8 @@ int test()
     for (unsigned i = 0; i<1; ++i)
     {
     	///The array containing all the states, the measurements and the inputs
-    	IndexedMatrixArray x;
-    	IndexedMatrixArray u;
+    	IndexedVectorArray x;
+    	IndexedVectorArray u;
 
         ///simulation of the signal
         /// the IMU dynamical system functor

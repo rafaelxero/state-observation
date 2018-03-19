@@ -144,10 +144,10 @@ namespace stateObservation
         IndexedVector x_;
 
         ///Container for the measurements.
-        IndexedMatrixArray y_;
+        IndexedVectorArray y_;
 
         ///Container for the inputs.
-        IndexedMatrixArray u_;
+        IndexedVectorArray u_;
 
     };
 

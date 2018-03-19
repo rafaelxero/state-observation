@@ -24,13 +24,13 @@ int test()
     const unsigned inputSize=15;
 
     ///The array containing all the states, the measurements and the inputs
-    IndexedMatrixArray x;
-    IndexedMatrixArray y;
-    IndexedMatrixArray u;
-    IndexedMatrixArray z;
+    IndexedVectorArray x;
+    IndexedVectorArray y;
+    IndexedVectorArray u;
+    IndexedVectorArray z;
 
-    IndexedMatrixArray ino;
-    IndexedMatrixArray prediMea;
+    IndexedVectorArray ino;
+    IndexedVectorArray prediMea;
 
     ///Contact vector
     Vector3 contact(Vector3::Random());
@@ -153,7 +153,7 @@ int test()
     contactPositions.push_back(contact);
 
 
-    stateObservation::IndexedMatrixArray xh=
+    stateObservation::IndexedVectorArray xh=
         stateObservation::examples::offlineEKFFlexibilityEstimation
             (y,u,xh0,1,contactPositions,dt,&ino, &prediMea);
 

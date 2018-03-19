@@ -141,7 +141,7 @@ public:
       // Get the contact wrench
       void computeContactWrench
               (const Matrix3& orientation, const Vector3& position,
-               const IndexedMatrixArray& contactPosV, const IndexedMatrixArray& contactOriV,
+               const IndexedVectorArray& contactPosV, const IndexedVectorArray& contactOriV,
                const Vector& fc, const Vector& tc, const Vector3 & fm, const Vector3& tm,
                const Vector3& addForce, const Vector3 & addMoment);
 
@@ -153,8 +153,8 @@ public:
        const Vector3& accelerationCom, const Vector3& AngMomentum,
        const Vector3& dotAngMomentum,
        const Matrix3& Inertia, const Matrix3& dotInertia,
-       const IndexedMatrixArray& contactPos,
-       const IndexedMatrixArray& contactOri,
+       const IndexedVectorArray& contactPos,
+       const IndexedVectorArray& contactOri,
        const Vector3& position, const Vector3& linVelocity,
        Vector3& linearAcceleration,  const Vector3& oriVector ,
        const Matrix3& orientation, const Vector3& angularVel,
@@ -251,27 +251,27 @@ public:
       }
 
       virtual void computeElastContactForcesAndMoments
-      (const IndexedMatrixArray& contactPosArray,
-       const IndexedMatrixArray& contactOriArray,
-       const IndexedMatrixArray& contactVelArray,
-       const IndexedMatrixArray& contactAngVelArray,
+      (const IndexedVectorArray& contactPosArray,
+       const IndexedVectorArray& contactOriArray,
+       const IndexedVectorArray& contactVelArray,
+       const IndexedVectorArray& contactAngVelArray,
        const Vector3& position, const Vector3& linVelocity,
        const Vector3& oriVector, const Matrix3& orientation,
        const Vector3& angVel,
        Vector& fc, Vector& tc);
 
       virtual void computeElastPendulumForcesAndMoments
-      (const IndexedMatrixArray& PrArray,
+      (const IndexedVectorArray& PrArray,
        const Vector3& position, const Vector3& linVelocity,
        const Vector3& oriVector, const Matrix3& orientation,
        const Vector3& angVel,
        Vector& forces, Vector& moments);
 
       void computeForcesAndMoments
-      (const IndexedMatrixArray& position1,
-       const IndexedMatrixArray& position2,
-       const IndexedMatrixArray& velocity1,
-       const IndexedMatrixArray& velocity2,
+      (const IndexedVectorArray& position1,
+       const IndexedVectorArray& position2,
+       const IndexedVectorArray& velocity1,
+       const IndexedVectorArray& velocity2,
        const Vector3& position, const Vector3& linVelocity,
        const Vector3& oriVector, const Matrix3& orientation,
        const Vector3& angVel,
@@ -295,8 +295,8 @@ public:
        const Vector3& accelerationCom, const Vector3& AngMomentum,
        const Vector3& dotAngMomentum,
        const Matrix3& Inertia, const Matrix3& dotInertia,
-       const IndexedMatrixArray& contactPos,
-       const IndexedMatrixArray& contactOri,
+       const IndexedVectorArray& contactPos,
+       const IndexedVectorArray& contactOri,
        Vector3& position, Vector3& linVelocity, Vector& fc1,
        Vector3 &oriVector, Vector3& angularVel, Vector& fc2,
        const Vector3 & fm, const Vector3& tm,
@@ -309,8 +309,8 @@ public:
        const Vector3& accelerationCom, const Vector3& AngMomentum,
        const Vector3& dotAngMomentum,
        const Matrix3& Inertia, const Matrix3& dotInertia,
-       const IndexedMatrixArray& contactPos,
-       const IndexedMatrixArray& contactOri,
+       const IndexedVectorArray& contactPos,
+       const IndexedVectorArray& contactOri,
        Vector3& position, Vector3& linVelocity, Vector& fc1,
        Vector3 &oriVector, Vector3& angularVel, Vector& fc2,
        const Vector3 & fm, const Vector3& tm,
@@ -474,15 +474,15 @@ public:
 
         Matrix3 rControl;
 
-        IndexedMatrixArray contactPosV;
-        IndexedMatrixArray contactOriV;
-        IndexedMatrixArray contactVelArray;
-        IndexedMatrixArray contactAngVelArray;
+        IndexedVectorArray contactPosV;
+        IndexedVectorArray contactOriV;
+        IndexedVectorArray contactVelArray;
+        IndexedVectorArray contactAngVelArray;
 
         Matrix3 inertia;
         Matrix3 dotInertia;
 
-        IndexedMatrixArray efforts;
+        IndexedVectorArray efforts;
 
         Vector3 f, fi;
         Vector3 t;
