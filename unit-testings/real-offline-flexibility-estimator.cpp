@@ -10,6 +10,8 @@
 
 using namespace stateObservation;
 
+typedef kine::indexes<kine::rotationVector> indexes;
+
 ///sampling period
 const double dt=5e-3;
 
@@ -106,8 +108,8 @@ int testDerivator()
     {
         Vector xi = Vector::Zero(6,1);
 
-        xi.head(3) = Vector(x[i]).segment(kine::pos,3);
-        xi.tail(3) = Vector(x[i]).segment(kine::ori,3);
+        xi.head(3) = Vector(x[i]).segment(indexes::pos,3);
+        xi.tail(3) = Vector(x[i]).segment(indexes::ori,3);
 
         dta.setValue(xi,i);
     }
@@ -244,7 +246,7 @@ int test (const IndexedVectorArray & y, const IndexedVectorArray & u)
         {
             Matrix3 Rh;
 
-            Vector3 orientationV=Vector(xh[i]).segment(kine::ori,3);
+            Vector3 orientationV=Vector(xh[i]).segment(indexes::ori,3);
             double angle=orientationV.norm();
             if (angle > cst::epsilonAngle)
                 Rh = AngleAxis(angle, orientationV/angle).toRotationMatrix();

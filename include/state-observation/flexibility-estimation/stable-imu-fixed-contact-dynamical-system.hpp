@@ -95,6 +95,8 @@ namespace flexibilityEstimation
 
     protected:
 
+        typedef kine::indexes<kine::rotationVector> indexes;
+
         stateObservation::AccelerometerGyrometer sensor_;
 
         stateObservation::NoiseBase * processNoise_;

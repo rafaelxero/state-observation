@@ -31,7 +31,7 @@ namespace stateObservation
     {
       if (!matrixMode_)
       {
-        Quaternion q(state_[0],state_[1],state_[2],state_[3]);
+        Quaternion q(state_.head<4>());
 
         r_=q.toRotationMatrix();
         acc_= state_.segment(4,3);

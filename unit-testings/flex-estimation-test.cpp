@@ -8,7 +8,7 @@
 
 
 using namespace stateObservation;
-
+typedef kine::indexes<kine::rotationVector> indexes;
 
 int testConstant()
 {
@@ -74,8 +74,8 @@ int testConstant()
 
        Vector v2 (Matrix::Zero(6,1));
 
-       v2.head(3) = Vector(xh[i]).segment(kine::pos,3);
-       v2.tail(3) = Vector(xh[i]).segment(kine::ori,3);
+       v2.head(3) = Vector(xh[i]).segment(indexes::pos,3);
+       v2.tail(3) = Vector(xh[i]).segment(indexes::ori,3);
 
        Matrix4 m= kine::vector6ToHomogeneousMatrix(v2);
        Vector4 v;
@@ -125,15 +125,15 @@ int test()
 
         ///The process noise initialization
         Matrix q1=Matrix::Zero(stateSize,stateSize);
-        q1(kine::angAcc,kine::angAcc)
-                    = q1(kine::angAcc+1,kine::angAcc+1)
-                    = q1(kine::angAcc+2,kine::angAcc+2) = 0.000001;
-        q1(kine::angVel,kine::angVel)
-                    = q1(kine::angVel+1,kine::angVel+1)
-                    = q1(kine::angVel+2,kine::angVel+2) = 0.0001;
-        q1(kine::ori,kine::ori)
-                    = q1(kine::ori+1,kine::ori+1)
-                    = q1(kine::ori+2,kine::ori+2) = 0.001;
+        q1(indexes::angAcc,indexes::angAcc)
+                    = q1(indexes::angAcc+1,indexes::angAcc+1)
+                    = q1(indexes::angAcc+2,indexes::angAcc+2) = 0.000001;
+        q1(indexes::angVel,indexes::angVel)
+                    = q1(indexes::angVel+1,indexes::angVel+1)
+                    = q1(indexes::angVel+2,indexes::angVel+2) = 0.0001;
+        q1(indexes::ori,indexes::ori)
+                    = q1(indexes::ori+1,indexes::ori+1)
+                    = q1(indexes::ori+2,indexes::ori+2) = 0.001;
 
         GaussianWhiteNoise processNoise(imu.getStateSize());
         processNoise.setStandardDeviation(q1);
@@ -152,11 +152,11 @@ int test()
         ///initialization of the state vector
         Vector x0=Vector::Zero(stateSize,1);
 
-        x0[kine::angAcc]=x0[kine::angAcc+1]=x0[kine::angAcc+2]=0.00001;
+        x0[indexes::angAcc]=x0[indexes::angAcc+1]=x0[indexes::angAcc+2]=0.00001;
 
-        x0[kine::angVel]=x0[kine::angVel+1]=x0[kine::angVel+2]=0.0001;
+        x0[indexes::angVel]=x0[indexes::angVel+1]=x0[indexes::angVel+2]=0.0001;
 
-        x0[kine::ori]=x0[kine::ori+1]=x0[kine::ori+2]=0.3;
+        x0[indexes::ori]=x0[indexes::ori+1]=x0[indexes::ori+2]=0.3;
 
         //x0=x0*100;
 
@@ -169,25 +169,25 @@ int test()
         /// the input is constant over 10 time samples
         for (i=0;i<kmax/10.0;++i)
         {
-            uk[kine::pos     ]=0.4 * sin(M_PI/10*i);
-            uk[kine::pos+1   ]=0.6 * sin(M_PI/12*i);
-            uk[kine::pos+2   ]=0.2 * sin(M_PI/5*i);
+            uk[indexes::pos     ]=0.4 * sin(M_PI/10*i);
+            uk[indexes::pos+1   ]=0.6 * sin(M_PI/12*i);
+            uk[indexes::pos+2   ]=0.2 * sin(M_PI/5*i);
 
-            uk[kine::linVel  ]=0.1  * sin(M_PI/12*i);
-            uk[kine::linVel+1]=0.07  * sin(M_PI/15*i);
-            uk[kine::linVel+2]=0.05 * sin(M_PI/5*i);
+            uk[indexes::linVel  ]=0.1  * sin(M_PI/12*i);
+            uk[indexes::linVel+1]=0.07  * sin(M_PI/15*i);
+            uk[indexes::linVel+2]=0.05 * sin(M_PI/5*i);
 
-            uk[kine::linAcc  ]=1  * sin(M_PI/12*i);
-            uk[kine::linAcc+1]=0.07  * sin(M_PI/15*i);
-            uk[kine::linAcc+2]=0.05 * sin(M_PI/10*i);
+            uk[indexes::linAcc  ]=1  * sin(M_PI/12*i);
+            uk[indexes::linAcc+1]=0.07  * sin(M_PI/15*i);
+            uk[indexes::linAcc+2]=0.05 * sin(M_PI/10*i);
 
-            uk[kine::ori     ]=2  * sin(M_PI/12*i);
-            uk[kine::ori+1   ]=1.5  * sin(M_PI/18*i);
-            uk[kine::ori+2   ]=0.8 * sin(M_PI/6*i);
+            uk[indexes::ori     ]=2  * sin(M_PI/12*i);
+            uk[indexes::ori+1   ]=1.5  * sin(M_PI/18*i);
+            uk[indexes::ori+2   ]=0.8 * sin(M_PI/6*i);
 
-            uk[kine::angVel  ]=0.2  * sin(M_PI/12*i);
-            uk[kine::angVel+1]=0.07  * sin(M_PI/12*i);
-            uk[kine::angVel+2]=0.05 * sin(M_PI/5*i);
+            uk[indexes::angVel  ]=0.2  * sin(M_PI/12*i);
+            uk[indexes::angVel+1]=0.07  * sin(M_PI/12*i);
+            uk[indexes::angVel+2]=0.05 * sin(M_PI/5*i);
 
             ///filling the 10 time samples of the constant input
             for (int j=0;j<10;++j)
@@ -212,9 +212,9 @@ int test()
         {
             Vector x=sim.getState(i);
 
-            Vector3 orientationFlexV=x.segment(kine::ori,3);
-            Vector3 angularVelocityFlex=x.segment(kine::angVel,3);
-            Vector3 angularAccelerationFlex=x.segment(kine::angAcc,3);
+            Vector3 orientationFlexV=x.segment(indexes::ori,3);
+            Vector3 angularVelocityFlex=x.segment(indexes::angVel,3);
+            Vector3 angularAccelerationFlex=x.segment(indexes::angAcc,3);
 
             Matrix3 orientationFlexR =
                 kine::rotationVectorToAngleAxis(orientationFlexV).matrix();
@@ -227,9 +227,9 @@ int test()
                 (orientationFlexR, angularVelocityFlex, angularAccelerationFlex,
                 contact, positionFlex, velocityFlex, accelerationFlex);
 
-            x.segment(kine::pos,3) = positionFlex;
-            x.segment(kine::linVel,3) = velocityFlex;
-            x.segment(kine::linAcc,3) = accelerationFlex;
+            x.segment(indexes::pos,3) = positionFlex;
+            x.segment(indexes::linVel,3) = velocityFlex;
+            x.segment(indexes::linAcc,3) = accelerationFlex;
 
             sim.setState(x,i);
 
@@ -267,7 +267,7 @@ int test()
         Vector3 g;
         {
             Matrix3 R;
-            Vector3 orientationV=Vector(x[i]).segment(kine::ori,3);
+            Vector3 orientationV=Vector(x[i]).segment(indexes::ori,3);
             double angle=orientationV.norm();
             if (angle > cst::epsilonAngle)
                 R = AngleAxis(angle, orientationV/angle).toRotationMatrix();
@@ -281,7 +281,7 @@ int test()
         {
             Matrix3 Rh;
 
-            Vector3 orientationV=Vector(xh[i]).segment(kine::ori,3);
+            Vector3 orientationV=Vector(xh[i]).segment(indexes::ori,3);
             double angle=orientationV.norm();
             if (angle > cst::epsilonAngle)
                 Rh = AngleAxis(angle, orientationV/angle).toRotationMatrix();

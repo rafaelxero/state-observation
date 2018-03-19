@@ -6,6 +6,8 @@
 
 using namespace stateObservation;
 
+typedef kine::indexes<kine::rotationVector> indexes;
+
 int test()
 {
     /// The number of samples
@@ -98,7 +100,7 @@ int test()
 
     ///the initalization of a random estimation of the initial state
     Vector xh0=Vector::Random(stateSize,1)*3.14;
-    xh0[kine::ori]=3.14;
+    xh0[indexes::ori]=3.14;
 
 
     ///computation and initialization of the covariance matrix of the initial state
@@ -127,7 +129,7 @@ int test()
         Vector3 g;
         {
             Matrix3 R;
-            Vector3 orientationV=Vector(x[i]).segment(kine::ori,3);
+            Vector3 orientationV=Vector(x[i]).segment(indexes::ori,3);
             double angle=orientationV.norm();
             if (angle > cst::epsilonAngle)
                 R = AngleAxis(angle, orientationV/angle).toRotationMatrix();
@@ -140,7 +142,7 @@ int test()
         Vector3 gh;
         {
             Matrix3 Rh;
-            Vector3 orientationV=Vector(xh[i]).segment(kine::ori,3);
+            Vector3 orientationV=Vector(xh[i]).segment(indexes::ori,3);
             double angle=orientationV.norm();
             if (angle > cst::epsilonAngle)
                 Rh = AngleAxis(angle, orientationV/angle).toRotationMatrix();

@@ -393,16 +393,6 @@ namespace stateObservation
   typedef IndexedMatrixArrayT<Matrix> IndexedMatrixArray;
   typedef IndexedMatrixArrayT<Vector> IndexedVectorArray;
 
-  namespace kine
-  {
-    ///indexes of the different components of a vector of the kinematic state
-    const unsigned pos = 0;
-    const unsigned ori = 3;
-    const unsigned linVel = 6;
-    const unsigned angVel = 9;
-    const unsigned linAcc = 12;
-    const unsigned angAcc = 15;
-  }
 
   namespace cst
   {

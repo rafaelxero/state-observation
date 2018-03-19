@@ -52,14 +52,14 @@ namespace flexibilityEstimation
     {
         assertStateVector_(x);
 
-        Vector3 positionFlex(x.segment(kine::pos,3));
-        Vector3 velocityFlex(x.segment(kine::linVel,3));
-        //Vector3 accelerationFlex(x.segment(kine::linAcc,3));
+        Vector3 positionFlex(x.segment(indexes::pos,3));
+        Vector3 velocityFlex(x.segment(indexes::linVel,3));
+        //Vector3 accelerationFlex(x.segment(indexes::linAcc,3));
         Vector3 accelerationFlex(stabilizeAccelerationLinear(positionFlex, velocityFlex));
 
-        Vector3 orientationFlexV(x.segment(kine::ori,3));
-        Vector3 angularVelocityFlex(x.segment(kine::angVel,3));
-        //Vector3 angularAccelerationFlex(x.segment(kine::angAcc,3));
+        Vector3 orientationFlexV(x.segment(indexes::ori,3));
+        Vector3 angularVelocityFlex(x.segment(indexes::angVel,3));
+        //Vector3 angularAccelerationFlex(x.segment(indexes::angAcc,3));
         Vector3 angularAccelerationFlex(stabilizeAccelerationAngular(orientationFlexV, angularVelocityFlex));
 
         Quaternion orientationFlex(computeQuaternion_(orientationFlexV));
@@ -71,16 +71,16 @@ namespace flexibilityEstimation
         //x_{k+1}
         Vector xk1(x);
 
-        xk1.segment(kine::pos,3) = positionFlex;
-        xk1.segment(kine::linVel,3) = velocityFlex;
-        xk1.segment(kine::linAcc,3) = accelerationFlex;
+        xk1.segment(indexes::pos,3) = positionFlex;
+        xk1.segment(indexes::linVel,3) = velocityFlex;
+        xk1.segment(indexes::linAcc,3) = accelerationFlex;
 
         AngleAxis orientationAA(orientationFlex);
         orientationFlexV=orientationAA.angle()*orientationAA.axis();
 
-        xk1.segment(kine::ori,3) =  orientationFlexV;
-        xk1.segment(kine::angVel,3) = angularVelocityFlex;
-        xk1.segment(kine::angAcc,3) = angularAccelerationFlex;
+        xk1.segment(indexes::ori,3) =  orientationFlexV;
+        xk1.segment(indexes::angVel,3) = angularVelocityFlex;
+        xk1.segment(indexes::angAcc,3) = angularAccelerationFlex;
 
          if (processNoise_!=0x0)
             return processNoise_->addNoise(xk1);
@@ -105,13 +105,13 @@ namespace flexibilityEstimation
     {
         assertStateVector_(x);
 
-        Vector3 positionFlex(x.segment(kine::pos,3));
-        Vector3 velocityFlex(x.segment(kine::linVel,3));
-        Vector3 accelerationFlex(x.segment(kine::linAcc,3));
+        Vector3 positionFlex(x.segment(indexes::pos,3));
+        Vector3 velocityFlex(x.segment(indexes::linVel,3));
+        Vector3 accelerationFlex(x.segment(indexes::linAcc,3));
 
-        Vector3 orientationFlexV(x.segment(kine::ori,3));
-        Vector3 angularVelocityFlex(x.segment(kine::angVel,3));
-        Vector3 angularAccelerationFlex(x.segment(kine::angAcc,3));
+        Vector3 orientationFlexV(x.segment(indexes::ori,3));
+        Vector3 angularVelocityFlex(x.segment(indexes::angVel,3));
+        Vector3 angularAccelerationFlex(x.segment(indexes::angAcc,3));
 
         Quaternion qFlex (computeQuaternion_(orientationFlexV));
         Matrix3 rFlex (qFlex.toRotationMatrix());
@@ -119,12 +119,12 @@ namespace flexibilityEstimation
 
         assertInputVector_(u);
 
-        Vector3 positionControl(u.segment(kine::pos,3));
-        Vector3 velocityControl(u.segment(kine::linVel,3));
-        Vector3 accelerationControl(u.segment(kine::linAcc,3));
+        Vector3 positionControl(u.segment(indexes::pos,3));
+        Vector3 velocityControl(u.segment(indexes::linVel,3));
+        Vector3 accelerationControl(u.segment(indexes::linAcc,3));
 
-        Vector3 orientationControlV(u.segment(kine::ori,3));
-        Vector3 angularVelocityControl(u.segment(kine::angVel,3));
+        Vector3 orientationControlV(u.segment(indexes::ori,3));
+        Vector3 angularVelocityControl(u.segment(indexes::angVel,3));
 
         Quaternion qControl(computeQuaternion_(orientationControlV));
 
@@ -142,10 +142,7 @@ namespace flexibilityEstimation
 
         Vector v(Vector::Zero(10,1));
 
-        v[0]=q.w();
-        v[1]=q.x();
-        v[2]=q.y();
-        v[3]=q.z();
+        v.head<4>() = q.coeffs();
 
         v.segment(4,3)=acceleration;
         v.tail(3)=angularVelocity;

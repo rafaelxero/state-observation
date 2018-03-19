@@ -13,6 +13,8 @@
 
 using namespace stateObservation;
 
+typedef kine::indexes<kine::rotationVector> indexes;
+
 int test()
 {
     std::cout << "Starting" << std::endl;
@@ -191,12 +193,12 @@ int test()
 
     Vector error(6);
 
-    error(0) = sqrt((errorsum(kine::pos) + errorsum(kine::pos+1) + errorsum(kine::pos+2))/(kmax-kinit-2));
-    error(1) = sqrt((errorsum(kine::linVel) + errorsum(kine::linVel+1) + errorsum(kine::linVel+2))/(kmax-kinit-2));
-    error(2) = sqrt((errorsum(kine::linAcc) + errorsum(kine::linAcc+1) + errorsum(kine::linAcc+2))/(kmax-kinit-2));
-    error(3) = sqrt((errorsum(kine::ori) + errorsum(kine::ori+1) + errorsum(kine::ori+2))/(kmax-kinit-2));
-    error(4) = sqrt((errorsum(kine::angVel) + errorsum(kine::angVel+1) + errorsum(kine::angVel+2))/(kmax-kinit-2));
-    error(5) = sqrt((errorsum(kine::angAcc) + errorsum(kine::angAcc+1) + errorsum(kine::angAcc+2))/(kmax-kinit-2));
+    error(0) = sqrt((errorsum(indexes::pos) + errorsum(indexes::pos+1) + errorsum(indexes::pos+2))/(kmax-kinit-2));
+    error(1) = sqrt((errorsum(indexes::linVel) + errorsum(indexes::linVel+1) + errorsum(indexes::linVel+2))/(kmax-kinit-2));
+    error(2) = sqrt((errorsum(indexes::linAcc) + errorsum(indexes::linAcc+1) + errorsum(indexes::linAcc+2))/(kmax-kinit-2));
+    error(3) = sqrt((errorsum(indexes::ori) + errorsum(indexes::ori+1) + errorsum(indexes::ori+2))/(kmax-kinit-2));
+    error(4) = sqrt((errorsum(indexes::angVel) + errorsum(indexes::angVel+1) + errorsum(indexes::angVel+2))/(kmax-kinit-2));
+    error(5) = sqrt((errorsum(indexes::angAcc) + errorsum(indexes::angAcc+1) + errorsum(indexes::angAcc+2))/(kmax-kinit-2));
 
     std::cout << "Mean computation time " << computeTime[0] <<std::endl;
 

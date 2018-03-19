@@ -9,6 +9,8 @@
 
 using namespace stateObservation;
 
+typedef kine::indexes<kine::rotationVector> indexes;
+
 
 int test()
 {
@@ -51,12 +53,12 @@ int test()
         AngleAxis aa(q);
 
         Vector Xi (Vector::Zero(stateSize,1));
-        Xi.segment(kine::pos,3) = pos;
-        Xi.segment(kine::ori,3) = aa.angle()*aa.axis();
-        Xi.segment(kine::linVel,3) = vel;
-        Xi.segment(kine::angVel,3) = oi;
-        Xi.segment(kine::linAcc,3) = acc;
-        Xi.segment(kine::angAcc,3) = odoti;
+        Xi.segment(indexes::pos,3) = pos;
+        Xi.segment(indexes::ori,3) = aa.angle()*aa.axis();
+        Xi.segment(indexes::linVel,3) = vel;
+        Xi.segment(indexes::angVel,3) = oi;
+        Xi.segment(indexes::linAcc,3) = acc;
+        Xi.segment(indexes::angAcc,3) = odoti;
         x.setValue(Xi,0);
 
 
@@ -94,12 +96,12 @@ int test()
                                                         contact, pos, vel, acc);
 
 
-            Xi.segment(kine::pos,3) = pos;
-            Xi.segment(kine::ori,3) = aa.angle()*aa.axis();
-            Xi.segment(kine::linVel,3) = vel;
-            Xi.segment(kine::angVel,3) = oi;
-            Xi.segment(kine::linAcc,3) = acc;
-            Xi.segment(kine::angAcc,3) = odoti;
+            Xi.segment(indexes::pos,3) = pos;
+            Xi.segment(indexes::ori,3) = aa.angle()*aa.axis();
+            Xi.segment(indexes::linVel,3) = vel;
+            Xi.segment(indexes::angVel,3) = oi;
+            Xi.segment(indexes::linAcc,3) = acc;
+            Xi.segment(indexes::angAcc,3) = odoti;
 
             x.setValue(Xi,i);
 
@@ -112,11 +114,11 @@ int test()
             accCtrl << 0.12*sin(0.018*i), 0.08*sin(0.035*i), 0.3*sin(0.027*i);
 
             Vector Ui (Vector::Zero(inputSize,1));
-            Ui.segment(kine::pos,3) = posCtrl;
-            Ui.segment(kine::ori,3) = aaCtrl.angle()*aaCtrl.axis();
-            Ui.segment(kine::linVel,3) = velCtrl;
-            Ui.segment(kine::angVel,3) = oCtrl;
-            Ui.segment(kine::linAcc,3) = accCtrl;
+            Ui.segment(indexes::pos,3) = posCtrl;
+            Ui.segment(indexes::ori,3) = aaCtrl.angle()*aaCtrl.axis();
+            Ui.segment(indexes::linVel,3) = velCtrl;
+            Ui.segment(indexes::angVel,3) = oCtrl;
+            Ui.segment(indexes::linAcc,3) = accCtrl;
             u.setValue(Ui,i);
 
             Quaternion newqImu(q*qCtrl);
@@ -131,10 +133,7 @@ int test()
             qImu = newqImu;
 
             Vector Ximu(Vector::Zero(10,1));
-            Ximu[0]=qImu.w();
-            Ximu[1]=qImu.x();
-            Ximu[2]=qImu.y();
-            Ximu[3]=qImu.z();
+            Ximu.head<4>()=qImu.coeffs();
             Ximu.segment(4,3)=accImu;
             Ximu.segment(7,3)=oImu;
 
@@ -179,7 +178,7 @@ int test()
         Vector3 g;
         {
             Matrix3 R;
-            Vector3 orientationV=Vector(x[i]).segment(kine::ori,3);
+            Vector3 orientationV=Vector(x[i]).segment(indexes::ori,3);
             double angle=orientationV.norm();
             if (angle > cst::epsilonAngle)
                 R = AngleAxis(angle, orientationV/angle).toRotationMatrix();
@@ -193,7 +192,7 @@ int test()
         {
             Matrix3 Rh;
 
-            Vector3 orientationV=Vector(xh[i]).segment(kine::ori,3);
+            Vector3 orientationV=Vector(xh[i]).segment(indexes::ori,3);
             double angle=orientationV.norm();
             if (angle > cst::epsilonAngle)
                 Rh = AngleAxis(angle, orientationV/angle).toRotationMatrix();

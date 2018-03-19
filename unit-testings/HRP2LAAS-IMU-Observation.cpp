@@ -48,6 +48,8 @@ IndexedVectorArray getMeasurements(const char * accelerometerSignal, const char 
 int test(const IndexedVectorArray & y)
 {
 
+    typedef kine::indexes<kine::rotationVector> indexes;
+
     std::cout << "Starting observation" <<std::endl;
 
     ///sampling period
@@ -81,7 +83,7 @@ int test(const IndexedVectorArray & y)
         Vector3 gh;
         Matrix3 Rh;
         {
-            Vector3 orientationV=Vector(xh[i]).segment(kine::ori,3);
+            Vector3 orientationV=Vector(xh[i]).segment(indexes::ori,3);
             double angle=orientationV.norm();
             if (angle > cst::epsilonAngle)
                 Rh = AngleAxis(angle, orientationV/angle).toRotationMatrix();

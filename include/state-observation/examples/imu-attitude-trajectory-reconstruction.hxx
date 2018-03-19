@@ -13,6 +13,8 @@ IndexedVectorArray imuAttitudeTrajectoryReconstruction
     const unsigned measurementSize=6;
     const unsigned inputSize=6;
 
+    typedef kine::indexes<kine::rotationVector> indexes;
+
     ///initialization of the extended Kalman filter
     ExtendedKalmanFilter filter(stateSize, measurementSize, inputSize, false);
 
@@ -63,8 +65,8 @@ IndexedVectorArray imuAttitudeTrajectoryReconstruction
         Vector xhk=filter.getEstimatedState(i);
 
         ///regulate the part of orientation vector in the state vector
-        xhk.segment(kine::ori,3)=kine::regulateOrientationVector
-                                                    (xhk.segment(kine::ori,3));
+        xhk.segment(indexes::ori,3)=kine::regulateOrientationVector
+                                                    (xhk.segment(indexes::ori,3));
 
         ///give the new value of the state to the kalman filter.
         ///This step is usually unnecessary, unless we modify the

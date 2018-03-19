@@ -74,6 +74,9 @@ namespace stateObservation
         virtual unsigned getMeasurementSize() const;
 
     protected:
+
+        typedef kine::indexes<kine::rotationVector> indexes;
+
         AccelerometerGyrometerMagnetometer sensor_;
 
         NoiseBase * processNoise_;

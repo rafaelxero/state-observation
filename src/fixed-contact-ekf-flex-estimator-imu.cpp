@@ -24,8 +24,8 @@ namespace flexibilityEstimation
 
         Vector dx = Matrix::Constant(getStateSize(),1,dxFactor);
 
-        dx.segment(kine::ori,3) = Vector3::Constant(1e-4) ;
-        dx.segment(kine::angVel,3) = Vector3::Constant(1e-4) ;
+        dx.segment(indexes::ori,3) = Vector3::Constant(1e-4) ;
+        dx.segment(indexes::angVel,3) = Vector3::Constant(1e-4) ;
 
         FixedContactEKFFlexEstimatorIMU::useFiniteDifferencesJacobians(dx);
 
@@ -57,19 +57,19 @@ namespace flexibilityEstimation
 
         Q_=ekf_.getQmatrixIdentity();
         Q_=Q_*1.e-8;
-        Q_.block(kine::linVel,kine::linVel,3,3)=Matrix3::Identity()*1.e-4;
-        Q_.block(kine::angVel,kine::angVel,3,3)=Matrix3::Identity()*1.e-4;
-        Q_.block(kine::linAcc,kine::linAcc,3,3)=Matrix3::Identity()*1.e-2;
-        Q_.block(kine::angAcc,kine::angAcc,3,3)=Matrix3::Identity()*1.e-2;
+        Q_.block(indexes::linVel,indexes::linVel,3,3)=Matrix3::Identity()*1.e-4;
+        Q_.block(indexes::angVel,indexes::angVel,3,3)=Matrix3::Identity()*1.e-4;
+        Q_.block(indexes::linAcc,indexes::linAcc,3,3)=Matrix3::Identity()*1.e-2;
+        Q_.block(indexes::angAcc,indexes::angAcc,3,3)=Matrix3::Identity()*1.e-2;
 
         ekf_.setQ(Q_);
 
         Matrix P0 (ekf_.getQmatrixIdentity());
         P0=P0*1e-2;
-        P0.block(kine::linVel,kine::linVel,3,3)=Matrix3::Identity()*1.e-2;
-        P0.block(kine::angVel,kine::angVel,3,3)=Matrix3::Identity()*1.e-2;
-        P0.block(kine::linAcc,kine::linAcc,3,3)=Matrix3::Identity()*1.e-2;
-        P0.block(kine::angAcc,kine::angAcc,3,3)=Matrix3::Identity()*1.e-2;
+        P0.block(indexes::linVel,indexes::linVel,3,3)=Matrix3::Identity()*1.e-2;
+        P0.block(indexes::angVel,indexes::angVel,3,3)=Matrix3::Identity()*1.e-2;
+        P0.block(indexes::linAcc,indexes::linAcc,3,3)=Matrix3::Identity()*1.e-2;
+        P0.block(indexes::angAcc,indexes::angAcc,3,3)=Matrix3::Identity()*1.e-2;
 
         ekf_.setStateCovariance(P0);
 
@@ -136,9 +136,9 @@ namespace flexibilityEstimation
 
             Vector x_s = ekf_.stateVectorZero();
 
-            x_s.segment(kine::pos,3)=x0.head(3);
+            x_s.segment(indexes::pos,3)=x0.head(3);
 
-            x_s.segment(kine::ori,3)=x0.tail(3);
+            x_s.segment(indexes::ori,3)=x0.tail(3);
 
             ekf_.setState(x_s,k_);
 
@@ -210,8 +210,8 @@ namespace flexibilityEstimation
         Vector v (getFlexibilityVector());
         Vector6 v2;
 
-        v2.head(3) = v.segment(kine::pos,3);
-        v2.tail(3) = v.segment(kine::ori,3);
+        v2.head(3) = v.segment(indexes::pos,3);
+        v2.tail(3) = v.segment(indexes::ori,3);
 
         return kine::vector6ToHomogeneousMatrix(v2);
     }
@@ -223,8 +223,8 @@ namespace flexibilityEstimation
             lastX_ =EKFFlexibilityEstimatorBase::getFlexibilityVector();
 
             ///regulate the part of orientation vector in the state vector
-            lastX_.segment(kine::ori,3)=
-                kine::regulateOrientationVector(lastX_.segment(kine::ori,3));
+            lastX_.segment(indexes::ori,3)=
+                kine::regulateOrientationVector(lastX_.segment(indexes::ori,3));
 
             ekf_.setState(lastX_,ekf_.getCurrentTime());
         }

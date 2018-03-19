@@ -16,6 +16,9 @@
 using namespace stateObservation;
 
 
+typedef kine::indexes<kine::rotationVector> indexes;
+
+
 double rotationMatrixFromContactsPositionKine(const Vector3 vLFootPos, const Vector3 vRFootPos, Matrix3& R )
 {
 Vector3 Vrl, axis, theta;
@@ -190,7 +193,7 @@ int test()
 
     /// State initialization
     Vector x0=(Vector::Zero(stateSize,1));
-    x0.segment(kine::pos,3) <<  0,
+    x0.segment(indexes::pos,3) <<  0,
                                 0,
                                 0;//-9.8*hrp2::m / (2*hrp2::linKe); // flexibility excited by the weight
 

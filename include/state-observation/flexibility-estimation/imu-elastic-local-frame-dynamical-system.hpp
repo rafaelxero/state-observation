@@ -84,50 +84,6 @@ namespace stateObservation
       };
 
 
-      /**
-     * \class  AccelerometerGyrometerAugmented
-     * \brief  Implements the accelerometer-gyrometer measurements,
-     *        the augmentation consists at concatenating the accelero-gyro
-     *        measurement to another vector.
-     *
-     *
-     *
-     * \details
-     *
-     */
-      class AccelerometerGyrometerAugmented : public AlgebraicSensor
-        {
-public:
-          AccelerometerGyrometerAugmented();
-
-          ///Virtual destructor
-          virtual ~AccelerometerGyrometerAugmented() {}
-
-          ///Gets the state vector Size
-          virtual unsigned getStateSize() const;
-
-          ///Gets the measurements vector size
-          virtual unsigned getMeasurementSize() const;
-
-          void setMatrixMode(bool matrixMode);
-
-          void setAugmentationSize(bool);
-
-protected:
-
-
-
-          stateObservation::AccelerometerGyrometer accgyr_;
-          virtual Vector computeNoiselessMeasurement_();
-
-          unsigned augmentation_;
-
-public:
-          EIGEN_MAKE_ALIGNED_OPERATOR_NEW
-
-        };
-
-
       typedef Eigen::LLT<Matrix3> LLTMatrix3;
 
       ///constructor

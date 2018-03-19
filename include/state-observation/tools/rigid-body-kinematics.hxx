@@ -355,6 +355,8 @@ namespace stateObservation
     (const IndexedVectorArray & positionOrientation,
      double dt)
     {
+      typedef kine::indexes<kine::rotationVector> indexes;
+
       Vector r(Vector::Zero(18,1));
 
       const IndexedVectorArray & po= positionOrientation;
@@ -370,8 +372,8 @@ namespace stateObservation
       {
         Vector poi = po[i];
 
-        r.segment(kine::pos,3) = poi.head(3);
-        r.segment(kine::ori,3) = poi.tail(3);
+        r.segment(indexes::pos,3) = poi.head(3);
+        r.segment(indexes::ori,3) = poi.tail(3);
         a.setValue(r,i);
       }
 
@@ -382,9 +384,9 @@ namespace stateObservation
         Vector poi = po[i];
         Vector poi1 = po[i+1];
 
-        r.segment(linVel,3)  = tools::derivate(Vector3(poi.head(3)),
+        r.segment(indexes::linVel,3)  = tools::derivate(Vector3(poi.head(3)),
                                                Vector3(poi1.head(3)), dt);
-        r.segment(angVel,3) = derivateRotationFD(
+        r.segment(indexes::angVel,3) = derivateRotationFD(
                                 Quaternion(rotationVectorToAngleAxis (poi.tail(3))),
                                 Quaternion(rotationVectorToAngleAxis (poi1.tail(3))),
                                 dt);
@@ -398,10 +400,10 @@ namespace stateObservation
         r = a[i];
         Vector r2 = a[i+1];
 
-        r.segment(linAcc,3) = tools::derivate(Vector3(r.segment(linVel,3)),
-                                              Vector3(r2.segment(linVel,3)), dt);
-        r.segment(angAcc,3) = tools::derivate(Vector3(r.segment(angVel,3)),
-                                              Vector3(r2.segment(angVel,3)), dt);
+        r.segment(indexes::linAcc,3) = tools::derivate(Vector3(r.segment(indexes::linVel,3)),
+                                              Vector3(r2.segment(indexes::linVel,3)), dt);
+        r.segment(indexes::angAcc,3) = tools::derivate(Vector3(r.segment(indexes::angVel,3)),
+                                              Vector3(r2.segment(indexes::angVel,3)), dt);
 
         a.setValue(r,i);
 
@@ -412,25 +414,26 @@ namespace stateObservation
 
     inline Vector invertState( const Vector & state)
     {
-      Matrix3 r2 = (rotationVectorToAngleAxis( - state.segment(kine::ori,3))).
+      typedef kine::indexes<kine::rotationVector> indexes;
+      Matrix3 r2 = (rotationVectorToAngleAxis( - state.segment(indexes::ori,3))).
                    toRotationMatrix();//inverse
-      Vector3 omega1 = state.segment(kine::angVel,3);
-      Vector3 omega1dot = state.segment(kine::angAcc,3);
+      Vector3 omega1 = state.segment(indexes::angVel,3);
+      Vector3 omega1dot = state.segment(indexes::angAcc,3);
       Matrix3 omega1x = skewSymmetric(omega1);
       Matrix3 omega1dotx = skewSymmetric(omega1dot);
 
-      Vector3 t1 = state.segment(kine::pos,3);
-      Vector3 t1dot = state.segment(kine::linVel,3);
-      Vector3 t1dotdot = state.segment(kine::linAcc,3);
+      Vector3 t1 = state.segment(indexes::pos,3);
+      Vector3 t1dot = state.segment(indexes::linVel,3);
+      Vector3 t1dotdot = state.segment(indexes::linAcc,3);
 
       Vector state2(Vector::Zero(18,1));
-      state2.segment(kine::pos,3)= - r2 * t1 ;   //t2
-      state2.segment(kine::linVel,3)= r2 * ( omega1x * t1 - t1dot); //t2dot
-      state2.segment(kine::linAcc,3)=  r2 * ( omega1x * (2 * t1dot - omega1x * t1)
+      state2.segment(indexes::pos,3)= - r2 * t1 ;   //t2
+      state2.segment(indexes::linVel,3)= r2 * ( omega1x * t1 - t1dot); //t2dot
+      state2.segment(indexes::linAcc,3)=  r2 * ( omega1x * (2 * t1dot - omega1x * t1)
                                               - t1dotdot + omega1dotx * t1); //t2dotdot
-      state2.segment(kine::ori,3)= -state.segment(kine::ori,3);   //thetaU2
-      state2.segment(kine::angVel,3)= -r2 * omega1; //omega2
-      state2.segment(kine::angAcc,3)=  r2 * (omega1x * omega1 - omega1dot); //omega2dot
+      state2.segment(indexes::ori,3)= -state.segment(indexes::ori,3);   //thetaU2
+      state2.segment(indexes::angVel,3)= -r2 * omega1; //omega2
+      state2.segment(indexes::angAcc,3)=  r2 * (omega1x * omega1 - omega1dot); //omega2dot
       return state2;
 
     }

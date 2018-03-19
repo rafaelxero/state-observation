@@ -98,7 +98,7 @@ namespace flexibilityEstimation
 
     protected:
 
-
+        typedef kine::indexes<kine::rotationVector> indexes;
 
         virtual void updateCovarianceMatrix_();
 
