@@ -365,6 +365,17 @@ namespace stateObservation
         return predictedMeasurement_=simulateSensor_(oc_.xbar,k);
     }
 
+
+    void KalmanFilterBase::setSumeFunction(void (* sum )(const  Vector& stateVector, const Vector& tangentVector, Vector& result))
+    {
+      sum_ = sum;
+    }
+
+    void KalmanFilterBase::setDifferenceFunction(void (* difference )(const  Vector& stateVector1, const Vector& stateVector2, Vector& difference))
+    {
+      difference_= difference;
+    }
+
     namespace detail
     {
 

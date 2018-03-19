@@ -30,13 +30,11 @@
 namespace stateObservation
 {
 
-      namespace detail
+    namespace detail
     {
-
       void defaultSum_(const  Vector& stateVector, const Vector& tangentVector, Vector& sum);
       void defaultDifference_(const  Vector& stateVector1, const Vector& stateVector2, Vector& difference);
     }
-
 
 
 /**
@@ -267,6 +265,11 @@ namespace stateObservation
 
         ///get the last Kalman gain matrix
         Matrix getLastGain() const;
+
+        ///set update functions for sum and difference for the state vector
+        /// (used for the case of multiplicative Kalman filter)
+        void setSumeFunction(void (* sum)(const  Vector& stateVector, const Vector& tangentVector, Vector& result));
+        void setDifferenceFunction(void (* difference)(const  Vector& stateVector1, const Vector& stateVector2, Vector& difference));
 
     protected:
 
