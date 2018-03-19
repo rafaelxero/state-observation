@@ -2,7 +2,7 @@
 #include <fstream>
 
 #include <state-observation/tools/definitions.hpp>
-#include <state-observation/tools/miscellaneous-algorithms.hpp>
+#include <state-observation/tools/rigid-body-kinematics.hpp>
 
 using namespace stateObservation;
 

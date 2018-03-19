@@ -19,86 +19,178 @@
 
 namespace stateObservation
 {
-  namespace algorithm
+  namespace kine
   {
+    inline void integrateKinematics(Vector3 & position, const Vector3 & velocity, double dt);
 
-    /**
-    * \class  RigidBodyKinematics
-    * \brief  Implements the integrator of the linear acceleration and the
-    *         rotation acceleration of any rigid body. The class is to be
-    *         privately derived to use the algorithm. The class does not store
-    *         any object.
-    *
-    *
-    */
+    inline void integrateKinematics(Vector3 & position, Vector3 & velocity,
+    const Vector3 & acceleration, double dt);
 
-    class RigidBodyKinematics
+    inline void integrateKinematics( Matrix3 & orientation, const Vector3 & rotationVelocity,
+    double dt);
+
+    inline void integrateKinematics( Matrix3 & orientation, Vector3 & rotationVelocity,
+    const Vector3 & rotationAcceleration, double dt);
+
+    inline void integrateKinematics( Quaternion & orientation, const Vector3 & rotationVelocity,
+    double dt);
+
+    inline void integrateKinematics( Quaternion & orientation, Vector3 & rotationVelocity,
+    const Vector3 & rotationAcceleration, double dt);
+
+
+    ///integrates the position/orientation and their time derivatives, given the
+    ///accelerations, and initial velocities and positions. The rotations are
+    ///expressed by rotation matrix
+    inline void integrateKinematics
+    (Vector3 & position, Vector3 & velocity, const Vector3 & acceleration,
+    Matrix3 & orientation, Vector3 & rotationVelocity,
+    const Vector3 & rotationAcceleration, double dt);
+
+    ///integrates the position/orientation and their time derivatives, given the
+    ///accelerations, and initial velocities and positions. The orientations are
+    ///expressed by quaternions
+    inline void integrateKinematics
+    (Vector3 & position, Vector3 & velocity, const Vector3 & acceleration,
+    Quaternion & orientation, Vector3 & rotationVelocity,
+    const Vector3 & rotationAcceleration, double dt);
+
+    ///integrates the postition/orientation given the velocities
+    inline void integrateKinematics(Vector3 & position, const Vector3 & velocity,
+    Matrix3 & orientation, const Vector3 & rotationVelocity, double dt);
+
+    ///integrates the postition/orientation given the velocities
+    inline void integrateKinematics(Vector3 & position, const Vector3 & velocity,
+    Quaternion & orientation, const Vector3 & rotationVelocity, double dt);
+
+
+
+
+    /// Puts the orientation vector norm between 0 and Pi if it
+    /// gets close to 2pi
+    inline Vector regulateOrientationVector(const Vector3 & v );
+
+    /// Transform the rotation vector into angle axis
+    inline AngleAxis rotationVectorToAngleAxis(const Vector3 & v);
+
+    /// Tranbsform the rotation vector into rotation matrix
+    inline Matrix3 rotationVectorToRotationMatrix(const Vector3 & v);
+
+    /// Tranbsform the rotation matrix into rotation vector
+    inline Vector3 rotationMatrixToRotationVector(const Matrix3 & R);
+
+    /// Tranbsform a quaternion into rotation vector
+    inline Vector3 quaternionToRotationVector(const Quaternion &q);
+
+    /// Tranbsform a quaternion into rotation vector
+    inline Vector3 quaternionToRotationVector(const Vector4 &v);
+
+    /// Transform the rotation matrix into roll pitch yaw
+    ///(decompose R into Ry*Rp*Rr)
+    inline Vector3 rotationMatrixToRollPitchYaw(const Matrix3 & R, Vector3 & v );
+
+    inline Vector3 rotationMatrixToRollPitchYaw(const Matrix3 & R);
+
+    /// Transform the roll pitch yaw into rotation matrix
+    ///( R = Ry*Rp*Rr)
+    inline Matrix3 rollPitchYawToRotationMatrix(double roll, double pitch, double yaw);
+
+    inline Matrix3 rollPitchYawToRotationMatrix(Vector3 rpy);
+
+    ///transform a 3d vector into a skew symmetric 3x3 matrix
+    inline Matrix3 skewSymmetric(const Vector3 & v, Matrix3 & R);
+
+    ///transform a 3d vector into a skew symmetric 3x3 matrix
+    inline Matrix3 skewSymmetric(const Vector3 & v);
+
+    ///transform a 3d vector into a squared skew symmetric 3x3 matrix
+    inline Matrix3 skewSymmetric2(const Vector3 & v, Matrix3 & R);
+
+    ///transform a 3d vector into a squared skew symmetric 3x3 matrix
+    inline Matrix3 skewSymmetric2(const Vector3 & v);
+
+    inline Matrix3 computeInertiaTensor(const Vector6 inputInertia, Matrix3& inertiaTensor);
+
+    ///transforms a homogeneous matrix into 6d vector (position theta mu)
+    inline Vector6 homogeneousMatrixToVector6(const Matrix4 & M);
+
+    ///transforms a 6d vector (position theta mu) into a homogeneous matrix
+    inline Matrix4 vector6ToHomogeneousMatrix(const Vector6 & v);
+
+    ///transforms a rotation into translation given a constraint of a fixed point
+    inline void fixedPointRotationToTranslation
+    (const Matrix3 & R, const Vector3 & rotationVelocity,
+     const Vector3 & rotationAcceleration, const Vector3 & fixedPoint,
+     Vector3 & outputTranslation, Vector3 & outputLinearVelocity,
+     Vector3 & outputLinearAcceleration);
+
+    ///derivates a quaternion using finite difference to get a angular velocity vector
+    inline Vector3 derivateRotationFD
+    (const Quaternion & q1, const Quaternion & q2, double dt);
+
+    ///derivates a quaternion using finite difference to get a angular velocity vector
+    inline Vector3 derivateRotationFD
+    (const Vector3 & o1, const Vector3 & o2, double dt);
+
+    inline Vector6 derivateHomogeneousMatrixFD
+    (const Matrix4 & m1, const Matrix4 & m2, double dt );
+
+    inline Vector6 derivatePoseThetaUFD
+    (const Vector6 & v1, const Vector6 & v2, double dt );
+
+    ///uses the derivation to reconstruct the velocities and accelerations given
+    ///trajectories in positions and orientations only
+    inline IndexedMatrixArray reconstructStateTrajectory
+    (const IndexedMatrixArray & positionOrientation,
+     double dt);
+
+    inline Vector invertState( const Vector & state);
+
+    inline Matrix4 invertHomoMatrix (Matrix4 m);
+
+    struct kinematics
+
     {
-    public:
-      RigidBodyKinematics()
+      struct Flags
       {
-#ifdef STATEOBSERVATION_VERBOUS_CONSTRUCTORS
-        std::cout<<std::endl<<"DynamicalSystemFunctorBase Constructor"<<std::endl;
-#endif //STATEOBSERVATION_VERBOUS_CONSTRUCTORS
-      }
+        typedef unsigned char byte;
+        static const byte position= BOOST_BINARY(0000001);
+        static const byte quaternion= BOOST_BINARY(0000010);
+        static const byte rotationMatrix= BOOST_BINARY(0000100);
+        static const byte linVel= BOOST_BINARY(0001000);
+        static const byte angVel= BOOST_BINARY(0010000);
+        static const byte linAcc= BOOST_BINARY(0100000);
+        static const byte angAcc= BOOST_BINARY(1000000);
 
-      inline void integrateKinematics(Vector3 & position, const Vector3 & velocity, double dt);
-
-      inline void integrateKinematics(Vector3 & position, Vector3 & velocity,
-                               const Vector3 & acceleration, double dt);
-
-      inline void integrateKinematics( Matrix3 & orientation, const Vector3 & rotationVelocity,
-                                double dt);
-
-      inline void integrateKinematics( Matrix3 & orientation, Vector3 & rotationVelocity,
-                                const Vector3 & rotationAcceleration, double dt);
-
-      inline void integrateKinematics( Quaternion & orientation, const Vector3 & rotationVelocity,
-                                double dt);
-
-      inline void integrateKinematics( Quaternion & orientation, Vector3 & rotationVelocity,
-                                const Vector3 & rotationAcceleration, double dt);
+        static const byte all= position | quaternion | rotationMatrix |
+        linVel | angVel | linAcc | angAcc;
+      };
 
 
-      ///integrates the position/orientation and their time derivatives, given the
-      ///accelerations, and initial velocities and positions. The rotations are
-      ///expressed by rotation matrix
-      inline void integrateKinematics
-      (Vector3 & position, Vector3 & velocity, const Vector3 & acceleration,
-       Matrix3 & orientation, Vector3 & rotationVelocity,
-       const Vector3 & rotationAcceleration, double dt);
+      CheckedVector3 position;
+      CheckedQuaternion orienation;
+      CheckedMatrix3 rotationMat;
 
-      ///integrates the position/orientation and their time derivatives, given the
-      ///accelerations, and initial velocities and positions. The orientations are
-      ///expressed by quaternions
-      inline void integrateKinematics
-      (Vector3 & position, Vector3 & velocity, const Vector3 & acceleration,
-       Quaternion & orientation, Vector3 & rotationVelocity,
-       const Vector3 & rotationAcceleration, double dt);
+      CheckedVector3 linVel;
+      CheckedVector3 angVel;
 
-      ///integrates the postition/orientation given the velocities
-      inline void integrateKinematics(Vector3 & position, const Vector3 & velocity,
-                                  Matrix3 & orientation, const Vector3 & rotationVelocity, double dt);
+      CheckedVector3 linAcc;
+      CheckedVector3 angAcc;
+
+      kinematics integrate(double dt, Flags::byte=Flags::all);
+
+      kinematics update(const kinematics & newValue, double dt, Flags::byte=Flags::all);
+
+      kinematics synchronizeRotations();
+
+      Vector3 rotateVector( const Vector3 & input);
+
 
       EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 
-    protected:
-      struct optimization
-      {
-        Matrix3 rotMat;
-        AngleAxis angAxis;
-        Vector3 vector3Vel;
-        Vector3 vector3Acc;
-
-        EIGEN_MAKE_ALIGNED_OPERATOR_NEW
-      } optRBKyn_;
-
-
-
-
-
-    private:
     };
+
+
   }
 }
 

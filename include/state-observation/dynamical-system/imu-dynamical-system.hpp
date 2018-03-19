@@ -30,8 +30,7 @@ namespace stateObservation
     *
     *
     */
-    class IMUDynamicalSystem : public DynamicalSystemFunctorBase,
-        protected algorithm::RigidBodyKinematics
+    class IMUDynamicalSystem : public DynamicalSystemFunctorBase
     {
     public:
         ///The constructor

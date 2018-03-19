@@ -36,7 +36,7 @@ namespace stateObservation
 
         Quaternion orientation=computeQuaternion_(orientationV);
 
-        integrateKinematics
+        kine::integrateKinematics
                 (position, velocity, acceleration, orientation, angularVelocity,
                         angularAcceleration, dt_);
 

@@ -40,7 +40,7 @@ namespace flexibilityEstimation
 
         Quaternion orientationFlex(computeQuaternion_(orientationFlexV));
 
-        integrateKinematics
+        kine::integrateKinematics
                 (positionFlex, velocityFlex, accelerationFlex, orientationFlex,
                  angularVelocityFlex, angularAccelerationFlex, dt_);
 

@@ -32,8 +32,7 @@ namespace stateObservation
     *
     *
     */
-    class IMUMagnetometerDynamicalSystem : public DynamicalSystemFunctorBase,
-        protected algorithm::RigidBodyKinematics
+    class IMUMagnetometerDynamicalSystem : public DynamicalSystemFunctorBase
     {
     public:
         ///The constructor

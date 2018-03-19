@@ -125,16 +125,17 @@ namespace stateObservation
 
         //prediction
         updateStateAndMeasurementPrediction();// runs also updatePrediction_();
-        oc_.pbar=q_;
-        oc_.pbar.noalias()  += a_*(pr_*a_.transpose());
+        oc_.pbar.noalias()=q_ +a_*(pr_*a_.transpose());
+
 
         //innovation Measurements
         oc_.inoMeas.noalias() = this->y_[k+1] - predictedMeasurement_;
         oc_.inoMeasCov.noalias() = r_ +  c_ * (oc_.pbar * c_.transpose());
 
+        unsigned &  measurementSize =m_;
         //inversing innovation measurement covariance matrix
         oc_.inoMeasCovLLT.compute(oc_.inoMeasCov);
-        oc_.inoMeasCovInverse.resize(getMeasureSize(),getMeasureSize());
+        oc_.inoMeasCovInverse.resize(measurementSize,measurementSize);
         oc_.inoMeasCovInverse.setIdentity();
         oc_.inoMeasCovLLT.matrixL().solveInPlace(oc_.inoMeasCovInverse);
         oc_.inoMeasCovLLT.matrixL().transpose().solveInPlace(oc_.inoMeasCovInverse);
@@ -164,17 +165,13 @@ namespace stateObservation
         std::cout <<"Xhat" <<std::endl<< oc_.xhat.transpose().format(CleanFmt)<<std::endl;
 #endif // VERBOUS_KALMANFILTER
 
-
-
         this->x_.set(oc_.xhat,k+1);
-        pr_ = -oc_.kGain*c_;
+        pr_.noalias() = -oc_.kGain*c_;
         pr_.diagonal().array()+=1;
         pr_ *= oc_.pbar;
 
         // simmetrize the pr_ matrix
-        oc_.t.noalias()=pr_;
-        oc_.t+=pr_.transpose();
-        pr_=0.5*oc_.t;
+        pr_=(pr_+pr_.transpose())*0.5;
 
         return oc_.xhat;
     }

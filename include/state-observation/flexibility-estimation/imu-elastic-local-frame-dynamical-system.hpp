@@ -35,8 +35,7 @@ namespace stateObservation
     *
     */
     class 	IMUElasticLocalFrameDynamicalSystem :
-      public stateObservation::DynamicalSystemFunctorBase,
-      protected stateObservation::algorithm::RigidBodyKinematics
+      public stateObservation::DynamicalSystemFunctorBase
     {
     public:
       struct input

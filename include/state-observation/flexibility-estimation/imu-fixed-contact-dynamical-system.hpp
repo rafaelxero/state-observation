@@ -32,8 +32,7 @@ namespace flexibilityEstimation
     *
     */
     class IMUFixedContactDynamicalSystem :
-        public stateObservation::DynamicalSystemFunctorBase,
-        protected stateObservation::algorithm::RigidBodyKinematics
+        public stateObservation::DynamicalSystemFunctorBase
     {
     public:
         ///constructor
