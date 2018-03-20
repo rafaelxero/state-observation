@@ -20,16 +20,15 @@ namespace stateObservation
     inline void integrateKinematics( Matrix3 & orientation, const Vector3 & rotationVelocityVector,
                                      double dt)
     {
-      orientation =  kine::rotationVectorToAngleAxis
-                                (rotationVelocityVector* dt).toRotationMatrix()
-                    * orientation;
+      orientation =  kine::rotationVectorToRotationMatrix
+                                (rotationVelocityVector* dt) * orientation;
     }
 
 
     inline void integrateKinematics( Matrix3 & orientation, Vector3 & rotationVelocityVector,
                                      const Vector3 & rotationVelocityVectorRate, double dt)
     {
-      orientation = kine::rotationVectorToAngleAxis (rotationVelocityVector*dt + 0.5 * dt * dt*rotationVelocityVectorRate).toRotationMatrix()
+      orientation = kine::rotationVectorToRotationMatrix (rotationVelocityVector*dt + 0.5 * dt * dt*rotationVelocityVectorRate)
                     * orientation;
 
       rotationVelocityVector += dt * rotationVelocityVectorRate;
@@ -39,16 +38,16 @@ namespace stateObservation
     inline void integrateKinematics( Quaternion & orientation, const Vector3 & rotationVelocityVector,
                                      double dt)
     {
-      orientation = Quaternion( kine::rotationVectorToAngleAxis
-                                (rotationVelocityVector* dt ))
+      orientation =  kine::rotationVectorToQuaternion
+                                (rotationVelocityVector* dt )
                     * orientation;
     }
 
     inline void integrateKinematics( Quaternion & orientation, Vector3 & rotationVelocityVector,
                                      const Vector3 & rotationVelocityVectorRate, double dt)
     {
-      orientation = Quaternion( kine::rotationVectorToAngleAxis
-                                (rotationVelocityVector* dt + 0.5  * dt * dt*rotationVelocityVectorRate ))
+      orientation = kine::rotationVectorToQuaternion
+                                (rotationVelocityVector* dt + 0.5  * dt * dt*rotationVelocityVectorRate )
                     * orientation;
 
       rotationVelocityVector.noalias()+= dt * rotationVelocityVectorRate;
@@ -122,6 +121,12 @@ namespace stateObservation
     inline Matrix3 rotationVectorToRotationMatrix(const Vector3 & v)
     {
       return (rotationVectorToAngleAxis(Vector3(v))).toRotationMatrix();
+    }
+
+    /// Tranbsform the rotation vector into rotation matrix
+    inline Quaternion rotationVectorToQuaternion(const Vector3 & v)
+    {
+      return Quaternion(rotationVectorToAngleAxis(Vector3(v)));
     }
 
     /// Tranbsform the rotation matrix into rotation vector

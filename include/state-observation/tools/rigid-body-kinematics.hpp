@@ -76,6 +76,9 @@ namespace stateObservation
     /// Tranbsform the rotation vector into rotation matrix
     inline Matrix3 rotationVectorToRotationMatrix(const Vector3 & v);
 
+    /// Tranbsform the rotation vector into quaternion
+    inline Quaternion rotationVectorToQuaternion(const Vector3 & v);
+
     /// Tranbsform the rotation matrix into rotation vector
     inline Vector3 rotationMatrixToRotationVector(const Matrix3 & R);
 
@@ -191,6 +194,10 @@ namespace stateObservation
       static const unsigned angAcc = 16;
       static const unsigned size = 19;
     };
+
+
+    ///relative tolereance to the square of quaternion norm.
+    const double quatNormTol = 1e-6;
 
 
 
