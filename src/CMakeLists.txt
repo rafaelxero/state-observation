@@ -56,6 +56,7 @@ ADD_LIBRARY(${LIBRARY_NAME}
   dynamical-system-functor-base.cpp
   dynamical-system-simulator.cpp
   imu-dynamical-system.cpp
+  imu-mltpctive-dynamical-system.cpp
   imu-magnetometer-dynamical-system.cpp
   flexibility-estimator-base.cpp
   ekf-flexibility-estimator-base.cpp

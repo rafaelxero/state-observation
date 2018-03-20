@@ -65,6 +65,7 @@ SET(${PROJECT_NAME}_HEADERS
   include/state-observation/dynamical-system/dynamical-system-functor-base.hpp
   include/state-observation/dynamical-system/dynamical-system-simulator.hpp
   include/state-observation/dynamical-system/imu-dynamical-system.hpp
+  include/state-observation/dynamical-system/imu-mltpctive-dynamical-system.hpp
   include/state-observation/dynamical-system/imu-magnetometer-dynamical-system.hpp
   include/state-observation/dynamical-system/bidim-elastic-inv-pendulum-dyn-sys.hpp
   include/state-observation/flexibility-estimation/flexibility-estimator-base.hpp
@@ -76,6 +77,8 @@ SET(${PROJECT_NAME}_HEADERS
   include/state-observation/flexibility-estimation/imu-elastic-local-frame-dynamical-system.hpp
   include/state-observation/examples/imu-attitude-trajectory-reconstruction.hpp
   include/state-observation/examples/imu-attitude-trajectory-reconstruction.hxx
+  include/state-observation/examples/imu-multiplicative-attitude-reconstruction.hpp
+  include/state-observation/examples/imu-multiplicative-attitude-reconstruction.hxx
   include/state-observation/examples/offline-ekf-flexibility-estimation.hpp
   include/state-observation/examples/offline-ekf-flexibility-estimation.hxx
   include/state-observation/examples/offline-model-base-flex-estimation.hpp
@@ -84,6 +87,8 @@ SET(${PROJECT_NAME}_HEADERS
 SET(CXX_DISABLE_WERROR TRUE)
 
 SETUP_PROJECT()
+
+SET(BOOST_COMPONENTS filesystem system thread program_options unit_test_framework timer)
 
 SEARCH_FOR_BOOST()
 SEARCH_FOR_EIGEN()
