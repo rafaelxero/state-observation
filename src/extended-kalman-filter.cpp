@@ -103,13 +103,14 @@ must set directInputOutputFeedthrough to 'false' in the constructor");
     }
 
     KalmanFilterBase::Amatrix// ExtendedKalmanFilter<n,m,p>::Amatrix does not work
-    ExtendedKalmanFilter::getAMatrixFD(const ObserverBase::StateVector
+    ExtendedKalmanFilter::getAMatrixFD(const Vector
                                        &dx)
     {
         TimeIndex k=this->x_.getTime();
-        opt.a_=getAmatrixZero();
+        opt.a_.resize(nt_,nt_);
         opt.xbar_=prediction_(k+1);
         opt.x_=this->x_();
+        opt.dx_.resize(nt_);
 
         if (p_>0)
         {
@@ -119,44 +120,54 @@ must set directInputOutputFeedthrough to 'false' in the constructor");
                 opt.u_=inputVectorZero();
         }
 
-        for (unsigned i=0;i<n_;++i)
+        for (unsigned i=0;i<nt_;++i)
         {
-            opt.x_[i]+=dx[i];
+
+            opt.dx_.setZero();
+            opt.dx_[i]=dx[i];
+
+            sum_(this->x_(),opt.dx_,opt.x_);
+
+
             opt.xp_=f_->stateDynamics(opt.x_,opt.u_,k);
 
-            opt.xp_-=opt.xbar_;
-            opt.xp_/=dx[i];
+            difference_(opt.xp_,opt.xbar_,opt.dx_);
 
-            opt.a_.col(i)=opt.xp_;
-            opt.x_[i]=this->x_()(i,0);
+            opt.dx_/=dx[i];
+
+            opt.a_.col(i)=opt.dx_;
         }
 
         return opt.a_;
     }
 
     KalmanFilterBase::Cmatrix
-    ExtendedKalmanFilter::getCMatrixFD(const ObserverBase::StateVector
-                                       &dx)
+    ExtendedKalmanFilter::getCMatrixFD(const Vector  &dx)
     {
         TimeIndex k=this->x_.getTime();
 
-        opt.c_.resize(m_,n_);
+        opt.c_.resize(m_,nt_);
 
         opt.xbar_=prediction_(k+1);
         opt.xp_ = opt.xbar_;
 
         opt.y_=predictSensor_(k+1);
 
-        for (unsigned i=0;i<n_;++i)
+        opt.dx_.resize(nt_);
+
+        for (unsigned i=0;i<nt_;++i)
         {
-            opt.xp_[i]+= dx[i];
+            opt.dx_.setZero();
+            opt.dx_[i]=dx[i];
+
+            sum_(opt.xbar_,opt.dx_,opt.xp_);
 
             opt.yp_=simulateSensor_(opt.xp_, k+1);
+
             opt.yp_-=opt.y_;
             opt.yp_/=dx[i];
 
             opt.c_.col(i)=opt.yp_;
-            opt.xp_[i]=opt.xbar_[i];
         }
 
         return opt.c_;

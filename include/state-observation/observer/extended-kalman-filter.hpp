@@ -94,12 +94,14 @@ namespace stateObservation
         ///Give an estimation of A matrix using
         ///finite difference method (the forward difference method)
         ///the parameter dx is the step vector for derivation
-        virtual Amatrix getAMatrixFD(const StateVector &dx);
+        /// it must have the size nt (tangent vector)
+        virtual Amatrix getAMatrixFD(const Vector &dx);
 
         ///Give an estimation of C matrix using
         ///finite difference method (the forward difference method)
         ///the parameter dx is the step vector for derivation
-        virtual Cmatrix getCMatrixFD(const StateVector &dx);
+        /// it must have the size nt (tangent vector)
+        virtual Cmatrix getCMatrixFD(const Vector &dx);
 
         /// Reset the extended kalman filter (call also the reset function of the dynamics functor)
         virtual void reset();
@@ -138,6 +140,7 @@ namespace stateObservation
           KalmanFilterBase::Cmatrix c_;
           ObserverBase::StateVector x_;
           ObserverBase::StateVector xbar_;
+          ObserverBase::StateVector dx_;
           ObserverBase::StateVector xp_;
           ObserverBase::MeasureVector y_;
           ObserverBase::MeasureVector yp_;

@@ -234,6 +234,13 @@ namespace stateObservation
         ///the containers for the matrices A, C, Q, P
         virtual void setStateSize(unsigned n);
 
+        /// Changes the dimension of the state vector:
+        /// n is the dimension of the state representation
+        /// and nt is the dimension of the tangent vector representation
+        ///resets the internal container for the state vector and
+        ///the containers for the matrices A, C, Q, P
+        virtual void setStateSize(unsigned n, unsigned nt);
+
         /// Changes the dimension of the measurement vector:
         ///resets the internal container for the measurement vectors and
         ///the containers for the matrices C, R

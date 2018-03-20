@@ -194,72 +194,72 @@ namespace stateObservation
 
     KalmanFilterBase::Amatrix KalmanFilterBase::getAmatrixConstant(double c) const
     {
-        return Amatrix::Constant(n_,n_,c);
+        return Amatrix::Constant(nt_,nt_,c);
     }
 
     KalmanFilterBase::Amatrix KalmanFilterBase::getAmatrixRandom() const
     {
-        return Amatrix::Random(n_,n_);
+        return Amatrix::Random(nt_,nt_);
     }
 
     KalmanFilterBase::Amatrix KalmanFilterBase::getAmatrixZero() const
     {
-        return Amatrix::Zero(n_,n_);
+        return Amatrix::Zero(nt_,nt_);
     }
 
     KalmanFilterBase::Amatrix KalmanFilterBase::getAmatrixIdentity() const
     {
-        return Amatrix::Identity(n_,n_);
+        return Amatrix::Identity(nt_,nt_);
     }
 
     bool KalmanFilterBase::checkAmatrix(const Amatrix & a) const
     {
-        return (unsigned(a.rows())==n_ && unsigned(a.cols())==n_);
+        return (unsigned(a.rows())==nt_ && unsigned(a.cols())==nt_);
     }
 
     KalmanFilterBase::Cmatrix KalmanFilterBase::getCmatrixConstant(double c) const
     {
-        return Cmatrix::Constant(m_,n_,c);
+        return Cmatrix::Constant(m_,nt_,c);
     }
 
     KalmanFilterBase::Cmatrix KalmanFilterBase::getCmatrixRandom() const
     {
-        return Cmatrix::Random(m_,n_);
+        return Cmatrix::Random(m_,nt_);
     }
 
     KalmanFilterBase::Cmatrix KalmanFilterBase::getCmatrixZero() const
     {
-        return Cmatrix::Zero(m_,n_);
+        return Cmatrix::Zero(m_,nt_);
     }
 
     bool KalmanFilterBase::checkCmatrix(const Cmatrix & a) const
     {
-        return (unsigned(a.rows())==m_ && unsigned(a.cols())==n_);
+        return (unsigned(a.rows())==m_ && unsigned(a.cols())==nt_);
     }
 
     KalmanFilterBase::Qmatrix KalmanFilterBase::getQmatrixConstant(double c) const
     {
-        return Qmatrix::Constant(n_,n_,c);
+        return Qmatrix::Constant(nt_,nt_,c);
     }
 
     KalmanFilterBase::Qmatrix KalmanFilterBase::getQmatrixRandom() const
     {
-        return Qmatrix::Random(n_,n_);
+        return Qmatrix::Random(nt_,nt_);
     }
 
     KalmanFilterBase::Qmatrix KalmanFilterBase::getQmatrixZero() const
     {
-        return Qmatrix::Zero(n_,n_);
+        return Qmatrix::Zero(nt_,nt_);
     }
 
     KalmanFilterBase::Qmatrix KalmanFilterBase::getQmatrixIdentity() const
     {
-        return Qmatrix::Identity(n_,n_);
+        return Qmatrix::Identity(nt_,nt_);
     }
 
     bool KalmanFilterBase::checkQmatrix(const Qmatrix & a) const
     {
-        return (unsigned(a.rows())==n_ && unsigned(a.cols())==n_);
+        return (unsigned(a.rows())==nt_ && unsigned(a.cols())==nt_);
     }
 
     KalmanFilterBase::Rmatrix KalmanFilterBase::getRmatrixConstant(double c) const
@@ -289,38 +289,58 @@ namespace stateObservation
 
     KalmanFilterBase::Pmatrix KalmanFilterBase::getPmatrixConstant(double c) const
     {
-        return Pmatrix::Constant(n_,n_,c);
+        return Pmatrix::Constant(nt_,nt_,c);
     }
 
     KalmanFilterBase::Pmatrix KalmanFilterBase::getPmatrixRandom() const
     {
-        return Pmatrix::Random(n_,n_);
+        return Pmatrix::Random(nt_,nt_);
     }
 
     KalmanFilterBase::Pmatrix KalmanFilterBase::getPmatrixZero() const
     {
-        return Pmatrix::Zero(n_,n_);
+        return Pmatrix::Zero(nt_,nt_);
     }
 
     KalmanFilterBase::Pmatrix KalmanFilterBase::getPmatrixIdentity() const
     {
-        return Pmatrix::Identity(n_,n_);
+        return Pmatrix::Identity(nt_,nt_);
     }
 
     bool KalmanFilterBase::checkPmatrix(const Pmatrix & a) const
     {
-        return (unsigned(a.rows())==n_ && unsigned(a.cols())==n_);
+        return (unsigned(a.rows())==nt_ && unsigned(a.cols())==nt_);
     }
 
     void KalmanFilterBase::setStateSize(unsigned n)
     {
-        if (n!=n_)
+        if ((n!=n_) || (nt_ !=n))
         {
             ZeroDelayObserver::setStateSize(n);
+
+            nt_=n;
+
             clearA();
             clearC();
             clearQ();
             clearStateCovariance();
+
+        }
+    }
+
+    void KalmanFilterBase::setStateSize(unsigned n, unsigned nt)
+    {
+        if ((n!=n_) || (nt_ !=nt))
+        {
+            ZeroDelayObserver::setStateSize(n);
+
+            nt_=nt;
+
+            clearA();
+            clearC();
+            clearQ();
+            clearStateCovariance();
+
         }
     }
 
