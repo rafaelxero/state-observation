@@ -60,6 +60,10 @@ namespace stateObservation
         ///Gets the dimension of the noise vector
         virtual unsigned getDimension() const;
 
+        ///set update functions for sum for a vector
+        /// (used in case of lie group vectors)
+        void setSumFunction(void (* sum)(const  Vector& stateVector, const Vector& tangentVector, Vector& result));
+
     protected:
         virtual void checkMatrix_(const Matrix & m) const ;
 
@@ -67,9 +71,16 @@ namespace stateObservation
 
         unsigned dim_;
 
+
+
         Matrix std_;
 
         Vector bias_;
+
+        Vector noisy_;
+
+        void (* sum_)(const  Vector& stateVector, const Vector& tangentVector, Vector& result);
+
 
     };
 

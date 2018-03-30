@@ -25,6 +25,8 @@ int test()
     IndexedVectorArray y;
     IndexedVectorArray u;
 
+    const unsigned measurementSize=6;
+
     ///The covariance matrix of the process noise and the measurement noise
     Matrix q;
     Matrix r;
@@ -33,7 +35,7 @@ int test()
 
         ///Sizes of the states for the state, the measurement, and the input vector
         const unsigned stateSize=18;
-        const unsigned measurementSize=6;
+
         //const unsigned inputSize=6;
         ///simulation of the signal
         /// the IMU dynamical system functor
@@ -100,26 +102,20 @@ int test()
     }
 
     const unsigned stateSize=19;
-    const unsigned measurementSize=6;
+    const unsigned stateTangentSize=18;
 
-    Matrix q1=Matrix::Identity(stateSize,stateSize)*0.001;
+    Matrix q1=Matrix::Identity(stateTangentSize,stateTangentSize)*0.001;
     q=q1*q1.transpose();
 
-    ///initialization of the extended Kalman filter
-    ExtendedKalmanFilter filter(stateSize, measurementSize, measurementSize, false);
 
     ///the initalization of a random estimation of the initial state
     Vector xh0=Vector::Random(stateSize,1)*3.14;
     xh0.segment<4>(indexes2::ori).normalize();
+//    xh0.segment<4>(indexes2::ori)=Quaternion::Identity().coeffs();
 
 
     ///computation and initialization of the covariance matrix of the initial state
-    Matrix p=Matrix::Zero(stateSize,stateSize);
-    for (unsigned i=0;i<filter.getStateSize();++i)
-    {
-        p(i,i)=xh0[i];
-    }
-    p=p*p.transpose();
+    Matrix p=Matrix::Identity(stateTangentSize,stateTangentSize);
 
 
     IndexedVectorArray xh = examples::imuMultiplicativeAttitudeReconstruction

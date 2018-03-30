@@ -166,7 +166,7 @@ namespace stateObservation
     difference.segment<3>(indexesTangent::linVel) = stateVector1.segment<3>(indexes::linVel) - stateVector2.segment<3>(indexes::linVel);
     difference.segment<3>(indexesTangent::linAcc) = stateVector1.segment<3>(indexes::linAcc) - stateVector2.segment<3>(indexes::linAcc);
 
-    difference.segment<3>(indexesTangent::ori) =  kine::quaternionToRotationVector(Quaternion(stateVector2.segment<4>(indexes::ori)).conjugate() * Quaternion(stateVector1.segment<4>(indexes::ori)));
+    difference.segment<3>(indexesTangent::ori) =  kine::quaternionToRotationVector( Quaternion(stateVector1.segment<4>(indexes::ori))*Quaternion(stateVector2.segment<4>(indexes::ori)).conjugate());
     difference.segment<3>(indexesTangent::angVel) = stateVector1.segment<3>(indexes::angVel) - stateVector2.segment<3>(indexes::angVel);
     difference.segment<3>(indexesTangent::angAcc) = stateVector1.segment<3>(indexes::angAcc) - stateVector2.segment<3>(indexes::angAcc);
   }

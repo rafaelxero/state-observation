@@ -64,7 +64,37 @@ namespace stateObservation
 #endif //STATEOBSERVATION_VERBOUS_CONSTRUCTOR
 
             if (p==0)
+            {
                 directInputOutputFeedthrough_=false;
+                directInputStateProcessFeedthrough_=false;
+            }
+        }
+
+        /// The constructor.
+        ///  \li n : size of the state vector
+        ///  \li nt: size of the state tengent vector representation (usually nt<=n)
+        ///  \li m : size of the measurements vector
+        ///  \li p : size of the input vector
+        ///  \li The parameter directInputOutputFeedthrough defines whether (true) or not (false) the measurement y_k requires the input u_k
+        ///  \li The parameter directInputStateProcessFeedthrough defines whether (true) or not (false) the state x_{k+1} requires the input u_k
+
+        ExtendedKalmanFilter(unsigned n, unsigned nt, unsigned  m, unsigned p,
+                bool directInputOutputFeedthrough=true,
+                bool directInputStateProcessFeedthrough=true)
+            :KalmanFilterBase(n,nt,m,p),
+            directInputOutputFeedthrough_(directInputOutputFeedthrough),
+            directInputStateProcessFeedthrough_(directInputStateProcessFeedthrough), f_(0x0)
+
+        {
+#ifdef STATEOBSERVATION_VERBOUS_CONSTRUCTORS
+            std::cout<<std::endl<<"ExtendedKalmanFilter Constructor"<<std::endl;
+#endif //STATEOBSERVATION_VERBOUS_CONSTRUCTOR
+
+            if (p==0)
+            {
+                directInputOutputFeedthrough_=false;
+                directInputStateProcessFeedthrough_=false;
+            }
         }
 
 

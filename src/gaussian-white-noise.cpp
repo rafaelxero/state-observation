@@ -11,12 +11,14 @@ namespace stateObservation
     GaussianWhiteNoise::GaussianWhiteNoise(unsigned dimension):
             dim_(dimension),
             std_(Matrix::Identity(dimension, dimension)),
-            bias_(Vector::Zero(dimension,1))
+            bias_(Vector::Zero(dimension,1)),
+            sum_(detail::defaultSum)
     {
     }
 
     GaussianWhiteNoise::GaussianWhiteNoise():
-            dim_(0)
+            dim_(0),
+            sum_(detail::defaultSum)
     {
     }
 
@@ -24,7 +26,9 @@ namespace stateObservation
     {
         checkVector_(v);
 
-        return v+tools::ProbabilityLawSimulation::getWGNoise(std_, bias_,dim_);
+        sum_(v,tools::ProbabilityLawSimulation::getWGNoise(std_, bias_,dim_),noisy_);
+
+        return noisy_;
 
     }
 
@@ -69,5 +73,10 @@ namespace stateObservation
     {
         (void)v;//avoid warning
         BOOST_ASSERT(unsigned(v.rows())==dim_ && unsigned(v.cols())==1 && "ERROR: Vector incorrecly dimemsioned");
+    }
+
+    void GaussianWhiteNoise::setSumFunction(void (* sum)(const  Vector& stateVector, const Vector& tangentVector, Vector& result))
+    {
+      sum_=sum;
     }
 }

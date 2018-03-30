@@ -33,7 +33,6 @@
 // basic file operations
 #include <fstream>
 
-
 namespace stateObservation
 {
   ///Dynamic sized scalar vector
@@ -147,6 +146,8 @@ namespace stateObservation
     extern const std::runtime_error defaultException;
     extern const std::exception* defaultExcepionAddr;
 
+    void defaultSum(const  Vector& stateVector, const Vector& tangentVector, Vector& sum);
+    void defaultDifference(const  Vector& stateVector1, const Vector& stateVector2, Vector& difference);
 
   }
 

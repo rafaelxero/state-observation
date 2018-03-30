@@ -14,24 +14,24 @@ namespace stateObservation
 
     KalmanFilterBase::KalmanFilterBase():
       nt_(0),
-      sum_(detail::defaultSum_),
-      difference_(detail::defaultDifference_)
+      sum_(detail::defaultSum),
+      difference_(detail::defaultDifference)
     {
     }
 
     KalmanFilterBase::KalmanFilterBase(unsigned n,unsigned m,unsigned p)
             :ZeroDelayObserver(n,m,p),
             nt_(n),
-            sum_(detail::defaultSum_),
-            difference_(detail::defaultDifference_)
+            sum_(detail::defaultSum),
+            difference_(detail::defaultDifference)
     {
     }
 
     KalmanFilterBase::KalmanFilterBase(unsigned n, unsigned nt, unsigned m,unsigned p)
             :ZeroDelayObserver(n,m,p),
             nt_(nt),
-            sum_(detail::defaultSum_),
-            difference_(detail::defaultDifference_)
+            sum_(detail::defaultSum),
+            difference_(detail::defaultDifference)
     {
     }
 
@@ -386,7 +386,7 @@ namespace stateObservation
     }
 
 
-    void KalmanFilterBase::setSumeFunction(void (* sum )(const  Vector& stateVector, const Vector& tangentVector, Vector& result))
+    void KalmanFilterBase::setSumFunction(void (* sum )(const  Vector& stateVector, const Vector& tangentVector, Vector& result))
     {
       sum_ = sum;
     }
@@ -396,17 +396,5 @@ namespace stateObservation
       difference_= difference;
     }
 
-    namespace detail
-    {
 
-      void defaultSum_(const  Vector& stateVector, const Vector& tangentVector, Vector& result)
-      {
-        result.noalias() = stateVector + tangentVector;
-      }
-
-      void defaultDifference_(const  Vector& stateVector1, const Vector& stateVector2, Vector& difference)
-      {
-        difference.noalias() = stateVector1 - stateVector2;
-      }
-    }
 }
