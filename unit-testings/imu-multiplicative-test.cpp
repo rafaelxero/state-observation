@@ -148,7 +148,7 @@ int test()
         Vector3 gh;
         {
             Matrix3 Rh;
-            Quaternion orientation(Vector(xh[i]).segment<4>(indexes2::ori,4));
+            Quaternion orientation(Vector(xh[i]).segment<4>(indexes2::ori));
             Rh = orientation.toRotationMatrix();
             gh=Rh.transpose()*Vector3::UnitZ();
             gh.normalize();
