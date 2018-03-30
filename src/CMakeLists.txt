@@ -66,6 +66,8 @@ ADD_LIBRARY(${LIBRARY_NAME}
   stable-imu-fixed-contact-dynamical-system.cpp
   imu-elastic-local-frame-dynamical-system.cpp
   bidim-elastic-inv-pendulum-dyn-sys.cpp
+  kinetics-observer.cpp
+  kinetics-dynamical-system.cpp
   ${${PROJECT_NAME}_ABSOLUTE_HEADERS}
   )
 
