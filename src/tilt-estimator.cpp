@@ -3,7 +3,7 @@
 namespace stateObservation
 {
 
-  TiltEstimator::TiltEstimator(float alpha, float beta)
+  TiltEstimator::TiltEstimator(double alpha, double beta)
     : ZeroDelayObserver(6, 6), alpha_(alpha), beta_(beta),
       p_S_C(Vector3::Zero()), R_S_C(Matrix3::Zero()), v_S_C(Vector3::Zero()), w_S_C(Vector3::Zero())
   {

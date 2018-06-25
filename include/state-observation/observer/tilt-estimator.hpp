@@ -36,15 +36,15 @@ namespace stateObservation
     ///  \li alpha : parameter related to the convergence of the opposite of the
     ///              linear velocity of the IMU expressed in the control frame
     ///  \li beta  : parameter related to the convergence of the tilt
-    TiltEstimator(float alpha, float beta);
+    TiltEstimator(double alpha, double beta);
 
-    void setAlpha(const float alpha) { alpha_ = alpha; }
+    void setAlpha(const double alpha) { alpha_ = alpha; }
     unsigned getAlpha() const { return alpha_; }
     
-    void setBeta(const float beta) { beta_ = beta; }
+    void setBeta(const double beta) { beta_ = beta; }
     unsigned getBeta() const { return beta_; }
 
-    void setSamplingTime(const float dt) { dt_ = dt; }
+    void setSamplingTime(const double dt) { dt_ = dt; }
     unsigned getSamplingTime() const { return dt_; }
 
     void setSensorPositionInC(const Vector3& p) { p_S_C = p; }
@@ -65,10 +65,10 @@ namespace stateObservation
 
     /// The parameters of the estimator chosen such that
     /// beta_ * gravityConstant < alpha_^2
-    float alpha_, beta_;
+    double alpha_, beta_;
 
     /// Sampling time
-    float dt_;
+    double dt_;
     
     /// Position of the IMU in the control frame
     Vector3 p_S_C;
