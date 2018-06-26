@@ -12,7 +12,7 @@ namespace stateObservation
   void TiltEstimator::setMeasurement(const Vector ya_k, const Vector yg_k, TimeIndex k)
   {
     ObserverBase::MeasureVector y_k;
-    y_k = ya_k, yg_k;
+    y_k << ya_k, yg_k;
 
     ZeroDelayObserver::setMeasurement(y_k, k);
   }
