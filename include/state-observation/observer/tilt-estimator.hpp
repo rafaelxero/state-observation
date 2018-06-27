@@ -59,7 +59,7 @@ namespace stateObservation
     void setSensorAngularVelocityInC(const Vector3& w) { w_S_C = w; }
     Vector3 getSensorAngularVelocityInC() { return w_S_C; }
     
-    void setMeasurement(const Vector ya_k, const Vector yg_k, TimeIndex k);
+    void setMeasurement(const Vector3 ya_k, const Vector3 yg_k, TimeIndex k);
     
   protected:
 

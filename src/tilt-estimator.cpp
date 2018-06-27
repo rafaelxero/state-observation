@@ -9,9 +9,9 @@ namespace stateObservation
   {
   }
   
-  void TiltEstimator::setMeasurement(const Vector ya_k, const Vector yg_k, TimeIndex k)
+  void TiltEstimator::setMeasurement(const Vector3 ya_k, const Vector3 yg_k, TimeIndex k)
   {
-    ObserverBase::MeasureVector y_k;
+    ObserverBase::MeasureVector y_k(6);
     y_k << ya_k, yg_k;
 
     ZeroDelayObserver::setMeasurement(y_k, k);
@@ -38,6 +38,8 @@ namespace stateObservation
     dx_hat.tail(3) = x2_hat.cross(y1 - beta_ * x2_hat.cross(x1 - x1_hat));
     
     x_hat += dx_hat * dt_;
+
+    x_hat.tail(3) /= x_hat.tail(3).norm();
     
     setState(x_hat, k+1);
     
