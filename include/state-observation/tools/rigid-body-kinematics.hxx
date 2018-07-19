@@ -162,19 +162,21 @@ namespace stateObservation
       /// source http://planning.cs.uiuc.edu/node102.html
       /// and http://planning.cs.uiuc.edu/node103.html
 
-      v<<atan2(R(2,1),R(2,2)),
-      atan2(-R(2,0),sqrt(tools::square(R(2,1))+tools::square(R(2,2)))),
-      atan2(R(1,0),R(0,0));
-      return v;
+//      v<<atan2(R(2,1),R(2,2)),
+//      atan2(-R(2,0),sqrt(tools::square(R(2,1))+tools::square(R(2,2)))),
+//      atan2(R(1,0),R(0,0));
+//      return v;
+
+        return v=rotationMatrixToRollPitchYaw(R);
     }
 
     inline Vector3 rotationMatrixToRollPitchYaw(const Matrix3 & R)
     {
-      /// source http://planning.cs.uiuc.edu/node102.html
-      /// and http://planning.cs.uiuc.edu/node103.html
-
-      Vector3 v;
-      return rotationMatrixToRollPitchYaw(R,v);
+      //      v<<atan2(R(2,1),R(2,2)),
+//      atan2(-R(2,0),sqrt(tools::square(R(2,1))+tools::square(R(2,2)))),
+//      atan2(R(1,0),R(0,0));
+//      return v;
+        return R.eulerAngles(2,1,0).reverse();
     }
 
     /// Transform the roll pitch yaw into rotation matrix
