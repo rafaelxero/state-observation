@@ -65,7 +65,6 @@ IndexedVectorArray imuMultiplicativeAttitudeReconstruction
 
     Matrix a = filter.getAmatrixIdentity();
 
-    a.diagonal().segment<6>(indexesTangent::linAcc).setZero();
     a.block<12,12>(0,indexesTangent::linVel).diagonal().setConstant(dt);
     a.block<6,6>(0,indexesTangent::linAcc).diagonal().setConstant(dt*dt*0.5);
 
