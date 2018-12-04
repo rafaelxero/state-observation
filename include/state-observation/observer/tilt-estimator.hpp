@@ -23,7 +23,7 @@ namespace stateObservation
 /**
   * \class  TiltEstimator
   * \brief
-  *        Description is pending
+  *         Description is pending
   *
   *
   *
@@ -33,19 +33,23 @@ namespace stateObservation
   public:
 
     /// The constructor
-    ///  \li alpha : parameter related to the convergence of the opposite of the
-    ///              linear velocity of the IMU expressed in the control frame
-    ///  \li beta  : parameter related to the convergence of the tilt
-    TiltEstimator(double alpha, double beta);
+    ///  \li alpha : parameter related to the convergence of the linear velocity
+    ///              of the IMU expressed in the control frame
+    ///  \li beta  : parameter related to the fast convergence of the tilt
+    ///  \li gamma : parameter related to the orthogonality
+    TiltEstimator(double alpha, double beta, double gamma);
 
     void setAlpha(const double alpha) { alpha_ = alpha; }
-    unsigned getAlpha() const { return alpha_; }
+    double getAlpha() const { return alpha_; }
     
     void setBeta(const double beta) { beta_ = beta; }
-    unsigned getBeta() const { return beta_; }
+    double getBeta() const { return beta_; }
 
+    void setGamma(const double gamma) { gamma_ = gamma; }
+    double getGamma() const { return gamma_; }
+    
     void setSamplingTime(const double dt) { dt_ = dt; }
-    unsigned getSamplingTime() const { return dt_; }
+    double getSamplingTime() const { return dt_; }
 
     void setSensorPositionInC(const Vector3& p) { p_S_C = p; }
     Vector3 getSensorPositionInC() { return p_S_C; }
@@ -63,9 +67,8 @@ namespace stateObservation
     
   protected:
 
-    /// The parameters of the estimator chosen such that
-    /// beta_ * gravityConstant < alpha_^2
-    double alpha_, beta_;
+    /// The parameters of the estimator
+    double alpha_, beta_, gamma_;
 
     /// Sampling time
     double dt_;
