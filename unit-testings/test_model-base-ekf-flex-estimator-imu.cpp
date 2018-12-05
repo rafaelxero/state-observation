@@ -143,7 +143,7 @@ int test()
     flexibility.resize(18);
     Vector xdifference(flexibility);
 
-    SimplestStopwatch stopwatch;
+    tools::SimplestStopwatch stopwatch;
     IndexedMatrixArray computationTime_output;
     double computationTime_moy=0;
     Vector computeTime;

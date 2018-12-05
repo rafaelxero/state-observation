@@ -416,15 +416,33 @@ namespace stateObservation
   typedef boost::timer::cpu_timer cpu_timer;
   typedef boost::timer::cpu_timer cpu_times;
 
-  struct SimplestStopwatch
+  namespace tools
   {
-    inline void start();
-    inline double stop();
+    struct SimplestStopwatch
+    {
+      inline void start();
 
-    inline double diff(const timespec & start, const timespec & end);
+      ///provides the time since the start
+      ///the value is in nanoseconds
+      inline double stop();
 
-    timespec time1, time2, time3;
-  };
+      inline double diff(const timespec & start, const timespec & end);
+
+      timespec time1, time2, time3;
+    };
+
+
+      std::string matrixToString(const Matrix& mat);
+
+      std::string vectorToString(const Vector& v);
+
+      Matrix stringToMatrix(const std::string& str, unsigned rows, unsigned cols);
+
+      Vector stringToVector(const std::string& str, unsigned length);
+
+      Vector stringToVector(const std::string& str);
+  }
+
 
 #include <state-observation/tools/definitions.hxx>
 }
