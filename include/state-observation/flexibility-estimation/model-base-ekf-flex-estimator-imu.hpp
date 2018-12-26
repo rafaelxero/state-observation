@@ -130,6 +130,7 @@ namespace flexibilityEstimation
         virtual unsigned getMeasurementSize() const ;
 
         virtual unsigned getStateSize() const ;
+        static unsigned staticGetStateSize();
 
         virtual unsigned getInputSize() const ;
 

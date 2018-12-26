@@ -311,10 +311,16 @@ namespace stateObservation
       ekf_.setR(R_);
     }
 
+    unsigned ModelBaseEKFFlexEstimatorIMU::staticGetStateSize()
+    {
+      return stateSize;
+    }
+
     unsigned ModelBaseEKFFlexEstimatorIMU::getStateSize() const
     {
-      return ekf_.getStateSize();
+      return stateSize;
     }
+
 
     unsigned ModelBaseEKFFlexEstimatorIMU::getInputSize() const
     {
