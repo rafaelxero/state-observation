@@ -396,6 +396,12 @@ void IndexedMatrixArrayT<MatrixType>::truncateBefore(TimeIndex time)
 }
 
 template <typename MatrixType>
+void IndexedMatrixArrayT<MatrixType>::readFromFile(const std::string & filename, size_t rows, size_t cols, bool withTimeStamp)
+{
+  readFromFile(filename.c_str(),rows, cols, withTimeStamp);
+}
+
+template <typename MatrixType>
 void IndexedMatrixArrayT<MatrixType>::readFromFile(const char * filename, size_t rows, size_t cols, bool withTimeStamp)
 {
   reset();
@@ -439,6 +445,12 @@ void IndexedMatrixArrayT<MatrixType>::readFromFile(const char * filename, size_t
       }
     }
   }
+}
+
+template <typename MatrixType>
+void IndexedMatrixArrayT<MatrixType>::readVectorsFromFile(const std::string & filename, bool withTimeStamp )
+{
+  readVectorsFromFile(filename.c_str(),withTimeStamp);
 }
 
 template <typename MatrixType>

@@ -38,6 +38,9 @@ namespace stateObservation
   ///Dynamic sized scalar vector
   typedef Eigen::VectorXd Vector;
 
+  ///1D Vector
+  typedef Eigen::Matrix<double,1,1> Vector1;
+
   ///3D vector
   typedef Eigen::Vector3d Vector3;
 
@@ -349,11 +352,13 @@ namespace stateObservation
     ///row by row
     ///WARNING: this resets the array
     void readFromFile(const char * filename, size_t rows, size_t cols=1, bool withTimeStamp = true);
+    void readFromFile(const std::string &  filename, size_t rows, size_t cols=1, bool withTimeStamp = true);
 
     ///gets the array from a file
     ///the line starts with the time index and then every line of the file
     /// is converted into a vector
     ///WARNING: this resets the array
+    void readVectorsFromFile(const std::string &  filename, bool withTimeStamp = true );
     void readVectorsFromFile(const char * filename, bool withTimeStamp = true );
 
     ///write the array in a a file
