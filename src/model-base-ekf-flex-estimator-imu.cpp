@@ -388,13 +388,6 @@ namespace stateObservation
             }
 
 
-            ///regulate the part of orientation vector in the state vector
-            ///temporary code
-            contactPositions_.clear();
-            for (unsigned j = 0; j<functor_.getContactsNumber() ; ++j)
-            {
-              contactPositions_.push_back(getInput().segment<3>(42 + 12*i));
-            }
             ekf_.getEstimatedState(i);
 
           }
