@@ -67,8 +67,6 @@ namespace stateObservation
 
     }
 
-
-
     ModelBaseEKFFlexEstimatorIMU::~ModelBaseEKFFlexEstimatorIMU()
     {
       //dtor
@@ -292,7 +290,6 @@ namespace stateObservation
             }
           }
         }
-
 
         if(withAbsolutePos_)
         {

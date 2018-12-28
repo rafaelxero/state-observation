@@ -432,15 +432,15 @@ namespace stateObservation
     };
 
 
-      std::string matrixToString(const Matrix& mat);
+    std::string matrixToString(const Matrix& mat);
 
-      std::string vectorToString(const Vector& v);
+    std::string vectorToString(const Vector& v);
 
-      Matrix stringToMatrix(const std::string& str, unsigned rows, unsigned cols);
+    Matrix stringToMatrix(const std::string& str, unsigned rows, unsigned cols);
 
-      Vector stringToVector(const std::string& str, unsigned length);
+    Vector stringToVector(const std::string& str, unsigned length);
 
-      Vector stringToVector(const std::string& str);
+    Vector stringToVector(const std::string& str);
   }
 
 
