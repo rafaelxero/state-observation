@@ -325,11 +325,6 @@ namespace stateObservation
       ekf_.setR(R_);
     }
 
-    unsigned ModelBaseEKFFlexEstimatorIMU::staticGetStateSize()
-    {
-      return stateSize;
-    }
-
     unsigned ModelBaseEKFFlexEstimatorIMU::getStateSize() const
     {
       return stateSize;
@@ -646,6 +641,5 @@ namespace stateObservation
     {
       functor_.setRobotMass(m);
     }
-
   }
 }
