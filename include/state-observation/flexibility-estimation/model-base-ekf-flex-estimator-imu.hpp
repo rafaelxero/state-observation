@@ -238,6 +238,10 @@ namespace flexibilityEstimation
             return limitOn_;
         }
 
+        static Matrix getDefaultQ();
+
+        static Matrix6 getDefaultRIMU();
+
         EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 
     protected:
@@ -279,7 +283,6 @@ namespace flexibilityEstimation
             stateObservation::Matrix O;
             stateObservation::Matrix CA;
         }op_;
-        std::vector<Vector3, Eigen::aligned_allocator<Vector3> > contactPositions_;
 
     private:
     };

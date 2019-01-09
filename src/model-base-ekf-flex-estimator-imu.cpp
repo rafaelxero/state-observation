@@ -67,37 +67,52 @@ namespace stateObservation
 
     }
 
-
-
     ModelBaseEKFFlexEstimatorIMU::~ModelBaseEKFFlexEstimatorIMU()
     {
       //dtor
     }
 
+    Matrix ModelBaseEKFFlexEstimatorIMU::getDefaultQ()
+    {
+      Matrix Q=Matrix::Identity(stateSize,stateSize);
+
+      Q.block(state::pos,state::pos,3,3)=Matrix3::Identity()*1.e-8;
+      Q.block(state::ori,state::ori,3,3)=Matrix3::Identity()*1.e-8;
+      Q.block(state::linVel,state::linVel,3,3)=Matrix3::Identity()*1.e-8;
+      Q.block(state::angVel,state::angVel,3,3)=Matrix3::Identity()*1.e-8;
+
+      Q.block(state::fc,state::fc,3,3)=Matrix3::Identity()*1.e-4;
+      Q.block(state::fc+3,state::fc+3,3,3)=Matrix3::Identity()*1.e-4;
+      Q.block(state::fc+6,state::fc+6,3,3)=Matrix3::Identity()*1.e-4;
+      Q.block(state::fc+6+3,state::fc+6+3,3,3)=Matrix3::Identity()*1.e-4;
+
+      return Q;
+    }
+
+    Matrix6 ModelBaseEKFFlexEstimatorIMU::getDefaultRIMU()
+    {
+      Matrix6 R;
+
+      R.block<3,3>(0,0)=Matrix3::Identity()*1.e-6;//accelerometer
+      R.block<3,3>(3,3)=Matrix3::Identity()*1.e-6;//gyrometer
+
+      return R;
+    }
+
     void ModelBaseEKFFlexEstimatorIMU::resetCovarianceMatrices()
     {
 
-//            std::cout << "\n\n\n ============> RESET COVARIANCE MATRIX <=============== \n\n\n" << std::endl;
+/////// std::cout << "\n\n\n ============> RESET COVARIANCE MATRIX <=============== \n\n\n" << std::endl;
 
       R_=Matrix::Identity(getMeasurementSize(),getMeasurementSize());
-      R_.block(0,0,3,3)=Matrix3::Identity()*1.e-6;//accelerometer
-      R_.block(3,3,3,3)=Matrix3::Identity()*1.e-6;//gyrometer
+      R_.block<6,6>(0,0)=getDefaultRIMU();
 
       updateMeasurementCovarianceMatrix_();
       stateObservation::Matrix m;
       m.resize(6,6);
       m.setIdentity();
-      Q_=ekf_.getQmatrixIdentity();
 
-      Q_.block(state::pos,state::pos,3,3)=Matrix3::Identity()*1.e-8;
-      Q_.block(state::ori,state::ori,3,3)=Matrix3::Identity()*1.e-8;
-      Q_.block(state::linVel,state::linVel,3,3)=Matrix3::Identity()*1.e-8;
-      Q_.block(state::angVel,state::angVel,3,3)=Matrix3::Identity()*1.e-8;
-
-      Q_.block(state::fc,state::fc,3,3)=Matrix3::Identity()*1.e-4;
-      Q_.block(state::fc+3,state::fc+3,3,3)=Matrix3::Identity()*1.e-4;
-      Q_.block(state::fc+6,state::fc+6,3,3)=Matrix3::Identity()*1.e-4;
-      Q_.block(state::fc+6+3,state::fc+6+3,3,3)=Matrix3::Identity()*1.e-4;
+      Q_=getDefaultQ();
 
       if(withUnmodeledForces_)
         Q_.block(state::unmodeledForces,state::unmodeledForces,6,6)=Matrix6::Identity()*m*1.e-2;
@@ -293,7 +308,6 @@ namespace stateObservation
           }
         }
 
-
         if(withAbsolutePos_)
         {
           if (realIndex < currIndex + 6)
@@ -313,8 +327,9 @@ namespace stateObservation
 
     unsigned ModelBaseEKFFlexEstimatorIMU::getStateSize() const
     {
-      return ekf_.getStateSize();
+      return stateSize;
     }
+
 
     unsigned ModelBaseEKFFlexEstimatorIMU::getInputSize() const
     {
@@ -382,13 +397,6 @@ namespace stateObservation
             }
 
 
-            ///regulate the part of orientation vector in the state vector
-            ///temporary code
-            contactPositions_.clear();
-            for (unsigned j = 0; j<functor_.getContactsNumber() ; ++j)
-            {
-              contactPositions_.push_back(getInput().segment<3>(42 + 12*i));
-            }
             ekf_.getEstimatedState(i);
 
           }
@@ -633,6 +641,5 @@ namespace stateObservation
     {
       functor_.setRobotMass(m);
     }
-
   }
 }

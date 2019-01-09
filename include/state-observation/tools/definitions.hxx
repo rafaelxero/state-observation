@@ -300,7 +300,7 @@ void IndexedMatrixArrayT<MatrixType>::clear()
 template <typename MatrixType>
 inline bool IndexedMatrixArrayT<MatrixType>::checkIndex(TimeIndex time) const
 {
-    return (v_.size()>0 && k_<=time && k_+v_.size() > time);
+    return (v_.size()>0 && k_<=time && TimeIndex(k_+v_.size()) > time);
 }
 
 ///Checks whether the matrix is set or not (assert)
@@ -324,7 +324,7 @@ template <typename MatrixType>
 inline void IndexedMatrixArrayT<MatrixType>::checkNext_(TimeIndex time)const
 {
     (void)time;//avoid warning
-    BOOST_ASSERT( (v_.size()==0 || k_+v_.size() == time )&&
+    BOOST_ASSERT( (v_.size()==0 || TimeIndex(k_+v_.size()) == time )&&
                   "Error: New time instants must be consecutive to existing ones");
 }
 
@@ -396,6 +396,12 @@ void IndexedMatrixArrayT<MatrixType>::truncateBefore(TimeIndex time)
 }
 
 template <typename MatrixType>
+void IndexedMatrixArrayT<MatrixType>::readFromFile(const std::string & filename, size_t rows, size_t cols, bool withTimeStamp)
+{
+  readFromFile(filename.c_str(),rows, cols, withTimeStamp);
+}
+
+template <typename MatrixType>
 void IndexedMatrixArrayT<MatrixType>::readFromFile(const char * filename, size_t rows, size_t cols, bool withTimeStamp)
 {
   reset();
@@ -439,6 +445,12 @@ void IndexedMatrixArrayT<MatrixType>::readFromFile(const char * filename, size_t
       }
     }
   }
+}
+
+template <typename MatrixType>
+void IndexedMatrixArrayT<MatrixType>::readVectorsFromFile(const std::string & filename, bool withTimeStamp )
+{
+  readVectorsFromFile(filename.c_str(),withTimeStamp);
 }
 
 template <typename MatrixType>
@@ -562,23 +574,26 @@ void IndexedMatrixArrayT<MatrixType>::writeInFile(const char * filename, bool cl
 
 }
 
-
-inline void SimplestStopwatch::start()
+namespace tools
 {
-  clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &time1);
-  clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &time2);
-}
 
-inline double SimplestStopwatch::stop()
-{
-  clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &time3);
+  inline void SimplestStopwatch::start()
+  {
+    clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &time1);
+    clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &time2);
+  }
 
-  return diff(time2,time3)-diff(time1,time2);
-}
+  inline double SimplestStopwatch::stop()
+  {
+    clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &time3);
 
-double SimplestStopwatch::diff(const timespec & start, const timespec & end)
-{
-  return 1e9*double(end.tv_sec-start.tv_sec) + double(end.tv_nsec - start.tv_nsec);
+    return diff(time2,time3)-diff(time1,time2);
+  }
+
+  double SimplestStopwatch::diff(const timespec & start, const timespec & end)
+  {
+    return 1e9*double(end.tv_sec-start.tv_sec) + double(end.tv_nsec - start.tv_nsec);
+  }
 }
 
 

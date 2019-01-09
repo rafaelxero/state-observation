@@ -141,23 +141,18 @@ stateObservation::IndexedVectorArray offlineModelBaseFlexEstimation(
 
           if (verbose > 3)
           {
-
             std::cout << "numberOfContacts: " << numberOfContacts[i].transpose() << std::endl;
             std::cout << "Measurement: " << y[i].transpose() << std::endl;
             std::cout << "Input: " << u[i].transpose() << std::endl;
-
           }
         }
       }
-
-
     }
 
     ///introduction of the measurement
     estimator.setMeasurement(Vector(y[i]).head(estimator.getMeasurementSize()));
 
     estimator.setMeasurementInput(u[i]);
-
 
     ///initialize flexibility
     if (customQ)
@@ -170,11 +165,8 @@ stateObservation::IndexedVectorArray offlineModelBaseFlexEstimation(
       estimator.setMeasurementNoiseCovariance(R[i]);
     }
 
-
     ///get the estimation and give it to the array
     Vector xhk=estimator.getFlexibilityVector();
-
-
 
     xh.pushBack(xhk);
 
