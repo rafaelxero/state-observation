@@ -40,7 +40,7 @@ namespace stateObservation
     
     x_hat += dx_hat * dt_;
 
-    x_hat.tail(3) /= x_hat.tail(3).norm();
+    x_hat.tail<3>() /= x_hat.tail<3>().norm();
     
     setState(x_hat, k+1);
     
