@@ -24,7 +24,7 @@ namespace stateObservation
     BOOST_ASSERT(this->y_.size() > 0 && this->y_.checkIndex(k+1) && "ERROR: The measurement vector is not set");
 
     Vector3 ya = getMeasurement(k+1).head<3>();
-    Vector3 yg = getMeasurement(k+1).tail(3);
+    Vector3 yg = getMeasurement(k+1).tail<3>();
     
     Vector3 x1 = R_S_C.transpose() * (v_C + v_S_C) + (yg - R_S_C.transpose() * w_S_C).cross(R_S_C.transpose() * p_S_C);
 
