@@ -62,6 +62,9 @@ namespace stateObservation
     
     void setSensorAngularVelocityInC(const Vector3& w) { w_S_C = w; }
     Vector3 getSensorAngularVelocityInC() { return w_S_C; }
+
+    void setControlOriginVelocityInW(const Vector3& v) { v_C = v; }
+    Vector3 getControlOriginVelocityInW() { return v_C; }
     
     void setMeasurement(const Vector3 ya_k, const Vector3 yg_k, TimeIndex k);
     
@@ -84,6 +87,9 @@ namespace stateObservation
 
     /// Angular velocity of the IMU in the control frame
     Vector3 w_S_C;
+
+    /// Linear velocity of the control frame
+    Vector3 v_C;
     
     /// The tilt estimator loop
     StateVector oneStepEstimation_();

@@ -5,7 +5,7 @@ namespace stateObservation
 
   TiltEstimator::TiltEstimator(double alpha, double beta, double gamma)
     : ZeroDelayObserver(9, 6), alpha_(alpha), beta_(beta), gamma_(gamma),
-      p_S_C(Vector3::Zero()), R_S_C(Matrix3::Identity()), v_S_C(Vector3::Zero()), w_S_C(Vector3::Zero())
+      p_S_C(Vector3::Zero()), R_S_C(Matrix3::Identity()), v_S_C(Vector3::Zero()), w_S_C(Vector3::Zero()), v_C(Vector3::Zero())
   {
   }
   
@@ -26,7 +26,7 @@ namespace stateObservation
     Vector3 ya = getMeasurement(k+1).head(3);
     Vector3 yg = getMeasurement(k+1).tail(3);
     
-    Vector3 x1 = R_S_C.transpose() * v_S_C + (yg - R_S_C.transpose() * w_S_C).cross(R_S_C.transpose() * p_S_C);
+    Vector3 x1 = R_S_C.transpose() * (v_C + v_S_C) + (yg - R_S_C.transpose() * w_S_C).cross(R_S_C.transpose() * p_S_C);
 
     ObserverBase::StateVector x_hat = getEstimatedState(k);
     Vector3 x1_hat = x_hat.segment(0, 3);
