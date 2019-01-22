@@ -29,7 +29,7 @@ namespace stateObservation
     Vector3 x1 = R_S_C.transpose() * (v_C + v_S_C) + (yg - R_S_C.transpose() * w_S_C).cross(R_S_C.transpose() * p_S_C);
 
     ObserverBase::StateVector x_hat = getEstimatedState(k);
-    Vector3 x1_hat = x_hat.segment(0, 3);
+    Vector3 x1_hat = x_hat.segment<3>(0);
     Vector3 x2_hat_prime = x_hat.segment(3, 3);
     Vector3 x2_hat = x_hat.segment(6, 3);
     
