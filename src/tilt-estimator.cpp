@@ -35,7 +35,7 @@ namespace stateObservation
     
     Vector dx_hat(9);
     dx_hat.segment<3>(0) = x1_hat.cross(yg) - cst::gravityConstant * x2_hat_prime + ya + alpha_ * (x1 - x1_hat);
-    dx_hat.segment(3, 3) = x2_hat_prime.cross(yg) - beta_ * (x1 - x1_hat);
+    dx_hat.segment<3>(3) = x2_hat_prime.cross(yg) - beta_ * (x1 - x1_hat);
     dx_hat.segment(6, 3) = x2_hat.cross(yg - gamma_ * x2_hat.cross(x2_hat_prime));
     
     x_hat += dx_hat * dt_;
