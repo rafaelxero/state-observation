@@ -31,7 +31,7 @@ namespace stateObservation
     ObserverBase::StateVector x_hat = getEstimatedState(k);
     Vector3 x1_hat = x_hat.segment<3>(0);
     Vector3 x2_hat_prime = x_hat.segment<3>(3);
-    Vector3 x2_hat = x_hat.segment(6, 3);
+    Vector3 x2_hat = x_hat.segment<3>(6);
     
     Vector dx_hat(9);
     dx_hat.segment(0, 3) = x1_hat.cross(yg) - cst::gravityConstant * x2_hat_prime + ya + alpha_ * (x1 - x1_hat);
